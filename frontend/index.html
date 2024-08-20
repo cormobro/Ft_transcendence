@@ -22,11 +22,13 @@
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
 			let x = canvas.width / 2;
-			let y = canvas.height - 30;
-			let dx = 2;
-			let dy = -2;
+			let y = canvas.height - 10;
+			//let dx = 2;
+			//let dy = -2;
+			let dx = (canvas.width / 2) / 200;
+			let dy = -1 * ((canvas.height / 2) / 200);
 			const ballRadius = 10;
-			const paddleHeight = 75;
+			const paddleHeight = 150;
 			const paddleWidth = 10;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
@@ -35,7 +37,12 @@
 			let rightPaddleRightPressed = false;
 			let rightPaddleLeftPressed = false;
 			let interval = 0;
-			let score = 0;
+			let leftScore = 0;
+			let rightScore = 0;
+			let relativeIntersectionY = 0;
+			let normalizedIntersectionY = 0;
+			let bounceAngle = 0;
+			let ballSpeed = 4;
 
 			function drawBall() {
 				ctx.beginPath();
@@ -50,32 +57,69 @@
 				drawBall();
 				drawLeftPaddle();
 				drawRightPaddle();
+				drawScore();
 				x += dx;
 				y += dy;
 				if (x + dx < ballRadius)
 				{
 					if (y > leftPaddle && y < leftPaddle + paddleHeight)
 					{
-						dx = -dx;
+						relativeIntersectionY = (leftPaddle + (paddleHeight / 2)) - y;
+						normalizedIntersectionY = (relativeIntersectionY / (paddleHeight / 2));
+						bounceAngle = normalizedIntersectionY * (5*Math.PI/12);
+						ballSpeed += 0.2;
+						dx = ballSpeed*Math.cos(bounceAngle);
+						dy = ballSpeed*-Math.sin(bounceAngle);
 					}
 					else
 					{
-						alert("GAME OVER");
-						document.location.reload();
+						rightScore++;
+						if (rightScore === 3)
+						{
+							alert("GAME OVER : PLAYER 2 HAS WON");
+							document.location.reload();
+							clearInterval(interval);
+						}
 						clearInterval(interval);
+						interval = null;
+						x = canvas.width / 2;
+						y = canvas.height - 10;
+						dx = -1 * (canvas.width / 2) / 200;
+						dy = -1 * (canvas.height / 2) / 200;
+						leftPaddle = (canvas.height - paddleHeight) /2;
+						rightPaddle = (canvas.height - paddleHeight) /2;
+						interval = setInterval(draw, 8);
 					}
 				}
 				else if (x + dx > canvas.width - ballRadius)
 				{
 					if (y > rightPaddle && y < rightPaddle + paddleHeight)
 					{
-						dx = -dx;
+						relativeIntersectionY = (rightPaddle + (paddleHeight / 2)) - y;
+						normalizedIntersectionY = (relativeIntersectionY / (paddleHeight / 2));
+						bounceAngle = normalizedIntersectionY * (5*Math.PI/12);
+						ballSpeed += 0.2;
+						dx = -ballSpeed*Math.cos(bounceAngle);
+						dy = ballSpeed*-Math.sin(bounceAngle);
 					}
 					else
 					{
-						alert("GAME OVER");
-						document.location.reload();
+						leftScore++;
+						if (leftScore === 3)
+						{
+							alert("GAME OVER : PLAYER 1 HAS WON");
+							document.location.reload();
+							clearInterval(interval);
+						}
 						clearInterval(interval);
+						interval = null;
+						x = canvas.width / 2;
+						y = canvas.height - 10;
+						dx = (canvas.width / 2) / 200;
+						dy = -1 * ((canvas.height / 2) / 200);
+						leftPaddle = (canvas.height - paddleHeight) / 2;
+						rightPaddle = (canvas.height - paddleHeight) / 2;
+						interval = setInterval(draw, 8);
 					}
 				}
 				if (y + dy > canvas.height - ballRadius || y + dy < ballRadius)
@@ -117,6 +161,14 @@
 				ctx.closePath();
 			}
 
+			function drawScore() {
+				ctx.font = "16px Arial";
+				ctx.fillStyle = "#0095DD";
+				ctx.fillText(`Player 1: ${leftScore}`, 8, 20);
+				ctx.fillText(`Player 2: ${rightScore}`, 8, 40);
+			}
+
+
 			document.addEventListener("keydown", keyDownHandler, false);
 			document.addEventListener("keyup", keyUpHandler, false);
 			function keyDownHandler(e) {
@@ -156,13 +208,8 @@
 					rightPaddleRightPressed = false;
 				}
 			}
-			function drawScore() {
-				ctx.font = "16px Arial";
-				ctx.fillStyle = "#0095DD";
-				ctx.fillText(`Score: ${score}`, 8, 20);
-			}
 
-			interval = setInterval(draw, 10);
+			interval = setInterval(draw, 8);
 
 		</script>
 	</body>
