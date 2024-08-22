@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8" />
+		<title>PONG</title>
+		<style>
+* {
+	padding: 0;
+	margin: 0;
+}
+      canvas {
+	      background: #eee;
+	      display: block;
+	      margin: 0 auto;
+      }
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="1080" height="720"></canvas>
+
+		<script>
+			const canvas = document.getElementById("myCanvas");
+			const ctx = canvas.getContext("2d");
+			let interval = 0;
+			let boxHover = false;
+
+			function drawMenu()
+			{
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				drawStartSoloMenu();
+			}
+
+			function drawStartSoloMenu()
+			{
+				drawStartSoloMenuBox();
+				console.log(boxHover);
+				if (boxHover === true)
+					drawStartSoloMenuBoxHover();
+				drawStartSoloMenuText();
+			}
+
+			function drawStartSoloMenuBox()
+			{
+				ctx.fillStyle = "#0095DD";
+				ctx.beginPath();
+				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
+				ctx.fill();
+			}
+
+			function drawStartSoloMenuBoxHover()
+			{
+				ctx.fillStyle = "#000000";
+				ctx.beginPath();
+				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
+				ctx.fill();
+			}
+
+			function drawStartSoloMenuText()
+			{
+				ctx.font = canvas.height/6 + "px Arial";
+				ctx.fillStyle = "#ffffff";
+				ctx.textAlign="center";
+				ctx.textBaseline = "middle";
+				ctx.fillText(`PLAY`, canvas.width / 2, (canvas.height / 2))
+			}
+
+			function drawEndSoloMenu()
+			{
+			}
+			document.addEventListener("mousemove", mouseMoveHandler, false);
+			function mouseMoveHandler(e) {
+				const relativeX = e.clientX - canvas.offsetLeft;
+				const relativeY = e.clientY - canvas.offsetTop
+				if (relativeX > canvas.width/3 && relativeX < 2*canvas.width/3 && relativeY > canvas.height/3 && relativeY < 2*canvas.height/3)
+				{
+					boxHover = true;
+				}
+				else
+				{
+					boxHover = false;
+				}
+			}
+
+			interval = setInterval(drawMenu, 10);
+		</script>
+	</body>
+</html>
+
