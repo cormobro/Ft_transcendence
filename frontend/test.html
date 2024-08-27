@@ -26,7 +26,7 @@
 			let dx = (canvas.width / 2) / 200;
 			let dy = -1 * ((canvas.height / 2) / 200);
 			const ballRadius = 10;
-			const paddleHeight = 150;
+			const paddleHeight = canvas.height / 4.5;
 			const paddleWidth = 10;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
@@ -40,9 +40,12 @@
 			let relativeIntersectionY = 0;
 			let normalizedIntersectionY = 0;
 			let bounceAngle = 0;
-			let ballSpeed = 4;
+			let ballSpeed = canvas.width / 250;
 			let boxHover = false;
 			let menuBool = true;
+			let player1 = "Player 1";
+			let player2 = "Player 2";
+			let winner = 0;
 
 			function resetGame()
 			{
@@ -54,7 +57,7 @@
 				rightPaddle = (canvas.height - paddleHeight) / 2;
 				leftScore = 0;
 				rightScore = 0;
-				ballSpeed = 4;
+				ballSpeed = canvas.width / 250;
 				menuBool = true;
 			}
 
@@ -62,6 +65,8 @@
 			{
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				drawStartSoloMenu();
+				if (winner != 0)
+					drawMenuScore();
 			}
 
 			function drawStartSoloMenu()
@@ -100,7 +105,14 @@
 				ctx.fillText(`PLAY`, canvas.width / 2, (canvas.height / 2));
 			}
 
-			//function drawMenuScore()
+			function drawMenuScore()
+			{
+				ctx.font = canvas.height/10 + "px Arial";
+				ctx.fillStyle = "#000000";
+				ctx.textAlign="center";
+				ctx.textBaseline = "middle";
+				ctx.fillText(`${winner} has won!`, canvas.width / 2, canvas.height / 6);
+			}
 
 			function drawBall() {
 				ctx.beginPath();
@@ -125,7 +137,7 @@
 						relativeIntersectionY = (leftPaddle + (paddleHeight / 2)) - y;
 						normalizedIntersectionY = (relativeIntersectionY / (paddleHeight / 2));
 						bounceAngle = normalizedIntersectionY * (5*Math.PI/12);
-						if (ballSpeed < 10)
+						if (ballSpeed < canvas.width / 100)
 							ballSpeed += 0.2;
 						dx = ballSpeed*Math.cos(bounceAngle);
 						dy = ballSpeed*-Math.sin(bounceAngle);
@@ -137,6 +149,7 @@
 						{
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
+							winner = player2;
 							resetGame();
 							interval = setInterval(drawMenu, 10);
 							//return ;
@@ -154,7 +167,7 @@
 							dy = -1 * (canvas.height / 2) / 200;
 							leftPaddle = (canvas.height - paddleHeight) /2;
 							rightPaddle = (canvas.height - paddleHeight) /2;
-							ballSpeed = 4;
+							ballSpeed = canvas.width / 250;
 							interval = setInterval(draw, 8);
 						}
 					}
@@ -166,7 +179,7 @@
 						relativeIntersectionY = (rightPaddle + (paddleHeight / 2)) - y;
 						normalizedIntersectionY = (relativeIntersectionY / (paddleHeight / 2));
 						bounceAngle = normalizedIntersectionY * (5*Math.PI/12);
-						if (ballSpeed < 10)
+						if (ballSpeed < canvas.width / 100)
 							ballSpeed += 0.2;
 						dx = -ballSpeed*Math.cos(bounceAngle);
 						dy = ballSpeed*-Math.sin(bounceAngle);
@@ -178,7 +191,7 @@
 						{
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
-							//interval = null;
+							winner = player1;
 							resetGame();
 							interval = setInterval(drawMenu, 10);
 							//return ;
@@ -196,7 +209,7 @@
 							dy = -1 * ((canvas.height / 2) / 200);
 							leftPaddle = (canvas.height - paddleHeight) / 2;
 							rightPaddle = (canvas.height - paddleHeight) / 2;
-							ballSpeed = 4;
+							ballSpeed = canvas.width / 250;
 							interval = setInterval(draw, 8);
 						}
 					}
@@ -278,9 +291,9 @@
 				if (relativeX > canvas.width/3 && relativeX < 2*canvas.width/3 && relativeY > canvas.height/3 && relativeY < 2*canvas.height/3 && menuBool === true)
 				{
 					menuBool = false;
+					winner = 0;
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					clearInterval(interval);
-					//interval = NULL;
 					interval = setInterval(draw, 8);
 				}
 			}
