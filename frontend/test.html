@@ -21,11 +21,24 @@
 		<script>
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
+
+			//----------- Ball coordinates -----------------------------------------------------------------
+
 			let x = canvas.width / 2;
 			let y = canvas.height - 10;
+
+			//---------- Ball vectors/size/bounce angles/speed----------------------------------------------
+
 			let dx = (canvas.width / 2) / 200;
 			let dy = -1 * ((canvas.height / 2) / 200);
 			const ballRadius = 10;
+			let relativeIntersectionY = 0;
+			let normalizedIntersectionY = 0;
+			let bounceAngle = 0;
+			let ballSpeed = canvas.width / 250;
+
+			//---------- Paddle size/coordinates/state------------------------------------------------------
+
 			const paddleHeight = canvas.height / 4.5;
 			const paddleWidth = 10;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
@@ -34,15 +47,15 @@
 			let leftPaddleUpPressed = false;
 			let rightPaddleDownPressed = false;
 			let rightPaddleUpPressed = false;
+
+			//---------- Interval is the current running "loop" --------------------------------------------
+
 			let interval = 0;
+
+			//---------- Players related informations ------------------------------------------------------
+
 			let leftScore = 0;
 			let rightScore = 0;
-			let relativeIntersectionY = 0;
-			let normalizedIntersectionY = 0;
-			let bounceAngle = 0;
-			let ballSpeed = canvas.width / 250;
-			let boxHover = false;
-			let menuBool = true;
 			const players = {
 				player1: {name:"Player 1", score:0},
 				player2: {name:"Player 2", score:0},
@@ -53,10 +66,23 @@
 				player7: {name:"Player 7", score:0},
 				player8: {name:"Player 8", score:0}
 			}
+
+			//---------- Menu related informations ---------------------------------------------------------
+
+			let boxHover = false;
+			let menuBool = true;
+
+			//---------- player1 and player2 are the players currently playing a match ---------------------
+
 			let player1 = "Player 1";
 			let player2 = "Player 2";
 			let winner = 0;
+
+			//---------- gameMode 0 => SOLO ---------- gameMode 1 => DUO ---------- gameMode 2 => TOURNAMENT
+
 			let gameMode = 0;
+
+			//----------------------------------------------------------------------------------------------
 
 			function resetGame()
 			{
@@ -274,7 +300,7 @@
 				ctx.fillText(`Player 2: ${rightScore}`, 8, 40);
 			}
 
-			// EVENT LISTENER
+			//---------- EVENT LISTENERS -------------------------------------------------------------------
 
 			document.addEventListener("keydown", keyDownHandler, false);
 			document.addEventListener("keyup", keyUpHandler, false);
@@ -350,6 +376,7 @@
 					rightPaddleDownPressed = false;
 				}
 			}
+
 			interval = setInterval(drawMenu, 10);
 		</script>
 	</body>
