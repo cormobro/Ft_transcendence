@@ -30,10 +30,10 @@
 			const paddleWidth = 10;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
-			let leftPaddleRightPressed = false;
-			let leftPaddleLeftPressed = false;
-			let rightPaddleRightPressed = false;
-			let rightPaddleLeftPressed = false;
+			let leftPaddleDownPressed = false;
+			let leftPaddleUpPressed = false;
+			let rightPaddleDownPressed = false;
+			let rightPaddleUpPressed = false;
 			let interval = 0;
 			let leftScore = 0;
 			let rightScore = 0;
@@ -43,9 +43,20 @@
 			let ballSpeed = canvas.width / 250;
 			let boxHover = false;
 			let menuBool = true;
+			const players = {
+				player1: {name:"Player 1", score:0},
+				player2: {name:"Player 2", score:0},
+				player3: {name:"Player 3", score:0},
+				player4: {name:"Player 4", score:0},
+				player5: {name:"Player 5", score:0},
+				player6: {name:"Player 6", score:0},
+				player7: {name:"Player 7", score:0},
+				player8: {name:"Player 8", score:0}
+			}
 			let player1 = "Player 1";
 			let player2 = "Player 2";
 			let winner = 0;
+			let gameMode = 0;
 
 			function resetGame()
 			{
@@ -114,7 +125,13 @@
 				ctx.fillText(`${winner} has won!`, canvas.width / 2, canvas.height / 6);
 			}
 
-			function drawBall() {
+			function drawMenuAnnouncement()
+			{
+
+			}
+
+			function drawBall()
+			{
 				ctx.beginPath();
 				ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
 				ctx.fillStyle = "#0095DD";
@@ -122,7 +139,8 @@
 				ctx.closePath();
 			}
 
-			function draw() {
+			function draw()
+			{
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				drawBall();
 				drawLeftPaddle();
@@ -152,10 +170,6 @@
 							winner = player2;
 							resetGame();
 							interval = setInterval(drawMenu, 10);
-							//return ;
-							//alert("GAME OVER : PLAYER 2 HAS WON");
-							//document.location.reload();
-							//clearInterval(interval);
 						}
 						else
 						{
@@ -194,10 +208,6 @@
 							winner = player1;
 							resetGame();
 							interval = setInterval(drawMenu, 10);
-							//return ;
-							//alert("GAME OVER : PLAYER 1 HAS WON");
-							//document.location.reload();
-							//clearInterval(interval);
 						}
 						else
 						{
@@ -217,26 +227,27 @@
 				if (y + dy > canvas.height - ballRadius || y + dy < ballRadius)
 					dy = -dy;
 
-				if (leftPaddleRightPressed)
+				if (leftPaddleDownPressed)
 				{
 					leftPaddle = Math.min(leftPaddle + 7, canvas.height - paddleHeight);
 				}
-				else if (leftPaddleLeftPressed)
+				else if (leftPaddleUpPressed)
 				{
 					leftPaddle = Math.max(leftPaddle - 7, 0);
 				}
 
-				if (rightPaddleRightPressed)
+				if (rightPaddleDownPressed)
 				{
 					rightPaddle = Math.min(rightPaddle + 7, canvas.height - paddleHeight);
 				}
-				else if (rightPaddleLeftPressed)
+				else if (rightPaddleUpPressed)
 				{
 					rightPaddle = Math.max(rightPaddle - 7, 0);
 				}
 			}
 
-			function drawLeftPaddle() {
+			function drawLeftPaddle()
+			{
 				ctx.beginPath();
 				ctx.rect(0, leftPaddle, paddleWidth, paddleHeight);
 				ctx.fillStyle = "#0095DD";
@@ -253,7 +264,8 @@
 				ctx.closePath();
 			}
 
-			function drawScore() {
+			function drawScore()
+			{
 				ctx.font = "16px Arial";
 				ctx.fillStyle = "#0095DD";
 				ctx.textAlign = "left";
@@ -262,6 +274,7 @@
 				ctx.fillText(`Player 2: ${rightScore}`, 8, 40);
 			}
 
+			// EVENT LISTENER
 
 			document.addEventListener("keydown", keyDownHandler, false);
 			document.addEventListener("keyup", keyUpHandler, false);
@@ -297,41 +310,44 @@
 					interval = setInterval(draw, 8);
 				}
 			}
-			function keyDownHandler(e) {
-				if (e.key === "Right" || e.key === "ArrowRight")
+
+			function keyDownHandler(e)
+			{
+				if (e.key === "Up" || e.key === "ArrowUp")
 				{
-					rightPaddleLeftPressed = true;
+					rightPaddleUpPressed = true;
 				}
-				else if (e.key === "q" || e.key === "Q")
+				else if (e.key === "a" || e.key === "A")
 				{
-					leftPaddleLeftPressed = true;
+					leftPaddleUpPressed = true;
 				}
-				else if (e.key === "e" || e.key === "E")
+				else if (e.key === "z" || e.key === "Z")
 				{
-					leftPaddleRightPressed = true;
+					leftPaddleDownPressed = true;
 				}
-				else if (e.key === "Left" || e.key === "ArrowLeft")
+				else if (e.key === "Down" || e.key === "ArrowDown")
 				{
-					rightPaddleRightPressed = true;
+					rightPaddleDownPressed = true;
 				}
 			}
 
-			function keyUpHandler(e) {
-				if (e.key === "Right" || e.key === "ArrowRight")
+			function keyUpHandler(e)
+			{
+				if (e.key === "Up" || e.key === "ArrowUp")
 				{
-					rightPaddleLeftPressed = false;
+					rightPaddleUpPressed = false;
 				}
-				else if (e.key === "q" || e.key === "Q")
+				else if (e.key === "a" || e.key === "A")
 				{
-					leftPaddleLeftPressed = false;
+					leftPaddleUpPressed = false;
 				}
-				else if (e.key === "e" || e.key === "E")
+				else if (e.key === "z" || e.key === "Z")
 				{
-					leftPaddleRightPressed = false;
+					leftPaddleDownPressed = false;
 				}
-				else if (e.key === "Left" || e.key === "ArrowLeft")
+				else if (e.key === "Down" || e.key === "ArrowDown")
 				{
-					rightPaddleRightPressed = false;
+					rightPaddleDownPressed = false;
 				}
 			}
 			interval = setInterval(drawMenu, 10);
