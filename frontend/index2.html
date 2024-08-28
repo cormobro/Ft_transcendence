@@ -49,6 +49,10 @@
 								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-stat')[0].style.display='block';">Stats</a>
 								<!-- <a class="nav-link" href="#">Statistiques</a> -->
 							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Se connecter</a>
+								<!-- <a class="nav-link" href="#">Statistiques</a> -->
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -73,30 +77,31 @@
 			<div id="solo" class="content content-solo" style="display:none">
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
-						<div class="text-light">
+						<div class="py-5 text-light">
 							<h2>Mode Solo</h2>
 						</div>
-						<canvas class="bg-light" id="myCanvas"></canvas>
+						<div class="d-flex justify-content-center">
+							<canvas class="bg-light" id="myCanvas"></canvas>
+						</div>
 					</div>
 				</section>
 			</div>
 			<div id="duo" class="content content-duo" style="display:none">
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
-						<div class="text-light">
+						<div class="py-5 text-light">
 							<h2>Mode Duo</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="inputForm" method="POST">
-										<div id="playerInputs">
-											<div class="col-12">
-												<label for="player1" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player1" id="player1" required>
-											</div>
-											<div class="col-12">
-												<label for="player2" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player2" id="player2" required>
-											</div>
+									<form class="row gy-4" id="inputForm" method="post">
+										{% csrf_token %}
+										<div class="col-12">
+											<label for="player1" class="form-label">Nom d'utilisateur</label>
+											<input type="text" class="form-control" name="player1" id="player1" required>
+										</div>
+										<div class="col-12">
+											<label for="player2" class="form-label">Nom d'utilisateur</label>
+											<input type="text" class="form-control" name="player2" id="player2" required>
 										</div>
 										<div class="col-12">
 											<button type="submit" class="btn btn-outline-light w-100">Jouer</button>
@@ -111,11 +116,14 @@
 			<div id="tournament" class="content content-tournament" style="display:none">
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
-						<div class="text-light">
+						<div class="py-5 text-light">
 							<h2>Mode Tournoi</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="inputForm" method="POST">
+									<form class="row gy-4" id="inputForm" method="post">
+										<!-- Token pour CSRF (Django par exemple) -->
+										{% csrf_token %}
+										<!-- Section pour les inputs des joueurs -->
 										<div id="playerInputs">
 											<div class="col-12">
 												<label for="player1" class="form-label">Nom d'utilisateur</label>
@@ -124,6 +132,10 @@
 											<div class="col-12">
 												<label for="player2" class="form-label">Nom d'utilisateur</label>
 												<input type="text" class="form-control" name="player2" id="player2" required>
+											</div>
+											<div class="col-12">
+												<label for="player3" class="form-label">Nom d'utilisateur</label>
+												<input type="text" class="form-control" name="player3" id="player3" required>
 											</div>
 										</div>
 										<div class="col-4">
@@ -142,7 +154,7 @@
 			<div id="stat" class="content content-stat" style="display:none">
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
-						<div class="text-light">
+						<div class="py-5 text-light">
 							<h2>Statistiques</h2>
 						</div>
 					</div>
