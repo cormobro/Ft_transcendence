@@ -21,5 +21,7 @@ from polls.views import manage_request
 
 urlpatterns = [
 	path ('', manage_request, name='home'),
+	path ('get/', manage_request, name='home'),
+	path ('post/', manage_request, name='home'),
     path('admin/', admin.site.urls),
 ]

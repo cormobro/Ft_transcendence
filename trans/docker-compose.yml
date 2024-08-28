@@ -10,7 +10,12 @@ services:
       - ./postgres/scripts:/docker-entrypoint-initdb.d
   web:
     build: .
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    python manage.py createsuperuser --noinput --username admin --email admin@example.com || true &&
+                    python manage.py runserver 0.0.0.0:8000"
+    environment:
+      DJANGO_SUPERUSER_PASSWORD: "test"
     volumes:
       - ./app:/code
     ports:

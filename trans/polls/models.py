@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.contrib.postgres.fields import ArrayField 
+from django.contrib.postgres.fields import ArrayField
+import datetime
+import uuid
 
 # Player class, once set is added to the DB
 
@@ -15,9 +17,8 @@ class Player(models.Model):
 
 class Tournament(models.Model):
     name = models.CharField(max_length=255)
-    date = models.DateField()
+    date = models.DateField(blank=True, default=datetime.date.today)
 
     def __str__(self):
         return self.name
 
-	
