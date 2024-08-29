@@ -65,7 +65,8 @@
 						<div class="row align-items-center gy-4">
 							<div class="col-6 text-light">
 								<h1>Welcome Home!</h1>
-								<button id="postRequest" class="btn btn-outline-light mt-5">Commencer</button>
+								<button id="getRequest" class="btn btn-outline-light mt-5">GET request</button>
+								<button id="postRequest" class="btn btn-outline-light mt-5">POST request</button>
 						</div>
 						<div class="col-6">
 							<img src="img/accueil.png" alt="accueil" class="w-100">
@@ -80,8 +81,80 @@
 						<div class="py-5 text-light">
 							<h2>Mode Solo</h2>
 						</div>
+						<div class="mb-5">
+							<div class="row">
+								<div class="col-6">
+									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#scores">
+										Scores
+									</button>
+								</div>
+								<div class="col-6">
+									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#leaderboard">
+										Leaderboard
+									</button>
+								</div>
+							</div>
+							<div class="row"></div>
+								<div class="collapse" id="scores">
+									<div class="card card-body">
+										<ol class="list-group">
+											<li class="list-group-item bg-primary text-light">
+												<h4>Match 1</h4>
+												<h5>Player 1 vs Player 2</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>Match 2</h4>
+												<h5>Player 3 vs Player 4</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>Match 3</h4>
+												<h5>? vs ?</h5>
+											</li>
+										</ol>
+									</div>
+								</div>
+								<div class="collapse" id="leaderboard">
+									<div class="card card-body">
+										<ol class="list-group">
+											<li class="list-group-item bg-primary text-light">
+												<h4>1</h4>
+												<h5>Player 1</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>2</h4>
+												<h5>Player 2</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>3</h4>
+												<h5>Player 3</h5>
+											</li>
+										</ol>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="d-flex justify-content-center">
 							<canvas class="bg-light" id="myCanvas"></canvas>
+						</div>
+						<div class="row">
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>Q</h2></div>
+								<p>Monter</p>
+							</div>
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>&gt</h2></div>
+								<p>Monter</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>E</h2></div>
+								<p>Descendre</p>
+							</div>
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>&lt</h2></div>
+								<p>Descendre</p>
+							</div>
 						</div>
 					</div>
 				</section>
@@ -119,20 +192,23 @@
 							<h2>Mode Tournoi</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="inputForm" method="post">
+									<form class="inputForm row gy-4" id="inputForm" method="post">
 										<div id="playerInputs">
 											<div class="col-12">
 												<label for="player1" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player1" id="player1" required>
+												<input type="text" class="form-control" name="player1" id="player1" oninput="check(this)" maxlength="15" required>
 											</div>
 											<div class="col-12">
 												<label for="player2" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player2" id="player2" required>
+												<input type="text" class="form-control" name="player2" id="player2" oninput="check(this)" maxlength="15" required>
 											</div>
 											<div class="col-12">
 												<label for="player3" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player3" id="player3" required>
+												<input type="text" class="form-control" name="player3" id="player3" oninput="check(this)" maxlength="15" required>
 											</div>
+										</div>
+										<div class="col-12">
+											<p id="outputText" class="text-light"></p>
 										</div>
 										<div class="col-4">
 											<button type="button" class="btn btn-outline-light w-100" id="addPlayer"><i class="bi bi-person-plus-fill" style="font-size: 30px;"></i></button>
@@ -255,10 +331,14 @@
 				formdata.append('age', '26')
 				requestObj.send(formdata)
 			}
+		</script>
+		<script>
 			document.getElementById('addPlayer').addEventListener('click', function() {
 				// Compter le nombre actuel de champs d'input
 				const playerCount = document.querySelectorAll('#playerInputs .col-12').length;
 
+				if (playerCount == 8)
+					return;
 				// Créer un nouvel élément div pour le champ input
 				const newInputDiv = document.createElement('div');
 				newInputDiv.classList.add('col-12');
@@ -274,6 +354,7 @@
 				newInput.classList.add('form-control');
 				newInput.name = 'player' + (playerCount + 1);
 				newInput.id = 'player' + (playerCount + 1);
+				newInput.maxLength = '15';
 				newInput.required = ' ';
 
 				// Ajouter le label et l'input au div
@@ -282,6 +363,80 @@
 
 				// Ajouter le nouveau div au conteneur de champs
 				document.getElementById('playerInputs').appendChild(newInputDiv);
+			});
+		</script>
+		<!-- <script>
+			function check(input) {
+				if (input.value == "good" ||
+					input.value == "fine" ||
+					input.value == "tired") {
+					input.setCustomValidity('"' + input.value + '" is not a feeling.');
+				} else {
+					// input is fine -- reset the error message
+					input.setCustomValidity('');
+				}
+			}
+		</script> -->
+		<script>
+			// document.querySelectorAll('#playerInputs input').forEach(function(input) {
+			function check(input){
+				input.addEventListener('input', function() {
+				const inputs = document.querySelectorAll('#playerInputs input');
+				let isInvalid = false;
+				let inputValues = [];
+
+				inputs.forEach(function(inp){
+					console.log(inp.value);
+				})
+				inputs.forEach(function(input){
+					const value = input.value.trim();
+					// if (value === ''){
+					// 	console.log('"' + input.value + '" is empty.');
+					// 	isInvalid = true;
+					// }
+					if (value === " "){
+						console.log('"' + input.value + '" has space.');
+						isInvalid = true;
+					}
+					else if (inputValues.includes(value)){
+						console.log('"' + input.value + '" is dup.');
+						isInvalid = true;
+					}
+					if (value != '')
+						inputValues.push(value);
+				})
+				if (isInvalid)
+				{
+					document.getElementById('outputText').textContent = "Mauvaise saisie";
+					input.setCustomValidity('"' + input.value + '" is wrong.');
+				}
+				else
+				{
+					document.getElementById('outputText').textContent = "Saisie actuelle: " + this.value;
+					input.setCustomValidity('');
+				}
+				});
+			}
+			// });
+		</script>
+		<script>
+			var frm = document.querySelector('form.inputForm');
+			var inputs = frm.querySelectorAll('input[type=text]');
+
+			frm.addEventListener('submit', function(e) {
+
+				e.preventDefault();
+				var classArr = [];
+
+				for(var i = 0; i < inputs.length; i++) {
+					if(classArr.indexOf(inputs[i].value) != -1) {
+						inputs[i].style.backgroundColor = "red";
+						return false;
+					}
+					else
+						classArr.push(inputs[i].value);
+				}
+				frm.submit();
 			});
 		</script>
 		<script>
