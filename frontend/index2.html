@@ -380,7 +380,6 @@
 		<script>
 			// document.querySelectorAll('#playerInputs input').forEach(function(input) {
 			function check(input){
-				input.addEventListener('input', function() {
 				const inputs = document.querySelectorAll('#playerInputs input');
 				let isInvalid = false;
 				let inputValues = [];
@@ -389,12 +388,12 @@
 					console.log(inp.value);
 				})
 				inputs.forEach(function(input){
-					const value = input.value.trim();
+					const value = input.value;
 					// if (value === ''){
 					// 	console.log('"' + input.value + '" is empty.');
 					// 	isInvalid = true;
 					// }
-					if (value === " "){
+					if (value.includes(" ")){
 						console.log('"' + input.value + '" has space.');
 						isInvalid = true;
 					}
@@ -412,14 +411,13 @@
 				}
 				else
 				{
-					document.getElementById('outputText').textContent = "Saisie actuelle: " + this.value;
+					document.getElementById('outputText').textContent = "Saisie actuelle: " + input.value;
 					input.setCustomValidity('');
 				}
-				});
 			}
 			// });
 		</script>
-		<script>
+		<!-- <script>
 			var frm = document.querySelector('form.inputForm');
 			var inputs = frm.querySelectorAll('input[type=text]');
 
@@ -438,7 +436,7 @@
 				}
 				frm.submit();
 			});
-		</script>
+		</script> -->
 		<script>
 			function hideAllContentDivs(){
 				var contentDivs = document.getElementsByClassName('content');
