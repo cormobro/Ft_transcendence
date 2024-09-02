@@ -12,10 +12,9 @@ def home(request):
 @csrf_protect
 def manage_42_api_step1(request):
 	client_id = os.getenv('API_CLIENT_ID')
-	redirect_uri = 'https%3A%2F%2Flocalhost%3A8000%2Fapi_42'
+	redirect_uri = 'http%3A%2F%2Flocalhost%3A8000%2Fapi_code'
 	state = os.getenv('API_PROTECTION_STRING')
 	scope = "public"
-
 	auth_url = (
 		f"https://api.intra.42.fr/oauth/authorize"
 		f"?client_id={client_id}"
@@ -30,7 +29,6 @@ def manage_42_api_step1(request):
 def manage_42_api_step2(request):
 	code = request.GET.get('code')
 	state = request.GET.get('state')
-
 	if code:
 		return manage_42_api_step3(code)
 	else:
@@ -40,7 +38,7 @@ def manage_42_api_step3(code):
 	client_id = os.getenv('API_CLIENT_ID')
 	client_secret = os.getenv('API_CLIENT_SECRET')
 	state = os.getenv('API_PROTECTION_STRING')
-	redirect_uri = "https://127.0.0.1:8000"
+	redirect_uri = "http%3A%2F%2Flocalhost%3A8000%2F"
 	grant_type = "authorization_code"
 
 	data = {
@@ -49,31 +47,45 @@ def manage_42_api_step3(code):
 		'client_secret': client_secret,
 		'code': code,
 		'redirect_uri': redirect_uri,
+		'state': state,
 	}
 
 	response = requests.post("https://api.intra.42.fr/oauth/token", data=data)
 
-	if response.status_code == 200:
+	request_info = f"""
+    Request Method: {response.request.method}
+    Request URL: {response.request.url}
+    Request Headers: {response.request.headers}
+    Request Body: {response.request.body}
+    """
+	if response.status_code == 302 or response.status_code == 301 or response.status_code == 200:
 		token_data = response.json()
 		access_token = token_data.get('access_token')
+		# return HttpResponse(f"The token is {access_token}")
 		return use_access_token(access_token)
 	else:
-		return JsonResponse({'error': 'Failed to retrieve access token'}, status=response.status_code)
+		return HttpResponse(f"Error code : {response.status_code} and code was {code}")
 
 def use_access_token(access_token):
 	api_url = "https://api.intra.42.fr/v2/me"
 	headers = {
 		'Authorization' : f'Bearer {access_token}',
-	}	
+	}
 
 	response = requests.get(api_url, headers=headers)
 
+	request_info = f"""
+    Request Method: {response.request.method}
+    Request URL: {response.request.url}
+    Request Headers: {response.request.headers}
+    Request Body: {response.request.body}
+    """
 	if response.status_code == 200:
 		user_data = response.json()
 		display_name = user_data.get('displayname')
 		return HttpResponse(f"Got the displayname it is {display_name}")
 	else:
-		return HttpResponse(f"ERROR")
+		return HttpResponse(f"ERROR code is {response.status_code} the request was {request_info}")
 
 
 @csrf_protect
