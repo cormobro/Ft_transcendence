@@ -12,7 +12,7 @@ def home(request):
 @csrf_protect
 def manage_42_api_step1(request):
 	client_id = os.getenv('API_CLIENT_ID')
-	redirect_uri = 'http%3A%2F%2Flocalhost%3A8000%2Fapi_code'
+	redirect_uri = 'http://localhost:8000/api_code'
 	state = os.getenv('API_PROTECTION_STRING')
 	scope = "public"
 	auth_url = (
@@ -23,22 +23,23 @@ def manage_42_api_step1(request):
 		f"&scope={scope}"
 		f"&state={state}"
 	)
-	return redirect(auth_url)
+	return redirect(auth_url)	
 
 @csrf_protect
 def manage_42_api_step2(request):
 	code = request.GET.get('code')
 	state = request.GET.get('state')
-	if code:
-		return manage_42_api_step3(code)
+	if state != os.getenv('API_PROTECTION_STRING'):
+		return JsonResponse({'error': 'Wrong state, third party intrusion'}, status=400)
+	elif code:
+		return manage_42_api_step3(code, state, request)
 	else:
 		return JsonResponse({'error': 'No code returned'}, status=400)
 
-def manage_42_api_step3(code):
+def manage_42_api_step3(code, state, request):
 	client_id = os.getenv('API_CLIENT_ID')
 	client_secret = os.getenv('API_CLIENT_SECRET')
-	state = os.getenv('API_PROTECTION_STRING')
-	redirect_uri = "http%3A%2F%2Flocalhost%3A8000%2F"
+	redirect_uri = 'http://localhost:8000/api_code'
 	grant_type = "authorization_code"
 
 	data = {
@@ -62,30 +63,36 @@ def manage_42_api_step3(code):
 		token_data = response.json()
 		access_token = token_data.get('access_token')
 		# return HttpResponse(f"The token is {access_token}")
-		return use_access_token(access_token)
+		return use_access_token(access_token, request)
 	else:
-		return HttpResponse(f"Error code : {response.status_code} and code was {code}")
+		return HttpResponse(response)
+		#return HttpResponse(f"Error code : {response.status_code} and code was {code}")
 
-def use_access_token(access_token):
-	api_url = "https://api.intra.42.fr/v2/me"
-	headers = {
-		'Authorization' : f'Bearer {access_token}',
-	}
+def use_access_token(access_token, request):
+    api_url = "https://api.intra.42.fr/v2/me"
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+    }
 
-	response = requests.get(api_url, headers=headers)
+    response = requests.get(api_url, headers=headers)
 
-	request_info = f"""
-    Request Method: {response.request.method}
-    Request URL: {response.request.url}
-    Request Headers: {response.request.headers}
-    Request Body: {response.request.body}
-    """
-	if response.status_code == 200:
-		user_data = response.json()
-		display_name = user_data.get('displayname')
-		return HttpResponse(f"Got the displayname it is {display_name}")
-	else:
-		return HttpResponse(f"ERROR code is {response.status_code} the request was {request_info}")
+    if response.status_code == 200:
+        user_data = response.json()
+        username = user_data.get('login')
+        if not Player.objects.filter(username=username).exists():
+            player = Player(username=username)
+            player.save()
+        # Render the template if the user does not exist or exists
+        return render(request, 'polls/index.html')
+    else:
+        # Define request_info if needed
+        request_info = f"""
+        Request Method: {response.request.method}
+        Request URL: {response.request.url}
+        Request Headers: {response.request.headers}
+        Request Body: {response.request.body}
+        """
+        return HttpResponse(f"ERROR code is {response.status_code}. The request was {request_info}")
 
 
 @csrf_protect
