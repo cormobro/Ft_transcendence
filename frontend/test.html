@@ -56,16 +56,18 @@
 
 			let leftScore = 0;
 			let rightScore = 0;
-			const players = {
-				player1: {name:"Player 1", score:0},
-				player2: {name:"Player 2", score:0},
-				player3: {name:"Player 3", score:0},
-				player4: {name:"Player 4", score:0},
-				player5: {name:"Player 5", score:0},
-				player6: {name:"Player 6", score:0},
-				player7: {name:"Player 7", score:0},
-				player8: {name:"Player 8", score:0}
-			}
+			let playersCount = 0;
+			let playersLeft = 0;
+			const players = [
+				{name:"Player 1", score:0, alive:true},
+				{name:"Player 2", score:0, alive:true},
+				{name:"Player 3", score:0, alive:true},
+				{name:"Player 4", score:0, alive:true},
+				{name:"Player 5", score:0, alive:true},
+				{name:"Player 6", score:0, alive:true},
+				{name:"Player 7", score:0, alive:true},
+				{name:"Player 8", score:0, alive:true}
+			];
 
 			//---------- Menu related informations ---------------------------------------------------------
 
@@ -80,7 +82,13 @@
 
 			//---------- gameMode 0 => SOLO ---------- gameMode 1 => DUO ---------- gameMode 2 => TOURNAMENT
 
-			let gameMode = 0;
+			let gameMode = 1;
+
+			//---------- Matchmaking related variables -----------------------------------------------------
+
+			let totalPoints = 0;
+			let matchmakingIndex = 0;
+			let foundPair = 0;
 
 			//----------------------------------------------------------------------------------------------
 
@@ -154,6 +162,50 @@
 			function drawMenuAnnouncement()
 			{
 
+			}
+
+			function findNextMatch()
+			{
+				foundPair = 0;
+				while (totalPoints < playersCount - 1)
+				{
+					while (matchmakingIndex < playersCount && foundPair < 2)
+					{
+						if (players[matchmakingIndex].alive === true && foundPair === 0)
+						{
+							player1 = players[matchmakingIndex].name;
+							foundPair++;
+							matchmakingIndex++;
+						}
+						else if (players[matchmakingIndex].alive === true && foundPair === 1)
+						{
+							player2 = players[matchmakingIndex].name;
+							foundPair++;
+							matchmakingIndex++;
+						}
+						else
+							matchmakingIndex++;
+					}
+					while (matchmakingIndex >= 0 && foundPair < 2)
+					{
+						if (players[matchmakingIndex].alive === true && foundPair === 0)
+						{
+							player1 = players[matchmakingIndex].name;
+							foundPair++;
+							matchmakingIndex--;
+						}
+						else if (players[matchmakingIndex].alive === true && foundPair === 1)
+						{
+							player2 = players[matchmakingIndex].name;
+							foundPair++;
+							matchmakingIndex--;
+						}
+						else
+							matchmakingIndex--;
+					}
+					if (foundPair === 2)
+						break ;
+				}
 			}
 
 			function drawBall()
@@ -339,7 +391,7 @@
 
 			function keyDownHandler(e)
 			{
-				if (e.key === "Up" || e.key === "ArrowUp")
+				if ((e.key === "Up" || e.key === "ArrowUp") && gameMode != 0)
 				{
 					rightPaddleUpPressed = true;
 				}
@@ -351,7 +403,7 @@
 				{
 					leftPaddleDownPressed = true;
 				}
-				else if (e.key === "Down" || e.key === "ArrowDown")
+				else if ((e.key === "Down" || e.key === "ArrowDown") && gameMode != 0)
 				{
 					rightPaddleDownPressed = true;
 				}
@@ -359,7 +411,7 @@
 
 			function keyUpHandler(e)
 			{
-				if (e.key === "Up" || e.key === "ArrowUp")
+				if ((e.key === "Up" || e.key === "ArrowUp") && gameMode != 0)
 				{
 					rightPaddleUpPressed = false;
 				}
@@ -371,7 +423,7 @@
 				{
 					leftPaddleDownPressed = false;
 				}
-				else if (e.key === "Down" || e.key === "ArrowDown")
+				else if ((e.key === "Down" || e.key === "ArrowDown") && gameMode != 0)
 				{
 					rightPaddleDownPressed = false;
 				}
