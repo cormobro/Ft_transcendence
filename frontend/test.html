@@ -56,7 +56,7 @@
 
 			let leftScore = 0;
 			let rightScore = 0;
-			let playersCount = 0;
+			let playersCount = 8;
 			let playersLeft = 0;
 			const players = [
 				{name:"Player 1", score:0, alive:true},
@@ -79,16 +79,18 @@
 			let player1 = "Player 1";
 			let player2 = "Player 2";
 			let winner = 0;
+			let index = 0;
 
 			//---------- gameMode 0 => SOLO ---------- gameMode 1 => DUO ---------- gameMode 2 => TOURNAMENT
 
-			let gameMode = 1;
+			let gameMode = 2;
 
 			//---------- Matchmaking related variables -----------------------------------------------------
 
 			let totalPoints = 0;
 			let matchmakingIndex = 0;
 			let foundPair = 0;
+			let loopDirection = 0;
 
 			//----------------------------------------------------------------------------------------------
 
@@ -169,8 +171,11 @@
 				foundPair = 0;
 				while (totalPoints < playersCount - 1)
 				{
-					while (matchmakingIndex < playersCount && foundPair < 2)
+					while (matchmakingIndex < playersCount - 1 && foundPair < 2 && loopDirection === 0)
 					{
+						console.log("matchmakingIndex:", matchmakingIndex);
+						if (matchmakingIndex === playersCount - 2)
+							loopDirection = 1;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
 						{
 							player1 = players[matchmakingIndex].name;
@@ -188,6 +193,9 @@
 					}
 					while (matchmakingIndex >= 0 && foundPair < 2)
 					{
+						console.log("matchmakingIndex2:", matchmakingIndex);
+						if (matchmakingIndex === 0)
+							loopDirection = 0;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
 						{
 							player1 = players[matchmakingIndex].name;
@@ -246,6 +254,19 @@
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player2;
+							if (gameMode === 2)
+							{
+								totalPoints++;
+								index = 0;
+								while (index < playersCount - 1)
+								{
+									if (player1.localeCompare(players[index].name) === 0)
+										players[index].alive = false;
+									if (player2.localeComapre(players[index].name) === 0)
+										players[index].score++;
+									index++;
+								}
+							}
 							resetGame();
 							interval = setInterval(drawMenu, 10);
 						}
@@ -284,6 +305,19 @@
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player1;
+							if (gameMode === 2)
+							{
+								totalPoints++;
+								index = 0;
+								while (index < playersCount - 1)
+								{
+									if (player1.localeCompare(players[index].name) === 0)
+										players[index].score++;
+									if (player2.localeCompare(players[index].name) === 0)
+										players[index].alive = false;
+									index++;
+								}
+							}
 							resetGame();
 							interval = setInterval(drawMenu, 10);
 						}
@@ -348,8 +382,8 @@
 				ctx.fillStyle = "#0095DD";
 				ctx.textAlign = "left";
 				ctx.textBaseline = "left";
-				ctx.fillText(`Player 1: ${leftScore}`, 8, 20);
-				ctx.fillText(`Player 2: ${rightScore}`, 8, 40);
+				ctx.fillText(`${player1}: ${leftScore}`, 8, 20);
+				ctx.fillText(`${player2}: ${rightScore}`, 8, 40);
 			}
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
@@ -383,6 +417,7 @@
 				{
 					menuBool = false;
 					winner = 0;
+					findNextMatch();
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					clearInterval(interval);
 					interval = setInterval(draw, 8);
