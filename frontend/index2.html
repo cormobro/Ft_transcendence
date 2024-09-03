@@ -29,20 +29,20 @@
 									Solo
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';">Facile</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';">Moyen</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';">Difficile</a></li>
+									<li><a class="dropdown-item" href="#facile" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Facile</a></li>
+									<li><a class="dropdown-item" href="#moyen" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Moyen</a></li>
+									<li><a class="dropdown-item" href="#difficile" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Difficile</a></li>
 									<!-- <li><a class="dropdown-item" href="#">Facile</a></li>
 									<li><a class="dropdown-item" href="#">Moyen</a></li>
 									<li><a class="dropdown-item" href="#">Difficile</a></li> -->
 								</ul>
 							</li>
 							<li class="nav-item text-white">
-								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';">Duo</a>
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';displayCanvas(2);launchGame();">Duo</a>
 								<!-- <a class="nav-link" href="#">Duo</a> -->
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';">Tournoi</a>
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';displayCanvas(3);launchGame();">Tournoi</a>
 								<!-- <a class="nav-link" href="#">Tournoi</a> -->
 							</li>
 							<li class="nav-item">
@@ -133,26 +133,26 @@
 								</div>
 							</div>
 						</div>
-						<div class="d-flex justify-content-center">
-							<canvas class="bg-light" id="myCanvas"></canvas>
+						<div class="d-flex justify-content-center" id="canvasSoloParent">
+							<!-- <canvas class="bg-light" id="myCanvas"></canvas> -->
 						</div>
 						<div class="row">
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>Q</h2></div>
+								<div class="border rounded-2 mt-2 p-2"><h2>W</h2></div>
 								<p>Monter</p>
 							</div>
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>&gt</h2></div>
+								<div class="border rounded-2 mt-2 p-2"><h2>&uarr;</h2></div>
 								<p>Monter</p>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>E</h2></div>
+								<div class="border rounded-2 mt-2 p-2"><h2>S</h2></div>
 								<p>Descendre</p>
 							</div>
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>&lt</h2></div>
+								<div class="border rounded-2 mt-2 p-2"><h2>&darr;</h2></div>
 								<p>Descendre</p>
 							</div>
 						</div>
@@ -166,20 +166,25 @@
 							<h2>Mode Duo</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="inputForm" method="post">
-										<div class="col-12">
-											<label for="player1" class="form-label">Nom d'utilisateur</label>
-											<input type="text" class="form-control" name="player1" id="player1" required>
-										</div>
-										<div class="col-12">
-											<label for="player2" class="form-label">Nom d'utilisateur</label>
-											<input type="text" class="form-control" name="player2" id="player2" required>
+									<form class="row gy-4" id="duoForm" method="post">
+										<div id="playerInputs">
+											<div class="col-12">
+												<label for="player1" class="form-label">Nom d'utilisateur</label>
+												<input type="text" class="form-control" name="player1" id="player1" maxlength="15" required>
+											</div>
+											<div class="col-12">
+												<label for="player2" class="form-label">Nom d'utilisateur</label>
+												<input type="text" class="form-control" name="player2" id="player2" maxlength="15" required>
+											</div>
 										</div>
 										<div class="col-12">
 											<button type="submit" class="btn btn-outline-light w-100">Jouer</button>
 										</div>
 									</form>
 								</div>
+							</div>
+							<div class="d-flex justify-content-center" id="canvasDuoParent">
+								<!-- <canvas class="bg-light" id="myCanvas"></canvas> -->
 							</div>
 						</div>
 					</div>
@@ -192,19 +197,21 @@
 							<h2>Mode Tournoi</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="inputForm row gy-4" id="inputForm" method="post">
-										<div id="playerInputs">
-											<div class="col-12">
-												<label for="player1" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player1" id="player1" oninput="check(this)" maxlength="15" required>
-											</div>
-											<div class="col-12">
-												<label for="player2" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player2" id="player2" oninput="check(this)" maxlength="15" required>
-											</div>
-											<div class="col-12">
-												<label for="player3" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player3" id="player3" oninput="check(this)" maxlength="15" required>
+									<form class="row gy-4" id="tournamentForm" method="post">
+										<div id="tournamentInputs">
+											<div id="playerInputs">
+												<div class="col-12">
+													<label for="player1" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player1" id="player1" maxlength="15" required>
+												</div>
+												<div class="col-12">
+													<label for="player2" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player2" id="player2" maxlength="15" required>
+												</div>
+												<div class="col-12">
+													<label for="player3" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player3" id="player3" maxlength="15" required>
+												</div>
 											</div>
 										</div>
 										<div class="col-12">
@@ -218,6 +225,9 @@
 										</div>
 									</form>
 								</div>
+							</div>
+							<div class="d-flex justify-content-center" id="canvasTournamentParent">
+								<!-- <canvas class="bg-light" id="myCanvas"></canvas> -->
 							</div>
 						</div>
 					</div>
@@ -335,7 +345,7 @@
 		<script>
 			document.getElementById('addPlayer').addEventListener('click', function() {
 				// Compter le nombre actuel de champs d'input
-				const playerCount = document.querySelectorAll('#playerInputs .col-12').length;
+				const playerCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
 
 				if (playerCount == 8)
 					return;
@@ -357,12 +367,16 @@
 				newInput.maxLength = '15';
 				newInput.required = ' ';
 
+				// newInput.oninput = function() {
+				// 	check(this);
+				// };
+
 				// Ajouter le label et l'input au div
 				newInputDiv.appendChild(newLabel);
 				newInputDiv.appendChild(newInput);
 
 				// Ajouter le nouveau div au conteneur de champs
-				document.getElementById('playerInputs').appendChild(newInputDiv);
+				document.querySelector('#tournamentInputs #playerInputs').appendChild(newInputDiv);
 			});
 		</script>
 		<!-- <script>
@@ -377,7 +391,7 @@
 				}
 			}
 		</script> -->
-		<script>
+		<!-- <script>
 			// document.querySelectorAll('#playerInputs input').forEach(function(input) {
 			function check(input){
 				const inputs = document.querySelectorAll('#playerInputs input');
@@ -416,30 +430,71 @@
 				}
 			}
 			// });
-		</script>
-		<!-- <script>
-			var frm = document.querySelector('form.inputForm');
-			var inputs = frm.querySelectorAll('input[type=text]');
+		</script> -->
+		<script>
+			var frm = document.querySelector('#duoForm');
 
 			frm.addEventListener('submit', function(e) {
 
+				var inputs = frm.querySelectorAll('input[type=text]');
+				for (var i = 0; i < inputs.length; i++)
+					console.log(inputs[i].value);
 				e.preventDefault();
 				var classArr = [];
-
-				for(var i = 0; i < inputs.length; i++) {
-					if(classArr.indexOf(inputs[i].value) != -1) {
-						inputs[i].style.backgroundColor = "red";
+				for(var i = 0; i < inputs.length; i++){
+					const value = inputs[i].value
+					console.log("Value:"+value);
+					if (value.includes(" ")){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
 						return false;
 					}
-					else
-						classArr.push(inputs[i].value);
+					else if (classArr.includes(value)){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+						return false;
+					}
+					if (value != '')
+						classArr.push(value);
+					for (var j = 0; j < classArr.length; j++){
+						console.log("classArr, index:"+j+": "+classArr[j]);
+					}
 				}
 				frm.submit();
 			});
-		</script> -->
+		</script>
+		<script>
+			var frm = document.querySelector('#tournamentForm');
+
+			frm.addEventListener('submit', function(e) {
+
+				var inputs = frm.querySelectorAll('input[type=text]');
+				for (var i = 0; i < inputs.length; i++)
+					console.log(inputs[i].value);
+				e.preventDefault();
+				var classArr = [];
+				for(var i = 0; i < inputs.length; i++){
+					const value = inputs[i].value
+					console.log("Value:"+value);
+					if (value.includes(" ")){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
+						return false;
+					}
+					else if (classArr.includes(value)){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+						return false;
+					}
+					if (value != '')
+						classArr.push(value);
+					for (var j = 0; j < classArr.length; j++){
+						console.log("classArr, index:"+j+": "+classArr[j]);
+					}
+				}
+				frm.submit();
+			});
+		</script>
 		<script>
 			function hideAllContentDivs(){
 				var contentDivs = document.getElementsByClassName('content');
+
 				for (var i = 0; i < contentDivs.length; ++i) {
 					var div = contentDivs[i];
 					div.style.display='none';
@@ -447,7 +502,50 @@
 			};
 		</script>
 		<script>
-			const canvas = document.getElementById("myCanvas");
+			function displayCanvas(canvasType){
+				console.log(canvasType);
+				var canvas = document.getElementById('canvasSolo');
+				var canvasParent = document.getElementById('canvasSoloParent');
+				if (canvasParent && canvas) {
+					canvasParent.removeChild(canvas);
+				}
+				canvas = document.getElementById('canvasDuo');
+				canvasParent = document.getElementById('canvasDuoParent');
+				if (canvasParent && canvas) {
+					canvasParent.removeChild(canvas);
+				}
+				canvas = document.getElementById('canvasTournament');
+				canvasParent = document.getElementById('canvasTournamentParent');
+				if (canvasParent && canvas) {
+					canvasParent.removeChild(canvas);
+				}
+				if (canvasType == 1){
+				const newInputCanvas = document.createElement('canvas');
+				newInputCanvas.classList.add('bg-light');
+				newInputCanvas.id = 'canvasSolo';
+				document.getElementById('canvasSoloParent').appendChild(newInputCanvas);
+				}
+				if (canvasType == 2){
+				const newInputCanvas = document.createElement('canvas');
+				newInputCanvas.classList.add('bg-light');
+				newInputCanvas.id = 'canvasDuo';
+				document.getElementById('canvasDuoParent').appendChild(newInputCanvas);
+				}
+				if (canvasType == 3){
+				const newInputCanvas = document.createElement('canvas');
+				newInputCanvas.classList.add('bg-light');
+				newInputCanvas.id = 'canvasTournament';
+				document.getElementById('canvasTournamentParent').appendChild(newInputCanvas);
+				}
+			}
+		</script>
+		<script>
+		function launchGame(){
+			var canvas = document.getElementById("canvasSolo");
+			if (!canvas)
+				canvas = document.getElementById("canvasDuo");
+			if (!canvas)
+				canvas = document.getElementById("canvasTournament");
 			const ctx = canvas.getContext("2d");
 			canvas.width = window.innerWidth * 3/4;
 			canvas.height = canvas.width * 2/3;
@@ -752,6 +850,7 @@
 				}
 			}
 			interval = setInterval(drawMenu, 10);
+		}
 		</script>
 	</body>
 </html>
