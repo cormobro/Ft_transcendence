@@ -1,23 +1,3 @@
-<!doctype html>
-<html lang="en-US">
-	<head>
-		<meta charset="utf-8" />
-		<title>PONG</title>
-		<style>
-* {
-	padding: 0;
-	margin: 0;
-}
-      canvas {
-	      background: #eee;
-	      display: block;
-	      margin: 0 auto;
-      }
-		</style>
-	</head>
-	<body>
-		<canvas id="myCanvas" width="1080" height="720"></canvas>
-
 		<script>
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
@@ -500,6 +480,3 @@
 				findNextMatch();
 			interval = setInterval(drawMenu, 10);
 		</script>
-	</body>
-</html>
-

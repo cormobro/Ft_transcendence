@@ -116,6 +116,7 @@
 					drawMenuScore();
 				if (gameMode === 2 && tournamentWinner === 0)
 					drawAnnouncementMenu();
+				interval = requestAnimationFrame(drawMenu);
 			}
 
 			function drawStartSoloMenu()
@@ -195,7 +196,6 @@
 				{
 					while (matchmakingIndex < playersCount - 1 && foundPair < 2 && loopDirection === 0)
 					{
-						console.log("matchmakingIndex:", matchmakingIndex);
 						if (matchmakingIndex === playersCount - 2)
 							loopDirection = 1;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
@@ -215,7 +215,6 @@
 					}
 					while (matchmakingIndex >= 0 && foundPair < 2 && loopDirection === 1)
 					{
-						console.log("matchmakingIndex2:", matchmakingIndex);
 						if (matchmakingIndex === 0)
 							loopDirection = 0;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
@@ -280,7 +279,6 @@
 						if (rightScore === 3)
 						{
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
-							clearInterval(interval);
 							winner = player2;
 							if (gameMode === 2)
 							{
@@ -299,12 +297,11 @@
 								findNextMatch();
 							}
 							resetGame();
-							interval = setInterval(drawMenu, 10);
+							cancelAnimationFrame(interval);
+							drawMenu();
 						}
 						else
 						{
-							clearInterval(interval);
-							interval = null;
 							x = canvas.width / 2;
 							y = canvas.height - 10;
 							dx = -1 * (canvas.width / 2) / 200;
@@ -312,7 +309,8 @@
 							leftPaddle = (canvas.height - paddleHeight) /2;
 							rightPaddle = (canvas.height - paddleHeight) /2;
 							ballSpeed = canvas.width / 250;
-							interval = setInterval(draw, 8);
+							cancelAnimationFrame(interval);
+							draw();
 						}
 					}
 				}
@@ -334,7 +332,6 @@
 						if (leftScore === 3)
 						{
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
-							clearInterval(interval);
 							winner = player1;
 							if (gameMode === 2)
 							{
@@ -353,12 +350,11 @@
 								findNextMatch();
 							}
 							resetGame();
-							interval = setInterval(drawMenu, 10);
+							cancelAnimationFrame(interval);
+							drawMenu();
 						}
 						else
 						{
-							clearInterval(interval);
-							interval = null;
 							x = canvas.width / 2;
 							y = canvas.height - 10;
 							dx = (canvas.width / 2) / 200;
@@ -366,7 +362,8 @@
 							leftPaddle = (canvas.height - paddleHeight) / 2;
 							rightPaddle = (canvas.height - paddleHeight) / 2;
 							ballSpeed = canvas.width / 250;
-							interval = setInterval(draw, 8);
+							cancelAnimationFrame(interval);
+							draw();
 						}
 					}
 				}
@@ -390,6 +387,7 @@
 				{
 					rightPaddle = Math.max(rightPaddle - 7, 0);
 				}
+				interval = requestAnimationFrame(draw);
 			}
 
 			function drawLeftPaddle()
@@ -452,8 +450,8 @@
 					menuBool = false;
 					winner = 0;
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					clearInterval(interval);
-					interval = setInterval(draw, 8);
+					cancelAnimationFrame(interval);
+					draw();
 				}
 			}
 
@@ -498,7 +496,7 @@
 			}
 			if (gameMode === 2)
 				findNextMatch();
-			interval = setInterval(drawMenu, 10);
+			drawMenu();
 		</script>
 	</body>
 </html>

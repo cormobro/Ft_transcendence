@@ -1,26 +1,11 @@
-<!doctype html>
-<html lang="en-US">
-	<head>
-		<meta charset="utf-8" />
-		<title>PONG</title>
-		<style>
-* {
-	padding: 0;
-	margin: 0;
-}
-      canvas {
-	      background: #eee;
-	      display: block;
-	      margin: 0 auto;
-      }
-		</style>
-	</head>
-	<body>
-		<canvas id="myCanvas" width="1080" height="720"></canvas>
-
 		<script>
+			//---------- Canvas infos ----------------------------------------------------------------------
+
+			
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
+			canvas.width = window.innerWidth * 3/4;
+			canvas.height = canvas.width * 2/3;
 
 			//----------- Ball coordinates -----------------------------------------------------------------
 
@@ -93,6 +78,32 @@
 			let loopDirection = 0;
 
 			//----------------------------------------------------------------------------------------------
+
+			function resetWholeGame()
+			{
+				resetGame();
+				player1 = "Player 1";
+				player2 = "Player 2";
+				winner = 0;
+				tournamentWinner = 0;
+				index = 0;
+				gameMode = 1;
+				totalPoints = 0;
+				matchmakingIndex = 0;
+				foundPair = 0;
+				loopDirection = 0;
+				playersCount = 1;
+				players = [
+				{name:"Player 1", score:0, alive:true},
+				{name:"Player 2", score:0, alive:true},
+				{name:"Player 3", score:0, alive:true},
+				{name:"Player 4", score:0, alive:true},
+				{name:"Player 5", score:0, alive:true},
+				{name:"Player 6", score:0, alive:true},
+				{name:"Player 7", score:0, alive:true},
+				{name:"Player 8", score:0, alive:true}
+			];
+			}
 
 			function resetGame()
 			{
@@ -195,7 +206,6 @@
 				{
 					while (matchmakingIndex < playersCount - 1 && foundPair < 2 && loopDirection === 0)
 					{
-						console.log("matchmakingIndex:", matchmakingIndex);
 						if (matchmakingIndex === playersCount - 2)
 							loopDirection = 1;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
@@ -215,7 +225,6 @@
 					}
 					while (matchmakingIndex >= 0 && foundPair < 2 && loopDirection === 1)
 					{
-						console.log("matchmakingIndex2:", matchmakingIndex);
 						if (matchmakingIndex === 0)
 							loopDirection = 0;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
@@ -499,7 +508,43 @@
 			if (gameMode === 2)
 				findNextMatch();
 			interval = setInterval(drawMenu, 10);
-		</script>
-	</body>
-</html>
 
+			//---------- onClick functions for game mode ---------------------------------------------------
+
+			function onClickEasy()
+			{
+				resetWholeGame();
+				gameMode = 0;
+				player1 = "Player 1";
+				player2 = "Easy";
+			};
+
+			function onClickMedium()
+			{
+				resetWholeGame();
+				gameMode = 0;
+				player1 = "Player 1";
+				player2 = "Medium";
+			};
+
+			function onClickHard()
+			{
+				resetWholeGame();
+				gameMode = 0;
+				player1 = "Player 1";
+				player2 = "Hard";
+			};
+
+			function onClickDuo()
+			{
+				resetWholeGame();
+				gameMode = 1;
+			};
+
+			function onClickTournament()
+			{
+				resetWholeGame();
+				gameMode = 2;
+			};
+
+		</script>
