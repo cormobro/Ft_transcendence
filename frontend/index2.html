@@ -29,9 +29,9 @@
 									Solo
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-									<li><a class="dropdown-item" href="#facile" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Facile</a></li>
-									<li><a class="dropdown-item" href="#moyen" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Moyen</a></li>
-									<li><a class="dropdown-item" href="#difficile" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Difficile</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Facile</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Moyen</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Difficile</a></li>
 									<!-- <li><a class="dropdown-item" href="#">Facile</a></li>
 									<li><a class="dropdown-item" href="#">Moyen</a></li>
 									<li><a class="dropdown-item" href="#">Difficile</a></li> -->
@@ -219,6 +219,7 @@
 										</div>
 										<div class="col-4">
 											<button type="button" class="btn btn-outline-light w-100" id="addPlayer"><i class="bi bi-person-plus-fill" style="font-size: 30px;"></i></button>
+											<button type="button" class="btn btn-outline-light w-100" id="removePlayer"><i class="bi bi-person-dash-fill" style="font-size: 30px;"></i></button>
 										</div>
 										<div class="col-12">
 											<button type="submit" class="btn btn-outline-light w-100">Jouer</button>
@@ -341,6 +342,17 @@
 				formdata.append('age', '26')
 				requestObj.send(formdata)
 			}
+		</script>
+		<script>
+			document.getElementById('removePlayer').addEventListener('click', function() {
+				const playerCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+				const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs .col-12');
+
+				if (playerCount <= 3)
+					return;
+
+				divInputs[divInputs.length - 1].remove();
+			});
 		</script>
 		<script>
 			document.getElementById('addPlayer').addEventListener('click', function() {
