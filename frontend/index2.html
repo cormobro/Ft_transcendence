@@ -29,20 +29,20 @@
 									Solo
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Facile</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Moyen</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';displayCanvas(1);launchGame();">Difficile</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Facile</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Moyen</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Difficile</a></li>
 									<!-- <li><a class="dropdown-item" href="#">Facile</a></li>
 									<li><a class="dropdown-item" href="#">Moyen</a></li>
 									<li><a class="dropdown-item" href="#">Difficile</a></li> -->
 								</ul>
 							</li>
 							<li class="nav-item text-white">
-								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';displayCanvas(2);launchGame();">Duo</a>
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';">Duo</a>
 								<!-- <a class="nav-link" href="#">Duo</a> -->
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';displayCanvas(3);launchGame();">Tournoi</a>
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';">Tournoi</a>
 								<!-- <a class="nav-link" href="#">Tournoi</a> -->
 							</li>
 							<li class="nav-item">
@@ -75,13 +75,13 @@
 				</div>
 				</section>
 			</div>
-			<div id="solo" class="content content-solo" style="display:none">
+			<div id="game" class="content content-game" style="display:none">
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
-						<div class="py-5 text-light">
-							<h2>Mode Solo</h2>
-						</div>
 						<div class="mb-5">
+							<div class="py-5 text-light">
+								<h2>Pong</h2>
+							</div>
 							<div class="row">
 								<div class="col-6">
 									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#scores">
@@ -133,12 +133,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="d-flex justify-content-center" id="canvasSoloParent">
-							<!-- <canvas class="bg-light" id="myCanvas"></canvas> -->
+						<div class="d-flex justify-content-center" id="myGame">
+							<canvas class="bg-light" id="myCanvas"></canvas>
 						</div>
 						<div class="row">
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>W</h2></div>
+								<div class="border rounded-2 mt-2 p-2"><h2>A</h2></div>
 								<p>Monter</p>
 							</div>
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
@@ -148,7 +148,7 @@
 						</div>
 						<div class="row">
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>S</h2></div>
+								<div class="border rounded-2 mt-2 p-2"><h2>Z</h2></div>
 								<p>Descendre</p>
 							</div>
 							<div class="col-6 d-flex justify-content-center text-light fw-bold">
@@ -166,7 +166,7 @@
 							<h2>Mode Duo</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="duoForm" method="post">
+									<form class="row gy-4" id="duoForm">
 										<div id="playerInputs">
 											<div class="col-12">
 												<label for="player1" class="form-label">Nom d'utilisateur</label>
@@ -178,13 +178,10 @@
 											</div>
 										</div>
 										<div class="col-12">
-											<button type="submit" class="btn btn-outline-light w-100">Jouer</button>
+											<a class="btn btn-outline-light w-100" href="#myGame" role="button" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Jouer</a>
 										</div>
 									</form>
 								</div>
-							</div>
-							<div class="d-flex justify-content-center" id="canvasDuoParent">
-								<!-- <canvas class="bg-light" id="myCanvas"></canvas> -->
 							</div>
 						</div>
 					</div>
@@ -197,7 +194,7 @@
 							<h2>Mode Tournoi</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="tournamentForm" method="post">
+									<form class="row gy-4" id="tournamentForm">
 										<div id="tournamentInputs">
 											<div id="playerInputs">
 												<div class="col-12">
@@ -222,13 +219,9 @@
 											<button type="button" class="btn btn-outline-light w-100" id="removePlayer"><i class="bi bi-person-dash-fill" style="font-size: 30px;"></i></button>
 										</div>
 										<div class="col-12">
-											<button type="submit" class="btn btn-outline-light w-100">Jouer</button>
-										</div>
+											<a class="btn btn-outline-light w-100" href="#myGame" role="button" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Jouer</a>										</div>
 									</form>
 								</div>
-							</div>
-							<div class="d-flex justify-content-center" id="canvasTournamentParent">
-								<!-- <canvas class="bg-light" id="myCanvas"></canvas> -->
 							</div>
 						</div>
 					</div>
@@ -345,10 +338,10 @@
 		</script>
 		<script>
 			document.getElementById('removePlayer').addEventListener('click', function() {
-				const playerCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+				const playersCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
 				const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs .col-12');
 
-				if (playerCount <= 3)
+				if (playersCount <= 3)
 					return;
 
 				divInputs[divInputs.length - 1].remove();
@@ -357,9 +350,9 @@
 		<script>
 			document.getElementById('addPlayer').addEventListener('click', function() {
 				// Compter le nombre actuel de champs d'input
-				const playerCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+				const playersCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
 
-				if (playerCount == 8)
+				if (playersCount == 8)
 					return;
 				// Créer un nouvel élément div pour le champ input
 				const newInputDiv = document.createElement('div');
@@ -514,50 +507,7 @@
 			};
 		</script>
 		<script>
-			function displayCanvas(canvasType){
-				console.log(canvasType);
-				var canvas = document.getElementById('canvasSolo');
-				var canvasParent = document.getElementById('canvasSoloParent');
-				if (canvasParent && canvas) {
-					canvasParent.removeChild(canvas);
-				}
-				canvas = document.getElementById('canvasDuo');
-				canvasParent = document.getElementById('canvasDuoParent');
-				if (canvasParent && canvas) {
-					canvasParent.removeChild(canvas);
-				}
-				canvas = document.getElementById('canvasTournament');
-				canvasParent = document.getElementById('canvasTournamentParent');
-				if (canvasParent && canvas) {
-					canvasParent.removeChild(canvas);
-				}
-				if (canvasType == 1){
-				const newInputCanvas = document.createElement('canvas');
-				newInputCanvas.classList.add('bg-light');
-				newInputCanvas.id = 'canvasSolo';
-				document.getElementById('canvasSoloParent').appendChild(newInputCanvas);
-				}
-				if (canvasType == 2){
-				const newInputCanvas = document.createElement('canvas');
-				newInputCanvas.classList.add('bg-light');
-				newInputCanvas.id = 'canvasDuo';
-				document.getElementById('canvasDuoParent').appendChild(newInputCanvas);
-				}
-				if (canvasType == 3){
-				const newInputCanvas = document.createElement('canvas');
-				newInputCanvas.classList.add('bg-light');
-				newInputCanvas.id = 'canvasTournament';
-				document.getElementById('canvasTournamentParent').appendChild(newInputCanvas);
-				}
-			}
-		</script>
-		<script>
-		function launchGame(){
-			var canvas = document.getElementById("canvasSolo");
-			if (!canvas)
-				canvas = document.getElementById("canvasDuo");
-			if (!canvas)
-				canvas = document.getElementById("canvasTournament");
+			var canvas = document.getElementById('myCanvas');
 			const ctx = canvas.getContext("2d");
 			canvas.width = window.innerWidth * 3/4;
 			canvas.height = canvas.width * 2/3;
@@ -862,7 +812,6 @@
 				}
 			}
 			interval = setInterval(drawMenu, 10);
-		}
 		</script>
 	</body>
 </html>
