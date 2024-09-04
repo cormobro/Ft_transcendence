@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+		<title>Ft_transcendence</title>
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+				<div class="container">
+					<a class="narbar-brand me-3" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-home')[0].style.display='block';">
+						<img src="img/logo.png" alt="logo" width="40" height="40">
+					</a>
+					<span class="text-white">Ft_transcendence</span>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+						<ul class="navbar-nav">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle active" href="#" id="navbarNavDropdownMenuLink" role="button" data-bs-toggle="dropdown">
+									Solo
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';onClickEasy()">Facile</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';onClickMedium()">Moyen</a></li>
+									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';onClickHard()">Difficile</a></li>
+									<!-- <li><a class="dropdown-item" href="#">Facile</a></li>
+									<li><a class="dropdown-item" href="#">Moyen</a></li>
+									<li><a class="dropdown-item" href="#">Difficile</a></li> -->
+								</ul>
+							</li>
+							<li class="nav-item text-white">
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';">Duo</a>
+								<!-- <a class="nav-link" href="#">Duo</a> -->
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';">Tournoi</a>
+								<!-- <a class="nav-link" href="#">Tournoi</a> -->
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-stat')[0].style.display='block';">Stats</a>
+								<!-- <a class="nav-link" href="#">Statistiques</a> -->
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Se connecter</a>
+								<!-- <a class="nav-link" href="#">Statistiques</a> -->
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<main>
+			<div id="home" class="content content-home">
+				<section class="py-5 mt-5 bg-dark">
+					<div class="container">
+						<div class="row align-items-center gy-4">
+							<div class="col-6 text-light">
+								<h1>Welcome Home!</h1>
+								<button id="getRequest" class="btn btn-outline-light mt-5">GET request</button>
+								<button id="postRequest" class="btn btn-outline-light mt-5">POST request</button>
+						</div>
+						<div class="col-6">
+							<img src="img/accueil.png" alt="accueil" class="w-100">
+						</div>
+					</div>
+				</div>
+				</section>
+			</div>
+			<div id="game" class="content content-game" style="display:none">
+				<section class="py-5 mt-5 bg-dark">
+					<div class="container">
+						<div class="mb-5">
+							<div class="py-5 text-light">
+								<h2>Pong</h2>
+							</div>
+							<div class="row">
+								<div class="col-6">
+									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#scores">
+										Scores
+									</button>
+								</div>
+								<div class="col-6">
+									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#leaderboard">
+										Leaderboard
+									</button>
+								</div>
+							</div>
+							<div class="row"></div>
+								<div class="collapse" id="scores">
+									<div class="card card-body">
+										<ol class="list-group">
+											<li class="list-group-item bg-primary text-light">
+												<h4>Match 1</h4>
+												<h5>Player 1 vs Player 2</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>Match 2</h4>
+												<h5>Player 3 vs Player 4</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>Match 3</h4>
+												<h5>? vs ?</h5>
+											</li>
+										</ol>
+									</div>
+								</div>
+								<div class="collapse" id="leaderboard">
+									<div class="card card-body">
+										<ol class="list-group">
+											<li class="list-group-item bg-primary text-light">
+												<h4>1</h4>
+												<h5>Player 1</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>2</h4>
+												<h5>Player 2</h5>
+											</li>
+											<li class="list-group-item">
+												<h4>3</h4>
+												<h5>Player 3</h5>
+											</li>
+										</ol>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="d-flex justify-content-center" id="myGame">
+							<canvas class="bg-light" id="myCanvas"></canvas>
+						</div>
+						<div class="row">
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>A</h2></div>
+								<p>Monter</p>
+							</div>
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>&uarr;</h2></div>
+								<p>Monter</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>Z</h2></div>
+								<p>Descendre</p>
+							</div>
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>&darr;</h2></div>
+								<p>Descendre</p>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div id="duo" class="content content-duo" style="display:none">
+				<section class="py-5 mt-5 bg-dark">
+					<div class="container">
+						<div class="py-5 text-light">
+							<h2>Mode Duo</h2>
+							<div class="d-flex justify-content-center">
+								<div class="col-3 border rounded-2 p-5 text-light">
+									<form class="row gy-4" id="duoForm">
+										<div id="playerInputs">
+											<div class="col-12">
+												<label for="player1" class="form-label">Nom d'utilisateur</label>
+												<input type="text" class="form-control" name="player1" id="player1" maxlength="15" required>
+											</div>
+											<div class="col-12">
+												<label for="player2" class="form-label">Nom d'utilisateur</label>
+												<input type="text" class="form-control" name="player2" id="player2" maxlength="15" required>
+											</div>
+										</div>
+										<div class="col-12">
+											<a class="btn btn-outline-light w-100" href="#myGame" role="button" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';onClickDuo()">Jouer</a>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div id="tournament" class="content content-tournament" style="display:none">
+				<section class="py-5 mt-5 bg-dark">
+					<div class="container">
+						<div class="py-5 text-light">
+							<h2>Mode Tournoi</h2>
+							<div class="d-flex justify-content-center">
+								<div class="col-3 border rounded-2 p-5 text-light">
+									<form class="row gy-4" id="tournamentForm">
+										<div id="tournamentInputs">
+											<div id="playerInputs">
+												<div class="col-12">
+													<label for="player1" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player1" id="player1" maxlength="15" required>
+												</div>
+												<div class="col-12">
+													<label for="player2" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player2" id="player2" maxlength="15" required>
+												</div>
+												<div class="col-12">
+													<label for="player3" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player3" id="player3" maxlength="15" required>
+												</div>
+											</div>
+										</div>
+										<div class="col-12">
+											<p id="outputText" class="text-light"></p>
+										</div>
+										<div class="col-4">
+											<button type="button" class="btn btn-outline-light w-100" id="addPlayer"><i class="bi bi-person-plus-fill" style="font-size: 30px;"></i></button>
+											<button type="button" class="btn btn-outline-light w-100" id="removePlayer"><i class="bi bi-person-dash-fill" style="font-size: 30px;"></i></button>
+										</div>
+										<div class="col-12">
+											<a class="btn btn-outline-light w-100" href="#myGame" role="button" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';onClickTournament()">Jouer</a>										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div id="stat" class="content content-stat" style="display:none">
+				<section class="py-5 mt-5 bg-dark">
+					<div class="container">
+						<div class="py-5 text-light">
+							<h2>Statistiques</h2>
+						</div>
+					</div>
+				</section>
+			</div>
+			<!-- <section class="py-5 mt-5 bg-dark">
+				<div class="container">
+					<div class="row align-items-center gy-4">
+						<div class="col-6 text-light">
+							<h1 class="fw-bold">Bienvenue sur Ft_transcendence.</h1>
+							<h2 class="fw-light">Laissez-vous emporter dans un voyage où l'espace et le temps ne suivent aucune loi que vous connaissez.</h2>
+							<h4 class="fw-light">Designed by mdor, febonaer and gt-serst.</h4>
+							<a class="btn btn-outline-light mt-5" href="#inputForm">Commencez</a>
+						</div>
+						<div class="col-6">
+							<img src="img/accueil.png" alt="accueil" class="w-100">
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="py-5 bg-dark">
+				<div class="container">
+					<div class="d-flex justify-content-center">
+						<div class="col-3 border rounded-2 p-5 text-light">
+							<form class="row gy-4" id="inputForm">
+								<div id="playerInputs">
+									<div class="col-12">
+										<label for="player1" class="form-label">Nom d'utilisateur</label>
+										<input type="text" class="form-control" name="player1" id="player1" required>
+									</div>
+									<div class="col-12">
+										<label for="player2" class="form-label">Nom d'utilisateur</label>
+										<input type="text" class="form-control" name="player2" id="player2" required>
+									</div>
+								</div>
+								<div class="col-4">
+									<button type="button" class="btn btn-outline-light w-100" id="addPlayer"><i class="bi bi-person-plus-fill" style="font-size: 30px;"></i></button>
+								</div>
+								<div class="col-12">
+									<button type="submit" class="btn btn-outline-light w-100">Jouez</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="py-5 bg-dark">
+				<div class="container">
+					<div class="row">
+						<div class="col-4 border rounded-2 p-5 text-light">
+							<h3>RÉSULTATS:</h3>
+							<h3>LEADERBOARD:</h3>
+						</div>
+						<div class="col-8 border rounded-2 p-5 text-light">
+							<h3>PONG</h3>
+						</div>
+					</div>
+				</div>
+			</section> -->
+		</main>
+		<footer>
+
+		</footer>
+		<!-- Optional JavaScript; choose one of the two! -->
+
+		<!-- Option 1: Bootstrap Bundle with Popper -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+		<!-- Option 2: Separate Popper and Bootstrap JS -->
+		<!--
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+		-->
+		<script>
+
+			var csrftoken = '{{ csrf_token }}'
+
+			document.getElementById('getRequest').onclick = () => {
+				const requestObj = new XMLHttpRequest()
+				requestObj.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200){
+						console.log(this.responseText)
+					}
+				}
+
+				requestObj.open("GET", "/get/")
+				requestObj.send()
+			}
+			document.getElementById('postRequest').onclick = () => {
+				const requestObj = new XMLHttpRequest()
+				requestObj.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200){
+						console.log(this.responseText)
+					}
+				}
+
+				requestObj.open("POST", "/post/")
+				requestObj.setRequestHeader("X-CSRFToken", csrftoken)
+
+				const formdata = new FormData()
+				formdata.append('name', 'Gege')
+				formdata.append('age', '26')
+				requestObj.send(formdata)
+			}
+		</script>
+		<script>
+			document.getElementById('removePlayer').addEventListener('click', function() {
+				const playersCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+				const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs .col-12');
+
+				if (playersCount <= 3)
+					return;
+
+				divInputs[divInputs.length - 1].remove();
+			});
+		</script>
+		<script>
+			document.getElementById('addPlayer').addEventListener('click', function() {
+				// Compter le nombre actuel de champs d'input
+				const playersCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+
+				if (playersCount == 8)
+					return;
+				// Créer un nouvel élément div pour le champ input
+				const newInputDiv = document.createElement('div');
+				newInputDiv.classList.add('col-12');
+
+				const newLabel = document.createElement('label');
+				newLabel.setAttribute('for', 'player' + (playerCount + 1));
+				newLabel.classList.add('form-label');
+				newLabel.textContent = 'Nom d\'utilisateur';
+
+				// Créer le nouvel input
+				const newInput = document.createElement('input');
+				newInput.type = 'text';
+				newInput.classList.add('form-control');
+				newInput.name = 'player' + (playerCount + 1);
+				newInput.id = 'player' + (playerCount + 1);
+				newInput.maxLength = '15';
+				newInput.required = ' ';
+
+				// newInput.oninput = function() {
+				// 	check(this);
+				// };
+
+				// Ajouter le label et l'input au div
+				newInputDiv.appendChild(newLabel);
+				newInputDiv.appendChild(newInput);
+
+				// Ajouter le nouveau div au conteneur de champs
+				document.querySelector('#tournamentInputs #playerInputs').appendChild(newInputDiv);
+			});
+		</script>
+		<!-- <script>
+			function check(input) {
+				if (input.value == "good" ||
+					input.value == "fine" ||
+					input.value == "tired") {
+					input.setCustomValidity('"' + input.value + '" is not a feeling.');
+				} else {
+					// input is fine -- reset the error message
+					input.setCustomValidity('');
+				}
+			}
+		</script> -->
+		<!-- <script>
+			// document.querySelectorAll('#playerInputs input').forEach(function(input) {
+			function check(input){
+				const inputs = document.querySelectorAll('#playerInputs input');
+				let isInvalid = false;
+				let inputValues = [];
+
+				inputs.forEach(function(inp){
+					console.log(inp.value);
+				})
+				inputs.forEach(function(input){
+					const value = input.value;
+					// if (value === ''){
+					// 	console.log('"' + input.value + '" is empty.');
+					// 	isInvalid = true;
+					// }
+					if (value.includes(" ")){
+						console.log('"' + input.value + '" has space.');
+						isInvalid = true;
+					}
+					else if (inputValues.includes(value)){
+						console.log('"' + input.value + '" is dup.');
+						isInvalid = true;
+					}
+					if (value != '')
+						inputValues.push(value);
+				})
+				if (isInvalid)
+				{
+					document.getElementById('outputText').textContent = "Mauvaise saisie";
+					input.setCustomValidity('"' + input.value + '" is wrong.');
+				}
+				else
+				{
+					document.getElementById('outputText').textContent = "Saisie actuelle: " + input.value;
+					input.setCustomValidity('');
+				}
+			}
+			// });
+		</script> -->
+		<script>
+			var frm = document.querySelector('#duoForm');
+
+			frm.addEventListener('submit', function(e) {
+
+				var inputs = frm.querySelectorAll('input[type=text]');
+				for (var i = 0; i < inputs.length; i++)
+					console.log(inputs[i].value);
+				e.preventDefault();
+				var classArr = [];
+				for(var i = 0; i < inputs.length; i++){
+					const value = inputs[i].value
+					console.log("Value:"+value);
+					if (value.includes(" ")){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
+						return false;
+					}
+					else if (classArr.includes(value)){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+						return false;
+					}
+					if (value != '')
+						classArr.push(value);
+					for (var j = 0; j < classArr.length; j++){
+						console.log("classArr, index:"+j+": "+classArr[j]);
+					}
+				}
+				frm.submit();
+			});
+		</script>
+		<script>
+			var frm = document.querySelector('#tournamentForm');
+
+			frm.addEventListener('submit', function(e) {
+
+				var inputs = frm.querySelectorAll('input[type=text]');
+				for (var i = 0; i < inputs.length; i++)
+					console.log(inputs[i].value);
+				e.preventDefault();
+				var classArr = [];
+				for(var i = 0; i < inputs.length; i++){
+					const value = inputs[i].value
+					console.log("Value:"+value);
+					if (value.includes(" ")){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
+						return false;
+					}
+					else if (classArr.includes(value)){
+						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+						return false;
+					}
+					if (value != '')
+						classArr.push(value);
+					for (var j = 0; j < classArr.length; j++){
+						console.log("classArr, index:"+j+": "+classArr[j]);
+					}
+				}
+				frm.submit();
+			});
+		</script>
+		<script>
+			function hideAllContentDivs(){
+				var contentDivs = document.getElementsByClassName('content');
+
+				for (var i = 0; i < contentDivs.length; ++i) {
+					var div = contentDivs[i];
+					div.style.display='none';
+				}
+			};
+		</script>
+		<script src="pongInterval.js"></script>
+	</body>
+</html>
