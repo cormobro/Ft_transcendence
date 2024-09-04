@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.contrib import messages
 from .models import Player, Tournament
 from django.views.decorators.csrf import csrf_protect
 import requests
@@ -11,6 +12,7 @@ def home(request):
 
 @csrf_protect
 def manage_42_api_step1(request):
+	
 	client_id = os.getenv('API_CLIENT_ID')
 	redirect_uri = 'http://localhost:8000/api_code'
 	state = os.getenv('API_PROTECTION_STRING')
@@ -23,7 +25,15 @@ def manage_42_api_step1(request):
 		f"&scope={scope}"
 		f"&state={state}"
 	)
-	return redirect(auth_url)	
+
+	# response = requests.get(auth_url, allow_redirects=True)
+
+	# # Récupérez l'URL de redirection (la dernière URL dans la chaîne de redirections)
+	# redirect_url = response.url
+
+	# # Retournez l'URL de redirection au navigateur
+	# return HttpResponseRedirect(redirect_url)
+	return redirect(auth_url)
 
 @csrf_protect
 def manage_42_api_step2(request):
@@ -79,11 +89,19 @@ def use_access_token(access_token, request):
     if response.status_code == 200:
         user_data = response.json()
         username = user_data.get('login')
+        message = "Player is already logged in"
         if not Player.objects.filter(username=username).exists():
             player = Player(username=username)
             player.save()
-        # Render the template if the user does not exist or exists
-        return render(request, 'polls/index.html')
+            message = "Player added to the db"
+        # url = 'https://signin.intra.42.fr/users/sign_out?all=false'
+
+        # headers = {
+        #     'Content-Type': 'application/x-www-form-urlencoded',
+        #     }
+        # response = requests.post(url, headers=headers)
+        # return HttpResponse(response)
+        return render(request, 'polls/index.html', {'message': message})
     else:
         # Define request_info if needed
         request_info = f"""

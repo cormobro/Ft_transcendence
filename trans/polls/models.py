@@ -18,6 +18,7 @@ class Player(models.Model):
 class Tournament(models.Model):
     name = models.CharField(max_length=255)
     date = models.DateField(blank=True, default=datetime.date.today)
+    winner = models.CharField(max_length=255, blank=False)
 
     def __str__(self):
         return self.name
