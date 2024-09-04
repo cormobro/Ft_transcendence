@@ -116,7 +116,7 @@
 					drawMenuScore();
 				if (gameMode === 2 && tournamentWinner === 0)
 					drawAnnouncementMenu();
-				requestAnimationFrame(drawMenu);
+				interval = requestAnimationFrame(drawMenu);
 			}
 
 			function drawStartSoloMenu()
@@ -253,6 +253,7 @@
 
 			function draw()
 			{
+				console.log("dx:", dx, "dy:", dy, "ballSpeed:", ballSpeed);
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				drawBall();
 				drawLeftPaddle();
@@ -296,6 +297,7 @@
 								findNextMatch();
 							}
 							resetGame();
+							cancelAnimationFrame(interval);
 							drawMenu();
 						}
 						else
@@ -307,6 +309,7 @@
 							leftPaddle = (canvas.height - paddleHeight) /2;
 							rightPaddle = (canvas.height - paddleHeight) /2;
 							ballSpeed = canvas.width / 250;
+							cancelAnimationFrame(interval);
 							draw();
 						}
 					}
@@ -347,6 +350,7 @@
 								findNextMatch();
 							}
 							resetGame();
+							cancelAnimationFrame(interval);
 							drawMenu();
 						}
 						else
@@ -358,6 +362,7 @@
 							leftPaddle = (canvas.height - paddleHeight) / 2;
 							rightPaddle = (canvas.height - paddleHeight) / 2;
 							ballSpeed = canvas.width / 250;
+							cancelAnimationFrame(interval);
 							draw();
 						}
 					}
@@ -382,7 +387,7 @@
 				{
 					rightPaddle = Math.max(rightPaddle - 7, 0);
 				}
-				requestAnimationFrame(draw);
+				interval = requestAnimationFrame(draw);
 			}
 
 			function drawLeftPaddle()
@@ -445,6 +450,7 @@
 					menuBool = false;
 					winner = 0;
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					cancelAnimationFrame(interval);
 					draw();
 				}
 			}
