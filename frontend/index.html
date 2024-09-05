@@ -170,16 +170,18 @@
 										<div id="playerInputs">
 											<div class="col-12">
 												<label for="player1" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player1" id="player1" maxlength="15" required>
+												<input type="text" class="form-control" name="player1" id="player1" maxlength="15">
 											</div>
 											<div class="col-12">
 												<label for="player2" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player2" id="player2" maxlength="15" required>
+												<input type="text" class="form-control" name="player2" id="player2" maxlength="15">
 											</div>
 										</div>
 										<div class="col-12">
-											<a class="btn btn-outline-light w-100" href="#myGame" role="button" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Jouer</a>
+											<p id="duoOutputText" class="text-light"></p>
 										</div>
+										<div class="col-12">
+											<a class="btn btn-outline-light w-100" id="duoSubmitButton" href="#myGame" role="button">Jouer</a>										</div>
 									</form>
 								</div>
 							</div>
@@ -199,27 +201,28 @@
 											<div id="playerInputs">
 												<div class="col-12">
 													<label for="player1" class="form-label">Nom d'utilisateur</label>
-													<input type="text" class="form-control" name="player1" id="player1" maxlength="15" required>
+													<input type="text" class="form-control" name="player1" id="player1" maxlength="15">
 												</div>
 												<div class="col-12">
 													<label for="player2" class="form-label">Nom d'utilisateur</label>
-													<input type="text" class="form-control" name="player2" id="player2" maxlength="15" required>
+													<input type="text" class="form-control" name="player2" id="player2" maxlength="15">
 												</div>
 												<div class="col-12">
 													<label for="player3" class="form-label">Nom d'utilisateur</label>
-													<input type="text" class="form-control" name="player3" id="player3" maxlength="15" required>
+													<input type="text" class="form-control" name="player3" id="player3" maxlength="15">
 												</div>
 											</div>
 										</div>
 										<div class="col-12">
-											<p id="outputText" class="text-light"></p>
+											<p id="tournamentOutputText" class="text-light"></p>
 										</div>
 										<div class="col-4">
 											<button type="button" class="btn btn-outline-light w-100" id="addPlayer"><i class="bi bi-person-plus-fill" style="font-size: 30px;"></i></button>
 											<button type="button" class="btn btn-outline-light w-100" id="removePlayer"><i class="bi bi-person-dash-fill" style="font-size: 30px;"></i></button>
 										</div>
 										<div class="col-12">
-											<a class="btn btn-outline-light w-100" href="#myGame" role="button" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Jouer</a>										</div>
+											<a class="btn btn-outline-light w-100" id="tournamentSubmitButton" href="#myGame" role="button">Jouer</a>
+										</div>
 									</form>
 								</div>
 							</div>
@@ -338,10 +341,10 @@
 		</script>
 		<script>
 			document.getElementById('removePlayer').addEventListener('click', function() {
-				const playersCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+				const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
 				const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs .col-12');
 
-				if (playersCount <= 3)
+				if (playersNumber <= 3)
 					return;
 
 				divInputs[divInputs.length - 1].remove();
@@ -350,16 +353,16 @@
 		<script>
 			document.getElementById('addPlayer').addEventListener('click', function() {
 				// Compter le nombre actuel de champs d'input
-				const playersCount = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+				const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
 
-				if (playersCount == 8)
+				if (playersNumber == 8)
 					return;
 				// Créer un nouvel élément div pour le champ input
 				const newInputDiv = document.createElement('div');
 				newInputDiv.classList.add('col-12');
 
 				const newLabel = document.createElement('label');
-				newLabel.setAttribute('for', 'player' + (playerCount + 1));
+				newLabel.setAttribute('for', 'player' + (playersNumber + 1));
 				newLabel.classList.add('form-label');
 				newLabel.textContent = 'Nom d\'utilisateur';
 
@@ -367,8 +370,8 @@
 				const newInput = document.createElement('input');
 				newInput.type = 'text';
 				newInput.classList.add('form-control');
-				newInput.name = 'player' + (playerCount + 1);
-				newInput.id = 'player' + (playerCount + 1);
+				newInput.name = 'player' + (playersNumber + 1);
+				newInput.id = 'player' + (playersNumber + 1);
 				newInput.maxLength = '15';
 				newInput.required = ' ';
 
@@ -437,63 +440,63 @@
 			// });
 		</script> -->
 		<script>
-			var frm = document.querySelector('#duoForm');
+			var button = document.getElementById('duoSubmitButton');
 
-			frm.addEventListener('submit', function(e) {
+			button.addEventListener('click', function(e) {
 
+				var frm = document.querySelector('#duoForm');
 				var inputs = frm.querySelectorAll('input[type=text]');
-				for (var i = 0; i < inputs.length; i++)
-					console.log(inputs[i].value);
 				e.preventDefault();
 				var classArr = [];
 				for(var i = 0; i < inputs.length; i++){
-					const value = inputs[i].value
-					console.log("Value:"+value);
+					const value = inputs[i].value;
+					console.log(value);
 					if (value.includes(" ")){
-						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
+						document.getElementById('duoOutputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
 						return false;
 					}
 					else if (classArr.includes(value)){
-						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+						document.getElementById('duoOutputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
 						return false;
 					}
-					if (value != '')
-						classArr.push(value);
-					for (var j = 0; j < classArr.length; j++){
-						console.log("classArr, index:"+j+": "+classArr[j]);
+					if (value === ''){
+						document.getElementById('duoOutputText').textContent = 'Please fill in all the field.';
+						return false;
 					}
+					classArr.push(value);
 				}
-				frm.submit();
+				hideAllContentDivs();
+				document.getElementsByClassName('content-game')[0].style.display='block';
 			});
 		</script>
 		<script>
-			var frm = document.querySelector('#tournamentForm');
+			var button = document.getElementById('tournamentSubmitButton');
 
-			frm.addEventListener('submit', function(e) {
+			button.addEventListener('click', function(e) {
 
+				var frm = document.querySelector('#tournamentForm');
 				var inputs = frm.querySelectorAll('input[type=text]');
-				for (var i = 0; i < inputs.length; i++)
-					console.log(inputs[i].value);
 				e.preventDefault();
 				var classArr = [];
 				for(var i = 0; i < inputs.length; i++){
-					const value = inputs[i].value
-					console.log("Value:"+value);
+					const value = inputs[i].value;
+					console.log(value);
 					if (value.includes(" ")){
-						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
+						document.getElementById('tournamentOutputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
 						return false;
 					}
 					else if (classArr.includes(value)){
-						document.getElementById('outputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+						document.getElementById('tournamentOutputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
 						return false;
 					}
-					if (value != '')
-						classArr.push(value);
-					for (var j = 0; j < classArr.length; j++){
-						console.log("classArr, index:"+j+": "+classArr[j]);
+					if (value === ''){
+						document.getElementById('tournamentOutputText').textContent = 'Please fill in all the field.';
+						return false;
 					}
+					classArr.push(value);
 				}
-				frm.submit();
+				hideAllContentDivs();
+				document.getElementsByClassName('content-game')[0].style.display='block';
 			});
 		</script>
 		<script>
