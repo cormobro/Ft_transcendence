@@ -1,11 +1,15 @@
-		<script>
 			//---------- Canvas infos ----------------------------------------------------------------------
 
 			
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
-			canvas.width = window.innerWidth * 3/4;
-			canvas.height = canvas.width * 2/3;
+			//canvas.width = window.innerWidth * 3/4;
+			//canvas.height = canvas.width * 2/3;
+			const navbar = document.querySelector('nav.navbar');
+			const navbarHeight = navbar.offsetHeight;
+			canvas.height = window.innerHeight - navbarHeight;
+			canvas.width = canvas.height * 3/2;
+			console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
 
 			//----------- Ball coordinates -----------------------------------------------------------------
 
@@ -42,7 +46,7 @@
 			let leftScore = 0;
 			let rightScore = 0;
 			let playersCount = 8;
-			const players = [
+			let	players = [
 				{name:"Player 1", score:0, alive:true},
 				{name:"Player 2", score:0, alive:true},
 				{name:"Player 3", score:0, alive:true},
@@ -435,8 +439,22 @@
 			document.addEventListener("keyup", keyUpHandler, false);
 			document.addEventListener("mousemove", mouseMoveHandler, false);
 			document.addEventListener("click", mouseClickHandler, false);
+			document.addEventListener("mousemove", function(e) {
+    				const mousePos = getMousePos(canvas, e);
+			});
 
-			function mouseMoveHandler(e)
+			function getMousePos(canvas, evt) {
+    				// Get the bounding rectangle of the canvas
+    				const rect = canvas.getBoundingClientRect();    
+    				// Calculate mouse position within the canvas, accounting for scroll offset
+    				const x = evt.clientX - rect.left;
+				//+ window.scrollX;
+    				const y = evt.clientY - rect.top;
+				//+ window.scrollY;
+    				return { x: x, y: y };
+			}
+
+			/*function mouseMoveHandler(e)
 			{
 				const relativeX = e.clientX - canvas.offsetLeft;
 				const relativeY = e.clientY - canvas.offsetTop;
@@ -464,7 +482,36 @@
 					clearInterval(interval);
 					interval = setInterval(draw, 8);
 				}
+			}*/
+
+			function mouseMoveHandler(e)
+			{
+				const mousePos = getMousePos(canvas, e);
+				const relativeX = mousePos.x;
+				const relativeY = mousePos.y;
+				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3) {
+        				boxHover = true;
+				}
+				else
+				{
+					boxHover = false;
+				}
 			}
+
+			function mouseClickHandler(e)
+			{
+				const mousePos = getMousePos(canvas, e);
+				const relativeX = mousePos.x;
+				const relativeY = mousePos.y;
+				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true) {
+					menuBool = false;
+					winner = 0;
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					clearInterval(interval);
+					interval = setInterval(draw, 8);
+				}
+			}
+
 
 			function keyDownHandler(e)
 			{
@@ -546,5 +593,3 @@
 				resetWholeGame();
 				gameMode = 2;
 			};
-
-		</script>
