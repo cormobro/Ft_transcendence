@@ -65,8 +65,8 @@ duoSubmitButton.addEventListener('click', function(e) {
 		classArr.push(value);
 		}
 		hideAllContentDivs();
-		document.getElementsByClassName('content-game')[0].style.display='block';
 		onClickDuo();
+		document.getElementsByClassName('content-game')[0].style.display='block';
 });
 
 var tournamentSubmitButton = document.getElementById('tournamentSubmitButton');
@@ -94,6 +94,6 @@ tournamentSubmitButton.addEventListener('click', function(e) {
 		classArr.push(value);
 		}
 		hideAllContentDivs();
-		document.getElementsByClassName('content-game')[0].style.display='block';
 		onClickTournament();
+		document.getElementsByClassName('content-game')[0].style.display='block';
 });
