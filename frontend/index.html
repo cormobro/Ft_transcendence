@@ -27,19 +27,19 @@
 									Solo
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Facile</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Moyen</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Difficile</a></li>
+									<li><a class="dropdown-item" href="#myGame" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Facile</a></li>
+									<li><a class="dropdown-item" href="#myGame" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Moyen</a></li>
+									<li><a class="dropdown-item" href="#myGame" onclick="hideAllContentDivs();document.getElementsByClassName('content-game')[0].style.display='block';">Difficile</a></li>
 								</ul>
 							</li>
 							<li class="nav-item text-white">
-								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';">Duo</a>
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';onClickEasy();">Duo</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';">Tournoi</a>
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';onClickMedium();">Tournoi</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-stat')[0].style.display='block';">Stats</a>
+								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-stat')[0].style.display='block';onClickHard();">Stats</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#">Se connecter</a>
@@ -90,16 +90,8 @@
 									<div class="card card-body">
 										<ol class="list-group">
 											<li class="list-group-item bg-primary text-light">
-												<h4>Match 1</h4>
-												<h5>Player 1 vs Player 2</h5>
-											</li>
-											<li class="list-group-item">
-												<h4>Match 2</h4>
-												<h5>Player 3 vs Player 4</h5>
-											</li>
-											<li class="list-group-item">
-												<h4>Match 3</h4>
-												<h5>? vs ?</h5>
+												<h4>Current match</h4>
+												<p id="currentMatchDisplay" class="text-light"></p>
 											</li>
 										</ol>
 									</div>
@@ -108,16 +100,8 @@
 									<div class="card card-body">
 										<ol class="list-group">
 											<li class="list-group-item bg-primary text-light">
-												<h4>1</h4>
-												<h5>Player 1</h5>
-											</li>
-											<li class="list-group-item">
-												<h4>2</h4>
-												<h5>Player 2</h5>
-											</li>
-											<li class="list-group-item">
-												<h4>3</h4>
-												<h5>Player 3</h5>
+												<h4>Current leader</h4>
+												<p id="currentLeaderDisplay" class="text-light"></p>
 											</li>
 										</ol>
 									</div>

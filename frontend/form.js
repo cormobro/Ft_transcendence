@@ -40,9 +40,9 @@ document.getElementById('removePlayer').addEventListener('click', function() {
 	divInputs[divInputs.length - 1].remove();
 });
 
-var button = document.getElementById('duoSubmitButton');
+var duoSubmitButton = document.getElementById('duoSubmitButton');
 
-button.addEventListener('click', function(e) {
+duoSubmitButton.addEventListener('click', function(e) {
 
 	var frm = document.querySelector('#duoForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
@@ -51,26 +51,27 @@ button.addEventListener('click', function(e) {
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('duoOutputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
+			document.getElementById('duoOutputText').textContent = 'Mauvaise saisie: "' + value + '" contient des espaces.';
 			return false;
 		}
 		else if (classArr.includes(value)){
-			document.getElementById('duoOutputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+			document.getElementById('duoOutputText').textContent = 'Mauvaise saisie: "' + value + '" est doublon.';
 			return false;
 		}
 		if (value === ''){
-			document.getElementById('duoOutputText').textContent = 'Please fill in all the field.';
+			document.getElementById('duoOutputText').textContent = 'Veuillez remplir tous les champs.';
 			return false;
 		}
 		classArr.push(value);
 		}
 		hideAllContentDivs();
 		document.getElementsByClassName('content-game')[0].style.display='block';
+		onClickDuo();
 });
 
-var button = document.getElementById('tournamentSubmitButton');
+var tournamentSubmitButton = document.getElementById('tournamentSubmitButton');
 
-button.addEventListener('click', function(e) {
+tournamentSubmitButton.addEventListener('click', function(e) {
 
 	var frm = document.querySelector('#tournamentForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
@@ -79,19 +80,20 @@ button.addEventListener('click', function(e) {
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('tournamentOutputText').textContent = 'Mauvaise saisie: "' + value + '" has space.';
+			document.getElementById('tournamentOutputText').textContent = 'Mauvaise saisie: "' + value + '" contient des espaces.';
 			return false;
 		}
 		else if (classArr.includes(value)){
-			document.getElementById('tournamentOutputText').textContent = 'Mauvaise saisie: "' + value + '" is dup.';
+			document.getElementById('tournamentOutputText').textContent = 'Mauvaise saisie: "' + value + '" est doublon.';
 			return false;
 		}
 		if (value === ''){
-			document.getElementById('tournamentOutputText').textContent = 'Please fill in all the field.';
+			document.getElementById('tournamentOutputText').textContent = 'Veuillez remplir tous les champs.';
 			return false;
 		}
 		classArr.push(value);
 		}
 		hideAllContentDivs();
 		document.getElementsByClassName('content-game')[0].style.display='block';
+		onClickTournament();
 });
