@@ -515,9 +515,11 @@
 
 			function keyDownHandler(e)
 			{
-				if ((e.key === "Up" || e.key === "ArrowUp") && gameMode != 0)
+				if (e.key === "Up" || e.key === "ArrowUp")
 				{
-					rightPaddleUpPressed = true;
+					e.preventDefault();
+					if (gameMode != 0)
+						rightPaddleUpPressed = true;
 				}
 				else if (e.key === "a" || e.key === "A")
 				{
@@ -527,9 +529,11 @@
 				{
 					leftPaddleDownPressed = true;
 				}
-				else if ((e.key === "Down" || e.key === "ArrowDown") && gameMode != 0)
+				else if (e.key === "Down" || e.key === "ArrowDown")
 				{
-					rightPaddleDownPressed = true;
+					e.preventDefault();
+					if (gameMode != 0)
+						rightPaddleDownPressed = true;
 				}
 			}
 
