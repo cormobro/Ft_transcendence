@@ -73,38 +73,35 @@ function drawPieSlice(pieChartCtx, centerX, centerY, radius, startAngle, endAngl
 	pieChartCtx.arc(centerX, centerY, radius, startAngle, endAngle, strokeColor);
 	pieChartCtx.closePath(); // provoque le retour du stylo au point de départ du sous-traçé courant
 	pieChartCtx.fill(); // remplit le chemin courant ou donné avec la couleur de fond en cours
+	ctx.stroke();
 	pieChartCtx.restore();
 }
-
-drawLine(pieChartCtx, 200, 200, 300, 300, "#000");
-drawArc(pieChartCtx, 250, 250, 150, 0, Math.PI/3, "#000");
-drawPieSlice(pieChartCtx, 250, 250, 150, Math.PI/2, Math.PI/2 + Math.PI/3, "#F00", "#000");
 
 /*
 To determine the angle for each category slice, we use the formula:
 slice angle = 2 * PI * category value / total value
 */
 
-class Piechart {
+class Piechart { // appel d'une classe pour créer des objets
 
-	constructor(options){
+	constructor(options){ // appel du constructeur de la classe
 
 		this.options = options;
 		this.canvas = options.canvas;
 		this.ctx = this.canvas.getContext("2d");
-		this.colors = options.colors;
-		this.titleOptions = options.titleOptions;
+		this.colors = options.colors; // récupère les options de couleurs
+		this.titleOptions = options.titleOptions; // récupère les options de titre
 		this.totalValue = [...Object.values(this.options.data)].reduce((a, b) => a + b, 0);
-		this.radius = Math.min(this.canvas.width / 2, this.canvas.height / 2) - options.padding;
+		this.radius = Math.min(this.canvas.width / 2, this.canvas.height / 2) - options.padding; // détermine le rayon du graphique
 	}
 
-	drawSlices(){
+	drawSlices(){ // méthode responsable du dessin des tranches du graphique circulaire
 
 		var colorIndex = 0;
 		var startAngle = -Math.PI / 2;
 		for (var categ in this.options.data) {
-			var val = this.options.data[categ];
-			var sliceAngle = (2 * Math.PI * val) / this.totalValue;
+			var val = this.options.data[categ]; // récupère la valeur associée à la catégorie actuelle
+			var sliceAngle = (2 * Math.PI * val) / this.totalValue; // calcule l'angle de la tranche pour chaque catégorie
 			drawPieSlice(
 				this.ctx,
 				this.canvas.width / 2,
@@ -114,25 +111,116 @@ class Piechart {
 				startAngle + sliceAngle,
 				this.colors[colorIndex % this.colors.length]
 			);
-			startAngle += sliceAngle;
-			colorIndex++;
+			startAngle += sliceAngle; // met à jour l'angle de départ pour la prochaine tranche
+			colorIndex++; // incrémente l'index des couleurs pour la prochaine tranche
 		}
+	}
+
+	drawLabels() {
+
+		var colorIndex = 0;
+		var startAngle = -Math.PI / 2; // commencer le tracé à partir du haut du cercle
+		for (var categ in this.options.data) {
+			var val = this.options.data[categ];
+			var sliceAngle = (2 * Math.PI * val) / this.totalValue;
+			var labelX =
+			this.canvas.width / 2 +
+			(this.radius / 2) * Math.cos(startAngle + sliceAngle / 2);
+			var labelY =
+			this.canvas.height / 2 +
+			(this.radius / 2) * Math.sin(startAngle + sliceAngle / 2);
+			var labelText = Math.round((100 * val) / this.totalValue); // calcule le pourcentage que représente la valeur actuelle val par rapport à la somme totale des valeurs du graphique. Il est arrondi à l'entier le plus proche
+			this.ctx.fillStyle = "black"; // couleur de police
+			this.ctx.font = "32px Khand"; // taille et style de police
+			this.ctx.fillText(labelText + "%", labelX, labelY); // écrit un texte donné à la position (x, y) donnée
+			startAngle += sliceAngle;
+		}
+	}
+
+	/*
+	Basically, polar coordinates use a radius and an angle to define the position of a point. The two formulas we will use are:
+	x = R * cos(angle)
+	y = R * sin(angle)
+	*/
+
+	drawLegend() {
+
+		let pIndex = 0;
+		let legend = document.querySelector("div[for='myPieChart']");
+		let ul = document.createElement("ul");
+		legend.append(ul);
+		for (let ctg of Object.keys(this.options.data)) { // boucle à travers les clés (noms des catégories) de l'objet data de this.options
+			let li = document.createElement("li");
+			li.style.listStyle = "none"; // enlève le style de puce par défaut de la liste non ordonnée
+			li.style.borderLeft =
+			"20px solid " + this.colors[pIndex % this.colors.length];
+			li.style.padding = "5px";
+			li.textContent = ctg;
+			ul.append(li);
+			pIndex++;
+		}
+	}
+
+	drawTitle() {
+
+		this.ctx.save();
+
+		this.ctx.textBaseline = "bottom";
+		this.ctx.textAlign = this.titleOptions.align;
+		this.ctx.fillStyle = this.titleOptions.fill;
+		this.ctx.font = `${this.titleOptions.font.weight} ${this.titleOptions.font.size} ${this.titleOptions.font.family}`;
+
+		let xPos = this.canvas.width / 2; // calcule la position X du texte pour l'alignement centré par défaut (au milieu du canevas)
+
+		if (this.titleOptions.align == "left") {
+			xPos = 10;
+		}
+		if (this.titleOptions.align == "right") {
+			xPos = this.canvas.width - 10;
+		}
+
+		this.ctx.fillText(this.options.seriesName, xPos, this.canvas.height);
+
+		this.ctx.restore();
+	}
+
+	draw(){
+
+		this.drawSlices();
+		this.drawLabels();
+		this.drawTitle();
+		this.drawLegend();
 	}
 }
 
-var myPiechart = new Piechart(
+var myPiechart = new Piechart( // crée une nouvelle instance
 	{
-		canvas: myCanvas,
-		padding: 40,
+		canvas: pieChartCanvas,
+		seriesName: "Vinyl records",
+		padding: 40, // espace autour du pie chart pour éviter qu'il touche les bords
 		data: {
 			"Classical Music": 16,
 			"Alternative Rock": 12,
 			"Pop": 18,
 			"Jazz": 32
 		},
-		colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
+		colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"],
+		titleOptions: {
+			align: "center",
+			fill: "white",
+			font: {
+				weight: "bold",
+				size: "18px",
+				family: "Lato"
+			}
+		}
 	}
 );
 
-myPiechart.drawSlices();
+myPiechart.draw();
 
+var barChartCanvas = document.getElementById("myBarChart");
+barChartCanvas.width = 500;
+barChartCanvas.height = 500;
+
+var barChartCtx = barChartCanvas.getContext("2d");
