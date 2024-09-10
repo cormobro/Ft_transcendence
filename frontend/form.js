@@ -67,6 +67,7 @@ duoSubmitButton.addEventListener('click', function(e) {
 		hideAllContentDivs();
 		onClickDuo();
 		document.getElementsByClassName('content-game')[0].style.display='block';
+		window.location.href = "#myGame";
 });
 
 var tournamentSubmitButton = document.getElementById('tournamentSubmitButton');
@@ -96,4 +97,5 @@ tournamentSubmitButton.addEventListener('click', function(e) {
 		hideAllContentDivs();
 		onClickTournament();
 		document.getElementsByClassName('content-game')[0].style.display='block';
+		window.location.href = "#myGame";
 });
