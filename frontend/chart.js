@@ -35,6 +35,8 @@ const game = {
 	win: false
 };*/
 
+// PIE CHART //
+
 var pieChartCanvas = document.getElementById("myPieChart");
 
 pieChartCanvas.width = 500;
@@ -42,16 +44,17 @@ pieChartCanvas.height = 500;
 
 var pieChartCtx = pieChartCanvas.getContext("2d");
 
-function drawLine(pieChartCtx, startX, startY, endX, endY, color){ //toutes les variables pour tracer la ligne
+// helper JS functions
+// function drawPieLine(pieChartCtx, startX, startY, endX, endY, color){ //toutes les variables pour tracer la ligne
 
-	pieChartCtx.save(); //enregistre l'état complet du canvas
-	pieChartCtx.strokeStyle = color; //spécifie la couleur ou le style à utiliser pour dessiner les lignes autour des formes
-	pieChartCtx.beginPath(); //commence un nouveau chemin en vidant la liste des sous-chemins
-	pieChartCtx.moveTo(startX,startY); //déplace le point de départ d'un nouveau sous-chemin vers les coordonnées (x, y)
-	pieChartCtx.lineTo(endX,endY); //connecte le dernier point du sous-chemin en cours aux coordonnées x, y spécifiées avec une ligne droite
-	pieChartCtx.stroke(); //dessine le chemin actuel ou donné avec le style de trait actuel
-	pieChartCtx.restore(); //rétablit l'état par défaut
-}
+// 	pieChartCtx.save(); //enregistre l'état complet du canvas
+// 	pieChartCtx.strokeStyle = color; //spécifie la couleur ou le style à utiliser pour dessiner les lignes autour des formes
+// 	pieChartCtx.beginPath(); //commence un nouveau chemin en vidant la liste des sous-chemins
+// 	pieChartCtx.moveTo(startX,startY); //déplace le point de départ d'un nouveau sous-chemin vers les coordonnées (x, y)
+// 	pieChartCtx.lineTo(endX,endY); //connecte le dernier point du sous-chemin en cours aux coordonnées x, y spécifiées avec une ligne droite
+// 	pieChartCtx.stroke(); //dessine le chemin actuel ou donné avec le style de trait actuel
+// 	pieChartCtx.restore(); //rétablit l'état par défaut
+// }
 
 function drawArc(pieChartCtx, centerX, centerY, radius, startAngle, endAngle, color){ // toutes les variables pour tracer l'arc de cercle avec x et y les coordonnées du centre et radius la coordonnée x de la fin de la ligne
 
@@ -82,6 +85,7 @@ To determine the angle for each category slice, we use the formula:
 slice angle = 2 * PI * category value / total value
 */
 
+// Pie chart class
 class Piechart { // appel d'une classe pour créer des objets
 
 	constructor(options){ // appel du constructeur de la classe
@@ -193,7 +197,7 @@ class Piechart { // appel d'une classe pour créer des objets
 	}
 }
 
-var myPiechart = new Piechart( // crée une nouvelle instance
+var myPiechart = new Piechart( // crée une nouvelle instance avec ses options
 	{
 		canvas: pieChartCanvas,
 		seriesName: "Vinyl records",
@@ -219,8 +223,301 @@ var myPiechart = new Piechart( // crée une nouvelle instance
 
 myPiechart.draw();
 
+// BAR CHART //
 var barChartCanvas = document.getElementById("myBarChart");
 barChartCanvas.width = 500;
 barChartCanvas.height = 500;
 
 var barChartCtx = barChartCanvas.getContext("2d");
+
+// helper JS functions
+function drawBarLine(ctx, startX, startY, endX, endY, color){ // toutes les variables pour tracer la ligne
+
+	ctx.save(); //save et restore sont appelés pour éviter que les modifications faites au ctx dans cette fonction n'affecte d'autres dessins du même ctx
+	ctx.strokeStyle = color;
+	ctx.beginPath(); //informe le ctx qu'un nouveau dessin arrive
+	ctx.moveTo(startX,startY);
+	ctx.lineTo(endX,endY);
+	ctx.stroke(); //dessine
+	ctx.restore();
+}
+
+function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height, color){ //width est la largeur de la bar et height sa hauteur
+
+	ctx.save();
+	ctx.fillStyle = color;
+	ctx.fillRect(upperLeftCornerX, upperLeftCornerY, width, height); //dessine un rectangle plein aux coordonnées (x, y), aux dimensions déterminées par largeur et hauteur et au style déterminé par l'attribut fillStyle
+	ctx.restore();
+}
+
+// Bar chart class
+class BarChart {
+
+	constructor(options) {
+
+		this.options = options;
+		this.canvas = options.canvas;
+		this.ctx = this.canvas.getContext("2d");
+		this.colors = options.colors;
+		this.titleOptions = options.titleOptions;
+		this.maxValue = Math.max(...Object.values(this.options.data));
+	}
+
+	drawGridLines() {
+
+		var canvasActualHeight = this.canvas.height - this.options.padding * 2;
+		var canvasActualWidth = this.canvas.width - this.options.padding * 2;
+		var gridValue = 0;
+		while (gridValue <= this.maxValue) { //boucle pour tracer chaque ligne de la grille, à chaque itération une ligne est tracée
+			var gridY = //position verticale de chaque ligne de la grille
+				canvasActualHeight * (1 - gridValue / this.maxValue) + // dépend de la hauteur du canva, de la ligne à laquelle on se trouve et de la présence de padding
+				this.options.padding;
+			drawBarLine( //trace une ligne horizontale sur tout le canevas, du côté gauche (0) au côté droit (largeur totale du canevas)
+				this.ctx,
+				0,
+				gridY,
+				this.canvas.width,
+				gridY,
+				this.options.gridColor
+			);
+			drawBarLine( //trace une ligne verticale près du bord gauche du canevas (coordonnée x = 15) allant du haut du canevas à la position gridY
+				this.ctx,
+				15,
+				this.options.padding/2,
+				15,
+				gridY + this.options.padding/2,
+				this.options.gridColor
+			);
+			this.ctx.save();
+			this.ctx.fillStyle = this.options.gridColor;
+			this.ctx.textBaseline = "bottom";
+			this.ctx.font = "bold 10px Arial";
+			this.ctx.fillText(gridValue, 0, gridY - 2);
+			this.ctx.restore();
+			gridValue += this.options.gridScale;
+		}
+	}
+
+	drawBars() {
+
+		var canvasActualHeight = this.canvas.height - this.options.padding * 2;
+		var canvasActualWidth = this.canvas.width - this.options.padding * 2;
+		var barIndex = 0;
+		var numberOfBars = Object.keys(this.options.data).length; // nombre de bar à dessiner
+		var barSize = canvasActualWidth / numberOfBars; //calcule les tailles de chaque bar selon la largeur dispo
+		var values = Object.values(this.options.data);
+		for (let val of values) { //boucle pour dessiner chaque bar
+			var barHeight = Math.round((canvasActualHeight * val) / this.maxValue); // calcule hauteur des bar selon la valeur des données passées en arguments de la classe
+			console.log(barHeight);
+
+		drawBar(
+			this.ctx,
+			this.options.padding + barIndex * barSize, // position x de la barre
+			this.canvas.height - barHeight - this.options.padding, //position y de la barre
+			barSize, // largeur de la barre
+			barHeight, // hauteur de la barre
+			this.colors[barIndex % this.colors.length]
+		);
+		barIndex++;
+		}
+	}
+
+	drawLabel() {
+
+		this.ctx.save();
+		this.ctx.textBaseline = "bottom";
+		this.ctx.textAlign = this.titleOptions.align;
+		this.ctx.fillStyle = this.titleOptions.fill;
+		this.ctx.font = `${this.titleOptions.font.weight} ${this.titleOptions.font.size} ${this.titleOptions.font.family}`;
+		let xPos = this.canvas.width / 2;
+		if (this.titleOptions.align == "left") {
+			xPos = 10;
+		}
+		if (this.titleOptions.align == "right") {
+			xPos = this.canvas.width - 10;
+		}
+		this.ctx.fillText(this.options.seriesName, xPos, this.canvas.height);
+		this.ctx.restore();
+	}
+
+	draw() {
+
+		this.drawGridLines();
+		this.drawBars();
+		this.drawLabel();
+	}
+}
+
+var myBarchart = new BarChart(
+	{
+		canvas:barChartCanvas,
+		seriesName:"Vinyl records",
+		padding:20,
+		gridScale:5,
+		gridColor:"#eeeeee",
+		data: {
+			"Classical Music": 16,
+			"Alternative Rock": 12,
+			"Pop": 18,
+			"Jazz": 32,
+		},
+		colors:["#a55ca5","#67b6c7", "#bccd7a","#eb9743"],
+		titleOptions: {
+			align: "center",
+			fill: "white",
+			font: {
+				weight: "bold",
+				size: "18px",
+				family: "Lato"
+			}
+		}
+	}
+);
+
+myBarchart.draw();
+
+// PLOT CHART //
+var plotChartCanvas = document.getElementById("myPlotChart");
+plotChartCanvas.width = 500;
+plotChartCanvas.height = 500;
+
+var plotChartCtx = plotChartCanvas.getContext("2d");
+
+// helper JS functions
+function drawPlotLine(ctx, lineWidth, startX, startY, endX, endY, color){ // toutes les variables pour tracer la ligne
+
+	ctx.save(); //save et restore sont appelés pour éviter que les modifications faites au ctx dans cette fonction n'affecte d'autres dessins du même ctx
+	ctx.strokeStyle = color;
+	ctx.lineWidth = lineWidth;
+	ctx.beginPath(); //informe le ctx qu'un nouveau dessin arrive
+	ctx.moveTo(startX,startY);
+	ctx.lineTo(endX,endY);
+	ctx.stroke(); //dessine
+	ctx.restore();
+}
+
+// Plot chart class
+class PlotChart{
+
+	constructor(options){
+		this.options = options;
+		this.canvas = options.canvas;
+		this.ctx = this.canvas.getContext("2d");
+		this.colors = options.colors;
+		this.titleOptions = options.titleOptions;
+		this.maxValue = Math.max(...Object.values(this.options.data));
+	}
+
+	drawGrid() {
+
+		var canvasActualHeight = this.canvas.height - this.options.padding * 2;
+		var canvasActualWidth = this.canvas.width - this.options.padding * 2;
+		var gridValue = 0;
+		var gridY = //position verticale de chaque ligne de la grille
+				canvasActualHeight * (1 - gridValue / this.maxValue) + // dépend de la hauteur du canva, de la ligne à laquelle on se trouve et de la présence de padding
+				this.options.padding;
+		drawPlotLine( //trace une ligne horizontale sur tout le canevas, du côté gauche (0) au côté droit (largeur totale du canevas)
+			this.ctx,
+			this.options.lineGridWidth,
+			0,
+			gridY,
+			this.canvas.width,
+			gridY,
+			this.options.gridColor
+		);
+		drawPlotLine( //trace une ligne verticale près du bord gauche du canevas (coordonnée x = 15) allant du haut du canevas à la position gridY
+			this.ctx,
+			this.options.lineGridWidth,
+			15,
+			this.options.padding/2,
+			15,
+			gridY + this.options.padding/2,
+			this.options.gridColor
+		);
+		while (gridValue <= this.maxValue) { //boucle pour tracer chaque ligne de la grille, à chaque itération une ligne est tracée
+			var gridY = //position verticale de chaque ligne de la grille
+				canvasActualHeight * (1 - gridValue / this.maxValue) + // dépend de la hauteur du canva, de la ligne à laquelle on se trouve et de la présence de padding
+				this.options.padding;
+			this.ctx.save();
+			this.ctx.fillStyle = this.options.gridColor;
+			this.ctx.textBaseline = "bottom";
+			this.ctx.font = "bold 10px Arial";
+			this.ctx.fillText(gridValue, 0, gridY - 2);
+			this.ctx.restore();
+			gridValue += this.options.gridScale;
+		}
+	}
+
+	drawLines(){
+
+		var canvasActualHeight = this.canvas.height - this.options.padding * 2;
+		var canvasActualWidth = this.canvas.width - this.options.padding * 2;
+		var oldPointX = 0 + this.options.padding;
+		var oldPointY = this.canvas.height - this.options.padding;
+		var pointIndex = 0.5;
+		var colorIndex = 0;
+		var numberOfPoints = Object.keys(this.options.data).length;
+		console.log("canvasActualWidth:"+canvasActualWidth);
+		console.log("numberOfPoints:"+numberOfPoints);
+		var emptySpaceSize = canvasActualWidth / numberOfPoints;
+		var values = Object.values(this.options.data);
+		for (let val of values) { //boucle pour dessiner chaque bar
+			console.log("Padding:"+this.options.padding);
+			console.log("emptySpaceSize:"+emptySpaceSize);
+			console.log("pointIndex:"+pointIndex);
+			var pointX = this.options.padding + (emptySpaceSize * pointIndex);
+			console.log(pointX);
+			var pointY = Math.round(canvasActualHeight - (canvasActualHeight * val) / this.maxValue); // calcule hauteur points selon la valeur des données passées en arguments de la classe
+			console.log(pointY);
+			drawPlotLine(
+				this.ctx,
+				this.options.linePlotWidth,
+				oldPointX,
+				oldPointY,
+				pointX,
+				pointY,
+				this.colors[colorIndex % this.colors.length]
+			);
+			oldPointX = pointX;
+			oldPointY = pointY;
+			pointIndex = pointIndex + 0.5;
+			colorIndex++;
+		}
+	}
+
+	draw() {
+
+		this.drawGrid();
+		this.drawLines();
+	}
+
+}
+
+var myPlotChart = new PlotChart(
+	{
+		canvas:plotChartCanvas,
+		padding:20,
+		gridScale:5,
+		gridColor:"white",
+		lineGridWidth:1,
+		linePlotWidth:5,
+		data: {
+			"Classical Music": 16,
+			"Alternative Rock": 12,
+			"Pop": 18,
+			"Jazz": 32,
+		},
+		colors:["#a55ca5","#67b6c7", "#bccd7a","#eb9743"],
+		titleOptions: {
+			align: "center",
+			fill: "white",
+			font: {
+				weight: "bold",
+				size: "18px",
+				family: "Lato"
+			}
+		}
+	}
+);
+
+myPlotChart.draw();
