@@ -47,6 +47,7 @@ duoSubmitButton.addEventListener('click', function(e) {
 	var frm = document.querySelector('#duoForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
 	e.preventDefault();
+	e.stopPropagation();
 	var classArr = [];
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
@@ -63,11 +64,13 @@ duoSubmitButton.addEventListener('click', function(e) {
 			return false;
 		}
 		classArr.push(value);
-		}
-		hideAllContentDivs();
-		onClickDuo();
-		document.getElementsByClassName('content-game')[0].style.display='block';
-		window.location.href = "#myGame";
+	}
+	hideAllContentDivs();
+	onClickDuo();
+	player1 = inputs[0].value;
+	player2 = inputs[1].value;
+	document.getElementsByClassName('content-game')[0].style.display='block';
+	window.location.href = "#myGame";
 });
 
 var tournamentSubmitButton = document.getElementById('tournamentSubmitButton');
@@ -77,6 +80,7 @@ tournamentSubmitButton.addEventListener('click', function(e) {
 	var frm = document.querySelector('#tournamentForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
 	e.preventDefault();
+	e.stopPropagation();
 	var classArr = [];
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
@@ -93,9 +97,13 @@ tournamentSubmitButton.addEventListener('click', function(e) {
 			return false;
 		}
 		classArr.push(value);
-		}
-		hideAllContentDivs();
-		onClickTournament();
-		document.getElementsByClassName('content-game')[0].style.display='block';
-		window.location.href = "#myGame";
+	}
+	hideAllContentDivs();
+	onClickTournament();
+	for (var i = 0; i < inputs.length; i++)
+		players[i].name = inputs[i].value;
+	playersCount = inputs.length;
+	findNextMatch();
+	document.getElementsByClassName('content-game')[0].style.display='block';
+	window.location.href = "#myGame";
 });

@@ -72,7 +72,7 @@
 
 			//---------- gameMode 0 => SOLO ---------- gameMode 1 => DUO ---------- gameMode 2 => TOURNAMENT
 
-			let gameMode = 2;
+			let gameMode = 0;
 
 			//---------- Matchmaking related variables -----------------------------------------------------
 
@@ -267,7 +267,6 @@
 
 			function draw()
 			{
-				console.log("dx:", dx, "dy:", dy, "ballSpeed:", ballSpeed);
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				drawBall();
 				drawLeftPaddle();
@@ -503,7 +502,7 @@
 				const mousePos = getMousePos(canvas, e);
 				const relativeX = mousePos.x;
 				const relativeY = mousePos.y;
-				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true) {
+				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true && document.getElementsByClassName('content-game')[0].style.display === "block") {
 					menuBool = false;
 					winner = 0;
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -556,8 +555,6 @@
 					rightPaddleDownPressed = false;
 				}
 			}
-			if (gameMode === 2)
-				findNextMatch();
 			interval = setInterval(drawMenu, 10);
 
 			//---------- onClick functions for game mode ---------------------------------------------------
