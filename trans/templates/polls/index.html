@@ -1,11 +1,10 @@
 <!doctype html>
 <html lang="fr">
 	<head>
-		<!-- Required meta tags -->
+		{% load static %}
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- Bootstrap CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
@@ -16,7 +15,7 @@
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 				<div class="container">
 					<a class="narbar-brand me-3" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-home')[0].style.display='block';">
-						<img src="img/logo.png" alt="logo" width="40" height="40">
+						<img src="{% static 'img/logo.png' %}" alt="logo" width="40" height="40">
 					</a>
 					<span class="text-white">Ft_transcendence</span>
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
@@ -29,29 +28,22 @@
 									Solo
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';">Facile</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';">Moyen</a></li>
-									<li><a class="dropdown-item" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-solo')[0].style.display='block';">Difficile</a></li>
-									<!-- <li><a class="dropdown-item" href="#">Facile</a></li>
-									<li><a class="dropdown-item" href="#">Moyen</a></li>
-									<li><a class="dropdown-item" href="#">Difficile</a></li> -->
+									<li><a class="dropdown-item" href="#myGame" onclick="hideAllContentDivs();onClickEasy();document.getElementsByClassName('content-game')[0].style.display='block';">Facile</a></li>
+									<li><a class="dropdown-item" href="#myGame" onclick="hideAllContentDivs();onClickMedium();document.getElementsByClassName('content-game')[0].style.display='block';">Moyen</a></li>
+									<li><a class="dropdown-item" href="#myGame" onclick="hideAllContentDivs();onClickHard();document.getElementsByClassName('content-game')[0].style.display='block';">Difficile</a></li>
 								</ul>
 							</li>
 							<li class="nav-item text-white">
 								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-duo')[0].style.display='block';">Duo</a>
-								<!-- <a class="nav-link" href="#">Duo</a> -->
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-tournament')[0].style.display='block';">Tournoi</a>
-								<!-- <a class="nav-link" href="#">Tournoi</a> -->
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#" onclick="hideAllContentDivs();document.getElementsByClassName('content-stat')[0].style.display='block';">Stats</a>
-								<!-- <a class="nav-link" href="#">Statistiques</a> -->
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="#">Se connecter</a>
-								<!-- <a class="nav-link" href="#">Statistiques</a> -->
 							</li>
 						</ul>
 					</div>
@@ -69,20 +61,76 @@
 								<button id="postRequest" class="btn btn-outline-light mt-5">POST request</button>
 						</div>
 						<div class="col-6">
-							<img src="img/accueil.png" alt="accueil" class="w-100">
+							<img src="{% static 'img/accueil.png' %}" alt="accueil" class="w-100">
 						</div>
 					</div>
 				</div>
 				</section>
 			</div>
-			<div id="solo" class="content content-solo" style="display:none">
+			<div id="game" class="content content-game" style="display:none">
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
-						<div class="py-5 text-light">
-							<h2>Mode Solo</h2>
+						<div class="mb-5">
+							<div class="py-5 text-light">
+								<h2>Pong</h2>
+							</div>
+							<div class="row">
+								<div class="col-6">
+									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#scores">
+										Scores
+									</button>
+								</div>
+								<div class="col-6">
+									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#leaderboard">
+										Leaderboard
+									</button>
+								</div>
+							</div>
+							<div class="row"></div>
+								<div class="collapse" id="scores">
+									<div class="card card-body">
+										<ol class="list-group">
+											<li class="list-group-item bg-primary text-light">
+												<h4>Current match</h4>
+												<p id="currentMatchDisplay" class="text-light"></p>
+											</li>
+										</ol>
+									</div>
+								</div>
+								<div class="collapse" id="leaderboard">
+									<div class="card card-body">
+										<ol class="list-group">
+											<li class="list-group-item bg-primary text-light">
+												<h4>Current leader</h4>
+												<p id="currentLeaderDisplay" class="text-light"></p>
+											</li>
+										</ol>
+									</div>
+								</div>
+							</div>
 						</div>
-						<div class="d-flex justify-content-center">
-							<canvas class="bg-light" id="myCanvas"></canvas>
+						<div class="d-flex justify-content-center" id="myGame">
+							<canvas style="margin-top:56px;" class="bg-light" id="myCanvas"></canvas>
+						</div>
+						<div class="row">
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>A</h2></div>
+								<p>Monter</p>
+							</div>
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>&uarr;</h2></div>
+								<p>Monter</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>Z</h2></div>
+								<p>Descendre</p>
+							</div>
+							<div class="col-6 d-flex justify-content-center text-light fw-bold">
+								<div class="border rounded-2 mt-2 p-2"><h2>&darr;</h2></div>
+								<p>Descendre</p>
+							</div>
 						</div>
 					</div>
 				</section>
@@ -94,19 +142,22 @@
 							<h2>Mode Duo</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="inputForm" method="post">
-										{% csrf_token %}
-										<div class="col-12">
-											<label for="player1" class="form-label">Nom d'utilisateur</label>
-											<input type="text" class="form-control" name="player1" id="player1" required>
+									<form class="row gy-4" id="duoForm">
+										<div id="playerInputs">
+											<div class="col-12">
+												<label for="player1" class="form-label">Nom d'utilisateur</label>
+												<input type="text" class="form-control" name="player1" id="player1" maxlength="15">
+											</div>
+											<div class="col-12">
+												<label for="player2" class="form-label">Nom d'utilisateur</label>
+												<input type="text" class="form-control" name="player2" id="player2" maxlength="15">
+											</div>
 										</div>
 										<div class="col-12">
-											<label for="player2" class="form-label">Nom d'utilisateur</label>
-											<input type="text" class="form-control" name="player2" id="player2" required>
+											<p id="duoOutputText" class="text-light"></p>
 										</div>
 										<div class="col-12">
-											<button type="submit" class="btn btn-outline-light w-100">Jouer</button>
-										</div>
+											<a class="btn btn-outline-light w-100" id="duoSubmitButton" role="button">Jouer</a>										</div>
 									</form>
 								</div>
 							</div>
@@ -121,26 +172,32 @@
 							<h2>Mode Tournoi</h2>
 							<div class="d-flex justify-content-center">
 								<div class="col-3 border rounded-2 p-5 text-light">
-									<form class="row gy-4" id="inputForm" method="post">
-										<div id="playerInputs">
-											<div class="col-12">
-												<label for="player1" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player1" id="player1" required>
+									<form class="row gy-4" id="tournamentForm">
+										<div id="tournamentInputs">
+											<div id="playerInputs">
+												<div class="col-12">
+													<label for="player1" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player1" id="player1" maxlength="15">
+												</div>
+												<div class="col-12">
+													<label for="player2" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player2" id="player2" maxlength="15">
+												</div>
+												<div class="col-12">
+													<label for="player3" class="form-label">Nom d'utilisateur</label>
+													<input type="text" class="form-control" name="player3" id="player3" maxlength="15">
+												</div>
 											</div>
-											<div class="col-12">
-												<label for="player2" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player2" id="player2" required>
-											</div>
-											<div class="col-12">
-												<label for="player3" class="form-label">Nom d'utilisateur</label>
-												<input type="text" class="form-control" name="player3" id="player3" required>
-											</div>
+										</div>
+										<div class="col-12">
+											<p id="tournamentOutputText" class="text-light"></p>
 										</div>
 										<div class="col-4">
 											<button type="button" class="btn btn-outline-light w-100" id="addPlayer"><i class="bi bi-person-plus-fill" style="font-size: 30px;"></i></button>
+											<button type="button" class="btn btn-outline-light w-100" id="removePlayer"><i class="bi bi-person-dash-fill" style="font-size: 30px;"></i></button>
 										</div>
 										<div class="col-12">
-											<button type="submit" class="btn btn-outline-light w-100">Jouer</button>
+											<a class="btn btn-outline-light w-100" id="tournamentSubmitButton" role="button">Jouer</a>
 										</div>
 									</form>
 								</div>
@@ -158,449 +215,13 @@
 					</div>
 				</section>
 			</div>
-			<!-- <section class="py-5 mt-5 bg-dark">
-				<div class="container">
-					<div class="row align-items-center gy-4">
-						<div class="col-6 text-light">
-							<h1 class="fw-bold">Bienvenue sur Ft_transcendence.</h1>
-							<h2 class="fw-light">Laissez-vous emporter dans un voyage où l'espace et le temps ne suivent aucune loi que vous connaissez.</h2>
-							<h4 class="fw-light">Designed by mdor, febonaer and gt-serst.</h4>
-							<a class="btn btn-outline-light mt-5" href="#inputForm">Commencez</a>
-						</div>
-						<div class="col-6">
-							<img src="img/accueil.png" alt="accueil" class="w-100">
-						</div>
-					</div>
-				</div>
-			</section>
-			<section class="py-5 bg-dark">
-				<div class="container">
-					<div class="d-flex justify-content-center">
-						<div class="col-3 border rounded-2 p-5 text-light">
-							<form class="row gy-4" id="inputForm">
-								<div id="playerInputs">
-									<div class="col-12">
-										<label for="player1" class="form-label">Nom d'utilisateur</label>
-										<input type="text" class="form-control" name="player1" id="player1" required>
-									</div>
-									<div class="col-12">
-										<label for="player2" class="form-label">Nom d'utilisateur</label>
-										<input type="text" class="form-control" name="player2" id="player2" required>
-									</div>
-								</div>
-								<div class="col-4">
-									<button type="button" class="btn btn-outline-light w-100" id="addPlayer"><i class="bi bi-person-plus-fill" style="font-size: 30px;"></i></button>
-								</div>
-								<div class="col-12">
-									<button type="submit" class="btn btn-outline-light w-100">Jouez</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</section>
-			<section class="py-5 bg-dark">
-				<div class="container">
-					<div class="row">
-						<div class="col-4 border rounded-2 p-5 text-light">
-							<h3>RÉSULTATS:</h3>
-							<h3>LEADERBOARD:</h3>
-						</div>
-						<div class="col-8 border rounded-2 p-5 text-light">
-							<h3>PONG</h3>
-						</div>
-					</div>
-				</div>
-			</section> -->
 		</main>
 		<footer>
-
 		</footer>
-		<!-- Optional JavaScript; choose one of the two! -->
-
-		<!-- Option 1: Bootstrap Bundle with Popper -->
+		<script src="{% static 'js/api.js' %}"></script>
+		<script src="{% static 'js/form.js' %}"></script>
+		<script src="{% static 'js/utils.js' %}"></script>
+		<script src="{% static 'js/pongInterval.js' %}"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-		<!-- Option 2: Separate Popper and Bootstrap JS -->
-		<!--
-		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-		-->
-		<script>
-
-			var csrftoken = '{{ csrf_token }}'
-
-			document.getElementById('getRequest').onclick = () => {
-				const requestObj = new XMLHttpRequest()
-				requestObj.onreadystatechange = function () {
-					if (this.readyState == 4 && this.status == 200){
-						console.log(this.responseText)
-					}
-				}
-
-				requestObj.open("GET", "/get/")
-				requestObj.send()
-			}
-			document.getElementById('postRequest').onclick = () => {
-				const requestObj = new XMLHttpRequest()
-				requestObj.onreadystatechange = function () {
-					if (this.readyState == 4 && this.status == 200){
-						console.log(this.responseText)
-					}
-				}
-
-				requestObj.open("POST", "/post/")
-				requestObj.setRequestHeader("X-CSRFToken", csrftoken)
-
-				const formdata = new FormData()
-				formdata.append('name', 'Gege')
-				formdata.append('age', '26')
-				requestObj.send(formdata)
-			}
-			document.getElementById('addPlayer').addEventListener('click', function() {
-				// Compter le nombre actuel de champs d'input
-				const playerCount = document.querySelectorAll('#playerInputs .col-12').length;
-
-				// Créer un nouvel élément div pour le champ input
-				const newInputDiv = document.createElement('div');
-				newInputDiv.classList.add('col-12');
-
-				const newLabel = document.createElement('label');
-				newLabel.setAttribute('for', 'player' + (playerCount + 1));
-				newLabel.classList.add('form-label');
-				newLabel.textContent = 'Nom d\'utilisateur';
-
-				// Créer le nouvel input
-				const newInput = document.createElement('input');
-				newInput.type = 'text';
-				newInput.classList.add('form-control');
-				newInput.name = 'player' + (playerCount + 1);
-				newInput.id = 'player' + (playerCount + 1);
-				newInput.required = ' ';
-
-				// Ajouter le label et l'input au div
-				newInputDiv.appendChild(newLabel);
-				newInputDiv.appendChild(newInput);
-
-				// Ajouter le nouveau div au conteneur de champs
-				document.getElementById('playerInputs').appendChild(newInputDiv);
-			});
-		</script>
-		<script>
-			function hideAllContentDivs(){
-				var contentDivs = document.getElementsByClassName('content');
-				for (var i = 0; i < contentDivs.length; ++i) {
-					var div = contentDivs[i];
-					div.style.display='none';
-				}
-			};
-		</script>
-		<script>
-			const canvas = document.getElementById("myCanvas");
-			const ctx = canvas.getContext("2d");
-			canvas.width = window.innerWidth * 3/4;
-			canvas.height = canvas.width * 2/3;
-			let x = canvas.width / 2;
-			let y = canvas.height - 10;
-			let dx = (canvas.width / 2) / 200;
-			let dy = -1 * ((canvas.height / 2) / 200);
-			const ballRadius = 10;
-			const paddleHeight = canvas.height * 1/5;
-			const paddleWidth = canvas.width * 1/100;
-			let leftPaddle = (canvas.height - paddleHeight) / 2;
-			let rightPaddle = (canvas.height - paddleHeight) / 2;
-			let leftPaddleRightPressed = false;
-			let leftPaddleLeftPressed = false;
-			let rightPaddleRightPressed = false;
-			let rightPaddleLeftPressed = false;
-			let interval = 0;
-			let leftScore = 0;
-			let rightScore = 0;
-			let relativeIntersectionY = 0;
-			let normalizedIntersectionY = 0;
-			let bounceAngle = 0;
-			let ballSpeed = canvas.width * 1/250;
-			let boxHover = false;
-			let menuBool = true;
-
-			function resetGame()
-			{
-				x = canvas.width / 2;
-				y = canvas.height - 10;
-				dx = (canvas.width / 2) / 200;
-				dy = -1 * ((canvas.height / 2) / 200);
-				leftPaddle = (canvas.height - paddleHeight) / 2;
-				rightPaddle = (canvas.height - paddleHeight) / 2;
-				leftScore = 0;
-				rightScore = 0;
-				ballSpeed = canvas.width * 1/250;
-				menuBool = true;
-			}
-
-			function drawMenu()
-			{
-				ctx.clearRect(0, 0, canvas.width, canvas.height);
-				drawStartSoloMenu();
-			}
-
-			function drawStartSoloMenu()
-			{
-				drawStartSoloMenuBox();
-				if (boxHover === true)
-					drawStartSoloMenuBoxHover();
-				drawStartSoloMenuText();
-			}
-
-			function drawStartSoloMenuBox()
-			{
-				ctx.fillStyle = "#0095DD";
-				ctx.beginPath();
-				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
-				ctx.fill();
-				ctx.shadowBlur = 0;
-			}
-
-			function drawStartSoloMenuBoxHover()
-			{
-				ctx.fillStyle = "#0095DD";
-				ctx.beginPath();
-				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
-				ctx.shadowColor = "#FFFFFF";
-				ctx.shadowBlur = 50;
-				ctx.fill();
-			}
-
-			function drawStartSoloMenuText()
-			{
-				ctx.font = canvas.height/6 + "px Arial";
-				ctx.fillStyle = "#ffffff";
-				ctx.textAlign="center";
-				ctx.textBaseline = "middle";
-				ctx.fillText(`PLAY`, canvas.width / 2, (canvas.height / 2));
-			}
-
-			//function drawMenuScore()
-
-			function drawBall() {
-				ctx.beginPath();
-				ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-				ctx.fillStyle = "#0095DD";
-				ctx.fill();
-				ctx.closePath();
-			}
-
-			function draw() {
-				ctx.clearRect(0, 0, canvas.width, canvas.height);
-				drawBall();
-				drawLeftPaddle();
-				drawRightPaddle();
-				drawScore();
-				x += dx;
-				y += dy;
-				if (x + dx - (paddleWidth / 2) < ballRadius)
-				{
-					if (y > leftPaddle && y < leftPaddle + paddleHeight)
-					{
-						relativeIntersectionY = (leftPaddle + (paddleHeight / 2)) - y;
-						normalizedIntersectionY = (relativeIntersectionY / (paddleHeight / 2));
-						bounceAngle = normalizedIntersectionY * (5*Math.PI/12);
-						if (ballSpeed < canvas.width * 1/100)
-							ballSpeed += 0.2;
-						dx = ballSpeed*Math.cos(bounceAngle);
-						dy = ballSpeed*-Math.sin(bounceAngle);
-					}
-					else
-					{
-						rightScore++;
-						if (rightScore === 3)
-						{
-							ctx.clearRect(0, 0, canvas.width, canvas.height);
-							clearInterval(interval);
-							resetGame();
-							interval = setInterval(drawMenu, 10);
-							//return ;
-							//alert("GAME OVER : PLAYER 2 HAS WON");
-							//document.location.reload();
-							//clearInterval(interval);
-						}
-						else
-						{
-							clearInterval(interval);
-							interval = null;
-							x = canvas.width / 2;
-							y = canvas.height - 10;
-							dx = -1 * (canvas.width / 2) / 200;
-							dy = -1 * (canvas.height / 2) / 200;
-							leftPaddle = (canvas.height - paddleHeight) /2;
-							rightPaddle = (canvas.height - paddleHeight) /2;
-							ballSpeed = canvas.width * 1/250;
-							interval = setInterval(draw, 8);
-						}
-					}
-				}
-				else if (x + dx > canvas.width - ballRadius - (paddleWidth / 2))
-				{
-					if (y > rightPaddle && y < rightPaddle + paddleHeight)
-					{
-						relativeIntersectionY = (rightPaddle + (paddleHeight / 2)) - y;
-						normalizedIntersectionY = (relativeIntersectionY / (paddleHeight / 2));
-						bounceAngle = normalizedIntersectionY * (5*Math.PI/12);
-						if (ballSpeed < canvas.width * 1/100)
-							ballSpeed += 0.2;
-						dx = -ballSpeed*Math.cos(bounceAngle);
-						dy = ballSpeed*-Math.sin(bounceAngle);
-					}
-					else
-					{
-						leftScore++;
-						if (leftScore === 3)
-						{
-							ctx.clearRect(0, 0, canvas.width, canvas.height);
-							clearInterval(interval);
-							//interval = null;
-							resetGame();
-							interval = setInterval(drawMenu, 10);
-							//return ;
-							//alert("GAME OVER : PLAYER 1 HAS WON");
-							//document.location.reload();
-							//clearInterval(interval);
-						}
-						else
-						{
-							clearInterval(interval);
-							interval = null;
-							x = canvas.width / 2;
-							y = canvas.height - 10;
-							dx = (canvas.width / 2) / 200;
-							dy = -1 * ((canvas.height / 2) / 200);
-							leftPaddle = (canvas.height - paddleHeight) / 2;
-							rightPaddle = (canvas.height - paddleHeight) / 2;
-							ballSpeed = 4;
-							interval = setInterval(draw, 8);
-						}
-					}
-				}
-				if (y + dy > canvas.height - ballRadius || y + dy < ballRadius)
-					dy = -dy;
-
-				if (leftPaddleRightPressed)
-				{
-					leftPaddle = Math.min(leftPaddle + 7, canvas.height - paddleHeight);
-				}
-				else if (leftPaddleLeftPressed)
-				{
-					leftPaddle = Math.max(leftPaddle - 7, 0);
-				}
-
-				if (rightPaddleRightPressed)
-				{
-					rightPaddle = Math.min(rightPaddle + 7, canvas.height - paddleHeight);
-				}
-				else if (rightPaddleLeftPressed)
-				{
-					rightPaddle = Math.max(rightPaddle - 7, 0);
-				}
-			}
-
-			function drawLeftPaddle() {
-				ctx.beginPath();
-				ctx.rect(0, leftPaddle, paddleWidth, paddleHeight);
-				ctx.fillStyle = "#0095DD";
-				ctx.fill();
-				ctx.closePath();
-			}
-
-			function drawRightPaddle()
-			{
-				ctx.beginPath();
-				ctx.rect(canvas.width - paddleWidth, rightPaddle, paddleWidth, paddleHeight);
-				ctx.fillStyle = "#0095DD";
-				ctx.fill();
-				ctx.closePath();
-			}
-
-			function drawScore() {
-				ctx.font = "16px Arial";
-				ctx.fillStyle = "#0095DD";
-				ctx.textAlign = "left";
-				ctx.textBaseline = "left";
-				ctx.fillText(`Player 1: ${leftScore}`, 8, 20);
-				ctx.fillText(`Player 2: ${rightScore}`, 8, 40);
-			}
-
-
-			document.addEventListener("keydown", keyDownHandler, false);
-			document.addEventListener("keyup", keyUpHandler, false);
-			document.addEventListener("mousemove", mouseMoveHandler, false);
-			document.addEventListener("click", mouseClickHandler, false);
-
-			function mouseMoveHandler(e)
-			{
-				const relativeX = e.clientX - canvas.offsetLeft;
-				const relativeY = e.clientY - canvas.offsetTop;
-
-				if (relativeX > canvas.width/3 && relativeX < 2*canvas.width/3 && relativeY > canvas.height/3 && relativeY < 2*canvas.height/3)
-				{
-					boxHover = true;
-				}
-				else
-				{
-					boxHover = false;
-				}
-			}
-
-			function mouseClickHandler(e)
-			{
-				const relativeX = e.clientX - canvas.offsetLeft;
-				const relativeY = e.clientY - canvas.offsetTop;
-
-				if (relativeX > canvas.width/3 && relativeX < 2*canvas.width/3 && relativeY > canvas.height/3 && relativeY < 2*canvas.height/3 && menuBool === true)
-				{
-					menuBool = false;
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					clearInterval(interval);
-					//interval = NULL;
-					interval = setInterval(draw, 8);
-				}
-			}
-			function keyDownHandler(e) {
-				if (e.key === "Right" || e.key === "ArrowRight")
-				{
-					rightPaddleLeftPressed = true;
-				}
-				else if (e.key === "q" || e.key === "Q")
-				{
-					leftPaddleLeftPressed = true;
-				}
-				else if (e.key === "e" || e.key === "E")
-				{
-					leftPaddleRightPressed = true;
-				}
-				else if (e.key === "Left" || e.key === "ArrowLeft")
-				{
-					rightPaddleRightPressed = true;
-				}
-			}
-
-			function keyUpHandler(e) {
-				if (e.key === "Right" || e.key === "ArrowRight")
-				{
-					rightPaddleLeftPressed = false;
-				}
-				else if (e.key === "q" || e.key === "Q")
-				{
-					leftPaddleLeftPressed = false;
-				}
-				else if (e.key === "e" || e.key === "E")
-				{
-					leftPaddleRightPressed = false;
-				}
-				else if (e.key === "Left" || e.key === "ArrowLeft")
-				{
-					rightPaddleRightPressed = false;
-				}
-			}
-			interval = setInterval(drawMenu, 10);
-		</script>
 	</body>
 </html>

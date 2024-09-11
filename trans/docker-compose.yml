@@ -18,6 +18,7 @@ services:
       DJANGO_SUPERUSER_PASSWORD: "test"
     volumes:
       - ./app:/code
+      - ./app/frontend:/code/frontend
     ports:
       - "8000:8000"
     depends_on:
