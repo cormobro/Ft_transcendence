@@ -28,7 +28,7 @@
 
 			//---------- Paddle size/coordinates/state------------------------------------------------------
 
-			const paddleHeight = canvas.height / 4.5;
+			let paddleHeight = canvas.height / 4.5;
 			const paddleWidth = 10;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
@@ -446,6 +446,7 @@
 				navbarHeight = navbar.offsetHeight;
 				canvas.height = window.innerHeight - navbarHeight;
 				canvas.width = canvas.height * 3/2;
+				paddleHeight = canvas.height / 4.5;
 			}
 
 			function getMousePos(canvas, evt) {
