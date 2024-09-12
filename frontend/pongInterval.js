@@ -28,7 +28,7 @@
 
 			//---------- Paddle size/coordinates/state------------------------------------------------------
 
-			const paddleHeight = canvas.height / 4.5;
+			let paddleHeight = canvas.height / 4.5;
 			const paddleWidth = 10;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
@@ -272,7 +272,8 @@
 				drawLeftPaddle();
 				drawRightPaddle();
 				drawScore();
-				//simulateKeyPress("ArrowDown");
+				console.log("rightPaddle: ", rightPaddle);
+				simulateKeyPress("ArrowDown");
 				x += dx;
 				y += dy;
 				if (x + dx - (paddleWidth / 2) < ballRadius)
@@ -447,19 +448,19 @@
 				navbarHeight = navbar.offsetHeight;
 				canvas.height = window.innerHeight - navbarHeight;
 				canvas.width = canvas.height * 3/2;
+				paddleHeight = canvas.height / 4.5;
 			}
 
-			/*function simulateKeyPress(key) {
+			function simulateKeyPress(key) {
 				// Simulate keydown event
-				// const keydownEvent = new KeyboardEvent('keydown', { key: key });
+				const keydownEvent = new KeyboardEvent('keydown', { key: key });
 				document.dispatchEvent(keydownEvent);
 				// Simulate keyup event after a short delay (for continuous pressing, you can adjust or skip this)
 				setTimeout(() => {
 					const keyupEvent = new KeyboardEvent('keyup', { key: key });
 					document.dispatchEvent(keyupEvent);
-				}, 1000); // Delay in milliseconds, you can adjust as needed
-			}*/
-
+				}, 4); // Delay in milliseconds, you can adjust as needed
+			}
 
 			function getMousePos(canvas, evt) {
     				// Get the bounding rectangle of the canvas
