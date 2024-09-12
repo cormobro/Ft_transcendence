@@ -46,7 +46,7 @@ class ChartStatsView{
 			font: {
 				weight: "bold",
 				size: "18px",
-				family: "Lato"
+				family: "system-ui"
 			}
 		};
 
@@ -97,7 +97,7 @@ class ChartStatsView{
 			font: {
 				weight: "bold",
 				size: "18px",
-				family: "Lato"
+				family: "system-ui"
 			}
 		};
 
@@ -116,5 +116,9 @@ class ChartStatsView{
 		};
 		var myBarChartLegend = new Legend(legendOptions);
 		myBarChartLegend.drawLegend();
+	}
+
+	renderPlotChart(){
+		
 	}
 }

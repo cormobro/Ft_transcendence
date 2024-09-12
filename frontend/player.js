@@ -43,11 +43,11 @@ class Player{
 			}
 		};
 		this.gameHistory = [];
+		this.tournamentHistory = [];
 	}
 
 	addSoloGame(game){
 
-		this.gameHistory.push(game);
 		this.modeStats.solo.pointsWon += game.pointsWon;
 		this.modeStats.solo.pointsLost += game.pointsLost;
 		this.globalStats.pointsWon += game.pointsWon;
@@ -70,7 +70,6 @@ class Player{
 
 	addDuoGame(game){
 
-		this.gameHistory.push(game);
 		this.modeStats.duo.pointsWon += game.pointsWon;
 		this.modeStats.duo.pointsLost += game.pointsLost;
 		this.globalStats.pointsWon += game.pointsWon;
@@ -91,30 +90,49 @@ class Player{
 		}
 	}
 
-	addTournamentGame(){
+	addTournamentGame(game){
 
-		this.gameHistory.push(game);
+		this.modeStats.tournament.pointsWon += game.pointsWon;
+		this.modeStats.tournament.pointsLost += game.pointsLost;
+		this.globalStats.pointsWon += game.pointsWon;
+		this.globalStats.pointsLost += game.pointsLost;
+		this.modeStats.tournament.pointsPlayed += game.pointsWon + game.pointsLost;
+		this.globalStats.pointsPlayed += game.pointsWon + game.pointsLost;
+		this.modeStats.tournament.gamesPlayed++;
+		this.globalStats.gamesPlayed++;
+		if (game.result == true)
+		{
+			this.modeStats.tournament.gamesWon++;
+			this.globalStats.gamesWon++;
+		}
+		else
+		{
+			this.modeStats.tournament.gamesLost++;
+			this.globalStats.gamesLost++;
+		}	
 	}
 
-	addTournament(tournament){
+	updateGameStats(){
 
-		this.modeStats.tournament.pointsWon += tournament.pointsWon;
-		this.modeStats.tournament.pointsLost += tournament.pointsLost;
-		this.globalStats.pointsWon += tournament.pointsWon;
-		this.globalStats.pointsLost += tournament.pointsLost;
-		this.modeStats.tournament.pointsPlayed += tournament.pointsWon + tournament.pointsLost;
-		this.globalStats.pointsPlayed += tournament.pointsWon + tournament.pointsLost;
-		this.modeStats.tournament.gamesWon += tournament.gamesWon;
-		this.modeStats.tournament.gamesLost += tournament.gamesLost;
-		this.globalStats.gamesWon += tournament.gamesWon;
-		this.globalStats.gamesLost += tournament.gamesLost;
-		this.modeStats.tournament.gamesPlayed += tournament.gamesWon + tournament.gamesLost;
-		this.globalStats.gamesPlayed += tournament.gamesWon + tournament.gamesLost;
-		this.modeStats.tournament.tournamentsPlayed++;
-		this.globalStats.tournamentsPlayed++;
-		if (tournament.result == true)
-			this.modeStats.tournament.tournamentsWon++;
-		else
-			this.modeStats.tournament.tournamentsLost++;
+		for (Game game in this.gameHistory){
+			if (game.mode == "solo")
+				addSoloGame(game);
+			if (game.mode == "duo")
+				addDuoGame(game);
+			if (game.mode == "tournament")
+				addTournamentGame(game);
+		}
+	}
+
+	updateTournamentStats(){
+
+		for (Tournament tourn in this.tournamentHistory){
+			this.modeStats.tournament.tournamentsPlayed++;
+			this.globalStats.tournamentsPlayed++;
+			if (tournament.result == true)
+				this.modeStats.tournament.tournamentsWon++;
+			else
+				this.modeStats.tournament.tournamentsLost++;
+		}
 	}
 }
