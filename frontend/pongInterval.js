@@ -459,7 +459,7 @@
 				setTimeout(() => {
 					const keyupEvent = new KeyboardEvent('keyup', { key: key });
 					document.dispatchEvent(keyupEvent);
-				}, 4); // Delay in milliseconds, you can adjust as needed
+				}, 8); // Delay in milliseconds, you can adjust as needed
 			}
 
 			function getMousePos(canvas, evt) {
