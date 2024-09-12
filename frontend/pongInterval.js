@@ -6,7 +6,7 @@
 			//canvas.width = window.innerWidth * 3/4;
 			//canvas.height = canvas.width * 2/3;
 			const navbar = document.querySelector('nav.navbar');
-			const navbarHeight = navbar.offsetHeight;
+			let navbarHeight = navbar.offsetHeight;
 			canvas.height = window.innerHeight - navbarHeight;
 			canvas.width = canvas.height * 3/2;
 			console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
@@ -441,6 +441,12 @@
 			document.addEventListener("mousemove", function(e) {
     				const mousePos = getMousePos(canvas, e);
 			});
+			window.addEventListener( 'resize', onWindowResize, false );
+			function onWindowResize() {
+				navbarHeight = navbar.offsetHeight;
+				canvas.height = window.innerHeight - navbarHeight;
+				canvas.width = canvas.height * 3/2;
+			}
 
 			function getMousePos(canvas, evt) {
     				// Get the bounding rectangle of the canvas
