@@ -35,6 +35,7 @@ class PlayerController {
 
 	updateChartStatsView(){
 
+		this.chartStatsView.init();
 		this.chartStatsView.render();
 	}
 }

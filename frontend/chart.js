@@ -67,32 +67,32 @@ class Legend{
 /*------------------------------########## PIE CHART ##########------------------------------*/
 
 // helper JS functions
-function drawArc(pieChartCtx, centerX, centerY, radius, startAngle, endAngle, color){ // toutes les variables pour tracer l'arc de cercle avec x et y les coordonnées du centre et radius la coordonnée x de la fin de la ligne
+function drawArc(ctx, centerX, centerY, radius, startAngle, endAngle, color){ // toutes les variables pour tracer l'arc de cercle avec x et y les coordonnées du centre et radius la coordonnée x de la fin de la ligne
 
-	pieChartCtx.save();
-	pieChartCtx.strokeStyle = color;
-	pieChartCtx.beginPath();
-	pieChartCtx.arc(centerX, centerY, radius, startAngle, endAngle); // ajoute un arc de cercle au tracé, en le centrant aux positions (x, y) et avec un rayon r qui démarre à angleDépart et qui finit à angleFin, dans la direction de sensAntiHoraire
-	pieChartCtx.stroke();
-	pieChartCtx.restore();
+	ctx.save();
+	ctx.strokeStyle = color;
+	ctx.beginPath();
+	ctx.arc(centerX, centerY, radius, startAngle, endAngle); // ajoute un arc de cercle au tracé, en le centrant aux positions (x, y) et avec un rayon r qui démarre à angleDépart et qui finit à angleFin, dans la direction de sensAntiHoraire
+	ctx.stroke();
+	ctx.restore();
 }
 
-function drawPieSlice(pieChartCtx, centerX, centerY, radius, startAngle, endAngle, fillColor, strokeColor) { // toutes les variables pour remplir la part de tarte avec fillColor et strokeColor respectivement la couleur du remplissage et du périmètre
+function drawPieSlice(ctx, centerX, centerY, radius, startAngle, endAngle, fillColor, strokeColor) { // toutes les variables pour remplir la part de tarte avec fillColor et strokeColor respectivement la couleur du remplissage et du périmètre
 
-	pieChartCtx.save();
-	pieChartCtx.fillStyle = fillColor; // spécifie la couleur ou style à utiliser à l'intérieur des formes
-	pieChartCtx.strokeStyle = strokeColor;
-	pieChartCtx.beginPath();
-	pieChartCtx.moveTo(centerX, centerY);
-	pieChartCtx.arc(centerX, centerY, radius, startAngle, endAngle, strokeColor);
-	pieChartCtx.closePath(); // provoque le retour du stylo au point de départ du sous-traçé courant
-	pieChartCtx.fill(); // remplit le chemin courant ou donné avec la couleur de fond en cours
+	ctx.save();
+	ctx.fillStyle = fillColor; // spécifie la couleur ou style à utiliser à l'intérieur des formes
+	ctx.strokeStyle = strokeColor;
+	ctx.beginPath();
+	ctx.moveTo(centerX, centerY);
+	ctx.arc(centerX, centerY, radius, startAngle, endAngle, strokeColor);
+	ctx.closePath(); // provoque le retour du stylo au point de départ du sous-traçé courant
+	ctx.fill(); // remplit le chemin courant ou donné avec la couleur de fond en cours
 	ctx.stroke();
-	pieChartCtx.restore();
+	ctx.restore();
 }
 
 // Pie chart class
-class Piechart { // appel d'une classe pour créer des objets
+class PieChart { // appel d'une classe pour créer des objets
 
 	constructor(options){ // appel du constructeur de la classe
 
@@ -359,6 +359,7 @@ class PlotChart{
 
 /*-----------------------------------##### MAIN #####-----------------------------------*/
 
+/*
 var pieChartCanvas = document.getElementById("myPieChart");
 
 pieChartCanvas.width = 500;
@@ -366,7 +367,7 @@ pieChartCanvas.height = 500;
 
 var pieChartCtx = pieChartCanvas.getContext("2d");
 
-var myPiechart = new Piechart( // crée une nouvelle instance avec ses options
+var myPiechart = new PieChart( // crée une nouvelle instance avec ses options
 	{
 		canvas: pieChartCanvas,
 		seriesName: "Vinyl records",
@@ -524,3 +525,4 @@ var myPlotChartLegend = new Legend(
 myPlotChart.draw();
 myPlotChartTitle.drawTitle();
 myPlotChartLegend.drawLegend();
+*/

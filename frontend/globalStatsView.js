@@ -15,8 +15,8 @@ class GlobalStatsView{
 			<p>Parties perdues : ${this.player.globalStats.gamesLost}</p>
 			<p>Points totaux : ${this.player.globalStats.pointsPlayed}</p>
 			<p>Tournois joués : ${this.player.globalStats.tournamentsPlayed}</p>
-			<p>Tournois gagnés : ${this.player.modeStats.tournamentsWon}</p>
-			<p>Tournois perdus : ${this.player.modeStats.tournamentsLost}</p>
+			<p>Tournois gagnés : ${this.player.modeStats.tournament.tournamentsWon}</p>
+			<p>Tournois perdus : ${this.player.modeStats.tournament.tournamentsLost}</p>
 		`;
 	}
 }
