@@ -272,6 +272,7 @@
 				drawLeftPaddle();
 				drawRightPaddle();
 				drawScore();
+				//simulateKeyPress("ArrowDown");
 				x += dx;
 				y += dy;
 				if (x + dx - (paddleWidth / 2) < ballRadius)
@@ -447,6 +448,18 @@
 				canvas.height = window.innerHeight - navbarHeight;
 				canvas.width = canvas.height * 3/2;
 			}
+
+			/*function simulateKeyPress(key) {
+				// Simulate keydown event
+				// const keydownEvent = new KeyboardEvent('keydown', { key: key });
+				document.dispatchEvent(keydownEvent);
+				// Simulate keyup event after a short delay (for continuous pressing, you can adjust or skip this)
+				setTimeout(() => {
+					const keyupEvent = new KeyboardEvent('keyup', { key: key });
+					document.dispatchEvent(keyupEvent);
+				}, 1000); // Delay in milliseconds, you can adjust as needed
+			}*/
+
 
 			function getMousePos(canvas, evt) {
     				// Get the bounding rectangle of the canvas
