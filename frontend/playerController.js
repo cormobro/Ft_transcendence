@@ -33,9 +33,12 @@ class PlayerController {
 		this.modeStatsView.renderTournament();
 	}
 
-	updateChartStatsView(){
+	updateChartStatsView(type){
 
 		this.chartStatsView.init();
-		this.chartStatsView.render();
+		if (type == 0)
+			this.chartStatsView.renderPieChart();
+		if (type == 1)
+			this.chartStatsView.renderBarChart();
 	}
 }

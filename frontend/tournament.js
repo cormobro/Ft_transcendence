@@ -8,5 +8,6 @@ class Tournament{
 		this.gamesLost = gamesLost;
 		this.pointsWon = pointsWon;
 		this.pointsLost = pointsLost;
+		this.gameHistory = [];
 	}
 }

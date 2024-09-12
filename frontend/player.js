@@ -106,6 +106,8 @@ class Player{
 		this.globalStats.pointsPlayed += tournament.pointsWon + tournament.pointsLost;
 		this.modeStats.tournament.gamesWon += tournament.gamesWon;
 		this.modeStats.tournament.gamesLost += tournament.gamesLost;
+		this.globalStats.gamesWon += tournament.gamesWon;
+		this.globalStats.gamesLost += tournament.gamesLost;
 		this.modeStats.tournament.gamesPlayed += tournament.gamesWon + tournament.gamesLost;
 		this.globalStats.gamesPlayed += tournament.gamesWon + tournament.gamesLost;
 		this.modeStats.tournament.tournamentsPlayed++;
