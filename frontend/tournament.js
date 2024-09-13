@@ -1,13 +1,18 @@
 class Tournament{
 
-	constructor(id, result, gamesWon, gamesLost, pointsWon, pointsLost, gameHistory){
+	constructor(id, winner, matchs){
 
 		this.id = id;
-		this.result = result;
-		this.gamesWon = gamesWon;
-		this.gamesLost = gamesLost;
-		this.pointsWon = pointsWon;
-		this.pointsLost = pointsLost;
-		this.gameHistory = gameHistory;
+		this.winner = winner;
+		this.matchs = matchs;
 	}
+
+	getPlayerStats(player){
+
+		if (player === this.winner)
+			return (true);
+		else
+			return (false);
+	}
+
 }

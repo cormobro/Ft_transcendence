@@ -24,15 +24,17 @@ class ChartStatsView{
 
 	renderPieChart() {
 
+		const globalStats = this.player.getGlobalStats();
+
 		const chartOptions = {
 			canvas: this.canvas,
 			seriesName: "Répartition des résultats",
 			padding: 40,
 			data: {
-				"Victoires": this.player.globalStats.gamesWon,
-				"Défaites": this.player.globalStats.gamesLost
+				"Victoires": globalStats.matchsWon,
+				"Défaites": globalStats.matchsLost
 			},
-			colors: ["#80DEEA", "#FFE082"]
+			colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
 		};
 
 		var myPiechart = new PieChart(chartOptions);
@@ -57,10 +59,10 @@ class ChartStatsView{
 			canvas: this.canvas,
 			div: "myChartLegend",
 			data: {
-				"Victoires": this.player.globalStats.gamesWon,
-				"Défaites": this.player.globalStats.gamesLost
+				"Victoires": globalStats.matchsWon,
+				"Défaites": globalStats.matchsLost
 			},
-			colors: ["#80DEEA", "#FFE082"]
+			colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
 		};
 		var myPieChartLegend = new Legend(legendOptions);
 		myPieChartLegend.drawLegend();
@@ -68,10 +70,13 @@ class ChartStatsView{
 
 	renderBarChart() {
 
-		var gridScaleValue = Math.ceil(this.player.modeStats.solo.gamesWon +
-			this.player.modeStats.duo.gamesWon +
-			this.player.modeStats.tournament.gamesWon / 3);
-		console.log(gridScaleValue);
+		const soloStats = this.player.getModeStats("solo");
+		const duoStats = this.player.getModeStats("duo");
+		const tournamentStats = this.player.getModeStats("tournament");
+
+		var gridScaleValue = Math.ceil(soloStats.matchsWon +
+			duoStats.matchsWon +
+			tournamentStats.matchsWon / 3);
 		const barChartOptions = {
 			canvas:this.canvas,
 			seriesName:"Répartition des victoires par mode de jeux",
@@ -79,11 +84,11 @@ class ChartStatsView{
 			gridScale: gridScaleValue,
 			gridColor:"#0X33E31",
 			data: {
-				"Solo": this.player.modeStats.solo.gamesWon,
-				"Duo": this.player.modeStats.duo.gamesWon,
-				"Tournoi": this.player.modeStats.tournament.gamesWon,
+				"Solo": soloStats.matchsWon,
+				"Duo": duoStats.matchsWon,
+				"Tournoi": tournamentStats.matchsWon,
 			},
-			colors: ["#80DEEA", "#FFE082", "#FFAB91"]
+			colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
 		};
 
 		var myBarChart = new BarChart(barChartOptions);
@@ -108,17 +113,72 @@ class ChartStatsView{
 			canvas: this.canvas,
 			div: "myChartLegend",
 			data: {
-				"Solo": this.player.modeStats.solo.gamesWon,
-				"Duo": this.player.modeStats.duo.gamesWon,
-				"Tournoi": this.player.modeStats.tournament.gamesWon,
+				"Solo": soloStats.matchsWon,
+				"Duo": duoStats.matchsWon,
+				"Tournoi": tournamentStats.matchsWon,
 			},
-			colors: ["#80DEEA", "#FFE082", "#FFAB91"]
+			colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
 		};
 		var myBarChartLegend = new Legend(legendOptions);
 		myBarChartLegend.drawLegend();
 	}
 
 	renderPlotChart(){
-		
+
+		let pointsWonArray = new Array(this.player.matchHistory.length).fill(0);
+
+		for (let i = 0; i < this.player.matchHistory.length; i++){
+			if (i == 0)
+				pointsWonArray[i] += this.player.matchHistory[i].pointsWonByPlayer1;
+			else{
+				pointsWonArray[i] += pointsWonArray[i - 1] + this.player.matchHistory[i].pointsWonByPlayer1;
+			}
+		}
+
+		var dataPointsWon = {};
+
+		for (let i = 0; i < pointsWonArray.length; i++) {
+    		dataPointsWon["Match " + i] = pointsWonArray[i];
+		}
+	
+		const plotChartOptions = {
+			canvas: this.canvas,
+				seriesName:"Points gagnés au cours des parties",
+				padding:20,
+				gridScale:10,
+				gridColor:"black",
+				lineGridWidth:1,
+				linePlotWidth:5,
+				data: dataPointsWon,
+				colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
+		};
+
+		var myPlotChart = new PlotChart(plotChartOptions);
+		myPlotChart.draw();
+
+		const titleOptions = {
+			canvas: this.canvas,
+			seriesName: "Points gagnés au cours des parties",
+			align: "center",
+			fill: "dark",
+			font: {
+				weight: "bold",
+				size: "18px",
+				family: "system-ui"
+			}
+		};
+
+		var myPlotChartTitle = new Title(titleOptions);
+		myPlotChartTitle.drawTitle();
+
+		const legendOptions = {
+			canvas: this.canvas,
+			div: "myChartLegend",
+			data: dataPointsWon,
+			colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
+		};
+
+		var myPlotChartLegend = new Legend(legendOptions);
+		myPlotChartLegend.drawLegend();
 	}
 }

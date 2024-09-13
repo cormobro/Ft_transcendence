@@ -111,25 +111,32 @@
 						<div class="d-flex justify-content-center" id="myGame">
 							<canvas class="bg-light" id="myCanvas"></canvas>
 						</div>
-						<div class="row">
-							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>A</h2></div>
-								<p>Monter</p>
+						<div class="container">
+							<div class="row">
+								<div class="col-6 d-flex flex-column justify-content-start align-items-center text-light fw-bold">
+									<div class="border rounded-2 mt-2 p-2"><h2>A</h2></div>
+									<p>Monter</p>
+								</div>
+								<div class="col-6 d-flex flex-column justify-content-end align-items-center text-light fw-bold">
+									<div class="border rounded-2 mt-2 p-2"><h2>&uarr;</h2></div>
+									<p>Monter</p>
+								</div>
 							</div>
-							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>&uarr;</h2></div>
-								<p>Monter</p>
+							<div class="row">
+								<div class="col-6 d-flex flex-column justify-content-start align-items-center text-light fw-bold">
+									<div class="border rounded-2 mt-2 p-2"><h2>Z</h2></div>
+									<p>Descendre</p>
+								</div>
+								<div class="col-6 d-flex flex-column justify-content-end align-items-center text-light fw-bold">
+									<div class="border rounded-2 mt-2 p-2"><h2>&darr;</h2></div>
+									<p>Descendre</p>
+								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>Z</h2></div>
-								<p>Descendre</p>
-							</div>
-							<div class="col-6 d-flex justify-content-center text-light fw-bold">
-								<div class="border rounded-2 mt-2 p-2"><h2>&darr;</h2></div>
-								<p>Descendre</p>
-							</div>
+							<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="player1Stats" class="p-3 bg-light border rounded"></div></div></div>
+							<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="matchStats" class="p-3 bg-light border rounded"></div></div></div>
+							<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="player2Stats" class="p-3 bg-light border rounded"></div></div></div>
 						</div>
 					</div>
 				</section>
@@ -216,7 +223,7 @@
 											<div class="btn btn-outline-light mt-5 mb-5 me-3" id="globalStatsButton">Global</div>
 											<div class="dropdown">
 												<button class="btn btn-outline-light mt-5 mb-5 me-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-													Mode
+													Modes
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 													<li><a class="dropdown-item" id="soloModeStatsButton">Solo</a></li>
@@ -226,6 +233,8 @@
 											</div>
 											<div class="btn btn-outline-light mt-5 mb-5 me-3" id="pieChartButton">Pie Chart</div>
 											<div class="btn btn-outline-light mt-5 mb-5 me-3" id="barChartButton">Bar Chart</div>
+											<div class="btn btn-outline-light mt-5 mb-5 me-3" id="plotChartButton">Plot Chart</div>
+											<div class="btn btn-outline-light mt-5 mb-5 me-3" id="historicalStatsButton">Historique</div>
 										</div>
 									</div>
 									<div class="row mt-5">
@@ -251,8 +260,9 @@
 		<script src="globalStatsView.js"></script>
 		<script src="modeStatsView.js"></script>
 		<script src="chartStatsView.js"></script>
+		<script src="historicalStatsView.js"></script>
 		<script src="playerController.js"></script>
-		<script src="game.js"></script>
+		<script src="match.js"></script>
 		<script src="tournament.js"></script>
 		<script src="player.js"></script>
 		<script src="main.js"></script>

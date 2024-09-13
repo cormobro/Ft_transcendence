@@ -6,6 +6,7 @@ class PlayerController {
 		this.globalStatsView = new GlobalStatsView(player);
 		this.modeStatsView = new ModeStatsView(player);
 		this.chartStatsView = new ChartStatsView(player);
+		this.historicalStatsView = new HistoricalStatsView(player);
 	}
 
 	init() {
@@ -40,5 +41,19 @@ class PlayerController {
 			this.chartStatsView.renderPieChart();
 		if (type == 1)
 			this.chartStatsView.renderBarChart();
+		if (type == 2)
+			this.chartStatsView.renderPlotChart();
+	}
+
+	updateHistoricalStatsView(){
+
+		this.historicalStatsView.init();
+
+		for (let i = 0; i < this.player.matchHistory.length; i++) {
+
+			document.getElementById("match" + this.player.matchHistory[i].id).addEventListener('click', function() {
+				this.historicalStatsView.render(i);
+			});
+		}
 	}
 }

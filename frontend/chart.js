@@ -279,43 +279,38 @@ class PlotChart{
 		this.maxValue = Math.max(...Object.values(this.options.data));
 	}
 
-	drawGrid() {
+	drawGridLines() {
 
 		var canvasActualHeight = this.canvas.height - this.options.padding * 2;
 		var canvasActualWidth = this.canvas.width - this.options.padding * 2;
 		var gridValue = 0;
-		var gridY =
-				canvasActualHeight * (1 - gridValue / this.maxValue) +
-				this.options.padding;
-		drawPlotLine( //trace l'axe horizontale du graphique
-			this.ctx,
-			this.options.lineGridWidth,
-			0,
-			gridY,
-			this.canvas.width,
-			gridY,
-			this.options.gridColor
-		);
-		drawPlotLine( //trace l'axe vertical du graphique
-			this.ctx,
-			this.options.lineGridWidth,
-			15,
-			this.options.padding/2,
-			15,
-			gridY + this.options.padding/2,
-			this.options.gridColor
-		);
-		while (gridValue <= this.maxValue) { //boucle pour inscrire les valeurs de l'axe vertical du graphe
+		while (gridValue <= this.maxValue) {
 			var gridY =
 				canvasActualHeight * (1 - gridValue / this.maxValue) +
 				this.options.padding;
+			drawBarLine(
+				this.ctx,
+				0,
+				gridY,
+				this.canvas.width,
+				gridY,
+				this.options.gridColor
+			);
+			drawBarLine(
+				this.ctx,
+				15,
+				this.options.padding/2,
+				15,
+				gridY + this.options.padding/2,
+				this.options.gridColor
+			);
 			this.ctx.save();
 			this.ctx.fillStyle = this.options.gridColor;
 			this.ctx.textBaseline = "bottom";
 			this.ctx.font = "bold 10px Arial";
 			this.ctx.fillText(gridValue, 0, gridY - 2);
 			this.ctx.restore();
-			gridValue += this.options.gridScale; // gridScale détermine par l'échelle de précision de l'axe vertical
+			gridValue += this.options.gridScale;
 		}
 	}
 
@@ -351,7 +346,7 @@ class PlotChart{
 
 	draw() {
 
-		this.drawGrid();
+		this.drawGridLines();
 		this.drawPlots();
 	}
 }

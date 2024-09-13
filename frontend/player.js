@@ -4,135 +4,77 @@ class Player{
 
 		this.id = id;
 		this.username = username;
-		this.globalStats = {
-			pointsWon : 0,
-			pointsLost : 0,
-			pointsPlayed : 0,
-			gamesWon : 0,
-			gamesLost : 0,
-			gamesPlayed : 0,
-			tournamentsPlayed : 0
-		}
-		this.modeStats = {
-			solo: {
-				pointsWon : 0,
-				pointsLost : 0,
-				pointsPlayed : 0,
-				gamesWon : 0,
-				gamesLost : 0,
-				gamesPlayed : 0
-			},
-			duo: {
-				pointsWon : 0,
-				pointsLost : 0,
-				pointsPlayed : 0,
-				gamesWon : 0,
-				gamesLost : 0,
-				gamesPlayed : 0
-			},
-			tournament: {
-				pointsWon : 0,
-				pointsLost : 0,
-				pointsPlayed : 0,
-				gamesWon : 0,
-				gamesLost : 0,
-				gamesPlayed : 0,
-				tournamentsWon : 0,
-				tournamentsLost : 0,
-				tournamentsPlayed : 0
-			}
-		};
-		this.gameHistory = [];
+		this.matchHistory = [];
 		this.tournamentHistory = [];
 	}
 
-	addSoloGame(game){
+	addMatch(match) {
 
-		this.modeStats.solo.pointsWon += game.pointsWon;
-		this.modeStats.solo.pointsLost += game.pointsLost;
-		this.globalStats.pointsWon += game.pointsWon;
-		this.globalStats.pointsLost += game.pointsLost;
-		this.modeStats.solo.pointsPlayed += game.pointsWon + game.pointsLost;
-		this.globalStats.pointsPlayed += game.pointsWon + game.pointsLost;
-		this.modeStats.solo.gamesPlayed++;
-		this.globalStats.gamesPlayed++;
-		if (game.result == true)
-		{
-			this.modeStats.solo.gamesWon++;
-			this.globalStats.gamesWon++;
-		}
-		else
-		{
-			this.modeStats.solo.gamesLost++;
-			this.globalStats.gamesLost++;
-		}
+		this.matchHistory.push(match);
 	}
 
-	addDuoGame(game){
+	addTournament(tournament) {
 
-		this.modeStats.duo.pointsWon += game.pointsWon;
-		this.modeStats.duo.pointsLost += game.pointsLost;
-		this.globalStats.pointsWon += game.pointsWon;
-		this.globalStats.pointsLost += game.pointsLost;
-		this.modeStats.duo.pointsPlayed += game.pointsWon + game.pointsLost;
-		this.globalStats.pointsPlayed += game.pointsWon + game.pointsLost;
-		this.modeStats.duo.gamesPlayed++;
-		this.globalStats.gamesPlayed++;
-		if (game.result == true)
-		{
-			this.modeStats.duo.gamesWon++;
-			this.globalStats.gamesWon++;
-		}
-		else
-		{
-			this.modeStats.duo.gamesLost++;
-			this.globalStats.gamesLost++;
-		}
+		this.tournamentHistory.push(tournament);
 	}
 
-	addTournamentGame(game){
+	getGlobalStats(){
 
-		this.modeStats.tournament.pointsWon += game.pointsWon;
-		this.modeStats.tournament.pointsLost += game.pointsLost;
-		this.globalStats.pointsWon += game.pointsWon;
-		this.globalStats.pointsLost += game.pointsLost;
-		this.modeStats.tournament.pointsPlayed += game.pointsWon + game.pointsLost;
-		this.globalStats.pointsPlayed += game.pointsWon + game.pointsLost;
-		this.modeStats.tournament.gamesPlayed++;
-		this.globalStats.gamesPlayed++;
-		if (game.result == true)
-		{
-			this.modeStats.tournament.gamesWon++;
-			this.globalStats.gamesWon++;
+		let stats = {
+			pointsWon : 0,
+			pointsLost : 0,
+			pointsPlayed : 0,
+			matchsWon : 0,
+			matchsLost : 0,
+			matchsPlayed : 0
+		};
+
+		for (let match of this.matchHistory){
+			const playerStats = match.getPlayerStats(this);
+			stats.pointsWon += playerStats.pointsWon;
+			stats.pointsLost += playerStats.pointsLost;
+			stats.pointsPlayed += playerStats.pointsPlayed;
+			stats.matchsWon += playerStats.matchsWon;
+			stats.matchsLost += playerStats.matchsLost;
+			stats.matchsPlayed++;
 		}
-		else
-		{
-			this.modeStats.tournament.gamesLost++;
-			this.globalStats.gamesLost++;
-		}	
+		return (stats);
 	}
 
-	updateGameStats(){
+	getModeStats(mode){
 
-		for (Game game in this.gameHistory){
-			if (game.mode == "solo")
-				addSoloGame(game);
-			if (game.mode == "duo")
-				addDuoGame(game);
-			if (game.mode == "tournament")
-				addTournamentGame(game);
+		let stats = {
+			pointsWon : 0,
+			pointsLost : 0,
+			pointsPlayed : 0,
+			matchsWon : 0,
+			matchsLost : 0,
+			matchsPlayed : 0,
+			tournamentsWon : 0,
+			tournamentsLost : 0,
+			tournamentsPlayed : 0
+		};
+
+		for (let match of this.matchHistory){
+			if (mode === match.mode){
+				const playerStats = match.getPlayerStats(this);
+				stats.pointsWon += playerStats.pointsWon;
+				stats.pointsLost += playerStats.pointsLost;
+				stats.pointsPlayed += playerStats.pointsPlayed;
+				stats.matchsWon += playerStats.matchsWon;
+				stats.matchsLost += playerStats.matchsLost;
+				stats.matchsPlayed++;
+			}
 		}
-	}
-
-	updateTournamentStats(){
-
-		for (Tournament tourn in this.tournamentHistory){
-			this.modeStats.tournament.tournamentsPlayed++;
-			this.globalStats.tournamentsPlayed++;
-			if (tournament.result == true)
-				this.modeStats.tournament.tournamentsWon++;
-			else
-				this.modeStats.tournament.tournamentsLost++;
+		if (mode === "tournament"){
+			for (let tournament of this.tournamentHistory){
+				if (tournament.getPlayerStats(this) === true)
+					stats.tournamentsWon++;
+				else
+					stats.tournamentsLost++;
+				stats.tournamentsPlayed++;
+			}
 		}
+		return (stats);
 	}
 }
