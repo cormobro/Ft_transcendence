@@ -45,15 +45,9 @@ class PlayerController {
 			this.chartStatsView.renderPlotChart();
 	}
 
-	updateHistoricalStatsView(){
+	updateHistoricalStatsView(i){
 
 		this.historicalStatsView.init();
-
-		for (let i = 0; i < this.player.matchHistory.length; i++) {
-
-			document.getElementById("match" + this.player.matchHistory[i].id).addEventListener('click', function() {
-				this.historicalStatsView.render(i);
-			});
-		}
+		this.historicalStatsView.render(i);
 	}
 }

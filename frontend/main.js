@@ -93,3 +93,13 @@ document.getElementById("historicalStatsButton").addEventListener('click', funct
 
 	myPlayerController.updateHistoricalStatsView();
 })
+
+document.getElementById("playerStats").addEventListener("click", function(e) {
+
+	for (let i = 0; i < player3.matchHistory.length; i++){
+		if (e.target && e.target.id === "match" + player3.matchHistory[i].id) {
+			console.log(i);
+			myPlayerController.updateHistoricalStatsView(i);
+		}
+	}
+});
