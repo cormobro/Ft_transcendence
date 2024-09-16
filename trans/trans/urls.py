@@ -20,6 +20,7 @@ from polls.views import home
 from polls.views import manage_request
 from polls.views import manage_42_api_step1
 from polls.views import manage_42_api_step2
+from polls.views import manage_connection
 
 urlpatterns = [
 	path ('', manage_request, name='home'),
@@ -27,5 +28,6 @@ urlpatterns = [
 	path ('post/', manage_request, name='home'),
 	path ('api_42/', manage_42_api_step1, name='home'),
 	path ('api_code/', manage_42_api_step2, name='home'),
+	path ('new_connection/', manage_connection, name='home'),
     path('admin/', admin.site.urls),
 ]

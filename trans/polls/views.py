@@ -157,5 +157,31 @@ def manage_request(request):
 					return HttpResponse(f"Joueur {username} existe déjà")
 	return render(request, 'polls/index.html')
 
+	# 
+@csrf_protect
+def manage_connection(request):
+	if request.method == 'POST':
+		data = request.POST
+		username = data.get('username')
+		# voir comment hasher le password
+		# if check si le username est dans la db
+		# si il ne l'est pas on l'ajoute
+		# si il l'est déjà on renvoie un msg ce nom est dejà pris
+	elif request.method == 'GET':
+		# on va gérer comme ça pour la distinction
+		# si check si le username est dans la db 
+		# si pas on renvoie msg (user does not exist)
+		# si il l'est on check mdp hashé contre mdp 
+		# et on log l'user 
+		# on peut potentiellement remplir les différents arrays du front
+		# à ce moment là, sinon avoir une variable login avec la session
+		# du navigateur
+
+@csrf_protect
+def tournament_end(request):
+	if request.method == 'POST':
+		tournament = Tournament()
+
+	
 
 
