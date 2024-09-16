@@ -1,15 +1,26 @@
-			//---------- Canvas infos ----------------------------------------------------------------------
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8" />
+		<title>PONG</title>
+		<style>
+* {
+	padding: 0;
+	margin: 0;
+}
+      canvas {
+	      background: #eee;
+	      display: block;
+	      margin: 0 auto;
+      }
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="1080" height="720"></canvas>
 
-			
+		<script>
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
-			//canvas.width = window.innerWidth * 3/4;
-			//canvas.height = canvas.width * 2/3;
-			const navbar = document.querySelector('nav.navbar');
-			let navbarHeight = navbar.offsetHeight;
-			canvas.height = window.innerHeight - navbarHeight;
-			canvas.width = canvas.height * 3/2;
-			console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
 
 			//----------- Ball coordinates -----------------------------------------------------------------
 
@@ -28,7 +39,7 @@
 
 			//---------- Paddle size/coordinates/state------------------------------------------------------
 
-			let paddleHeight = canvas.height / 4.5;
+			const paddleHeight = canvas.height / 4.5;
 			const paddleWidth = 10;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
@@ -46,7 +57,7 @@
 			let leftScore = 0;
 			let rightScore = 0;
 			let playersCount = 8;
-			let	players = [
+			const players = [
 				{name:"Player 1", score:0, alive:true},
 				{name:"Player 2", score:0, alive:true},
 				{name:"Player 3", score:0, alive:true},
@@ -72,7 +83,7 @@
 
 			//---------- gameMode 0 => SOLO ---------- gameMode 1 => DUO ---------- gameMode 2 => TOURNAMENT
 
-			let gameMode = 0;
+			let gameMode = 2;
 
 			//---------- Matchmaking related variables -----------------------------------------------------
 
@@ -82,32 +93,6 @@
 			let loopDirection = 0;
 
 			//----------------------------------------------------------------------------------------------
-
-			function resetWholeGame()
-			{
-				resetGame();
-				player1 = "Player 1";
-				player2 = "Player 2";
-				winner = 0;
-				tournamentWinner = 0;
-				index = 0;
-				gameMode = 1;
-				totalPoints = 0;
-				matchmakingIndex = 0;
-				foundPair = 0;
-				loopDirection = 0;
-				playersCount = 1;
-				players = [
-				{name:"Player 1", score:0, alive:true},
-				{name:"Player 2", score:0, alive:true},
-				{name:"Player 3", score:0, alive:true},
-				{name:"Player 4", score:0, alive:true},
-				{name:"Player 5", score:0, alive:true},
-				{name:"Player 6", score:0, alive:true},
-				{name:"Player 7", score:0, alive:true},
-				{name:"Player 8", score:0, alive:true}
-			];
-			}
 
 			function resetGame()
 			{
@@ -210,6 +195,7 @@
 				{
 					while (matchmakingIndex < playersCount - 1 && foundPair < 2 && loopDirection === 0)
 					{
+						console.log("matchmakingIndex:", matchmakingIndex);
 						if (matchmakingIndex === playersCount - 2)
 							loopDirection = 1;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
@@ -229,6 +215,7 @@
 					}
 					while (matchmakingIndex >= 0 && foundPair < 2 && loopDirection === 1)
 					{
+						console.log("matchmakingIndex2:", matchmakingIndex);
 						if (matchmakingIndex === 0)
 							loopDirection = 0;
 						if (players[matchmakingIndex].alive === true && foundPair === 0)
@@ -267,6 +254,7 @@
 
 			function draw()
 			{
+				console.log("dx:", dx, "dy:", dy, "ballSpeed:", ballSpeed);
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				drawBall();
 				drawLeftPaddle();
@@ -438,29 +426,8 @@
 			document.addEventListener("keyup", keyUpHandler, false);
 			document.addEventListener("mousemove", mouseMoveHandler, false);
 			document.addEventListener("click", mouseClickHandler, false);
-			document.addEventListener("mousemove", function(e) {
-    				const mousePos = getMousePos(canvas, e);
-			});
-			window.addEventListener( 'resize', onWindowResize, false );
-			function onWindowResize() {
-				navbarHeight = navbar.offsetHeight;
-				canvas.height = window.innerHeight - navbarHeight;
-				canvas.width = canvas.height * 3/2;
-				paddleHeight = canvas.height / 4.5;
-			}
 
-			function getMousePos(canvas, evt) {
-    				// Get the bounding rectangle of the canvas
-    				const rect = canvas.getBoundingClientRect();    
-    				// Calculate mouse position within the canvas, accounting for scroll offset
-    				const x = evt.clientX - rect.left;
-				//+ window.scrollX;
-    				const y = evt.clientY - rect.top;
-				//+ window.scrollY;
-    				return { x: x, y: y };
-			}
-
-			/*function mouseMoveHandler(e)
+			function mouseMoveHandler(e)
 			{
 				const relativeX = e.clientX - canvas.offsetLeft;
 				const relativeY = e.clientY - canvas.offsetTop;
@@ -488,44 +455,13 @@
 					clearInterval(interval);
 					interval = setInterval(draw, 8);
 				}
-			}*/
-
-			function mouseMoveHandler(e)
-			{
-				const mousePos = getMousePos(canvas, e);
-				const relativeX = mousePos.x;
-				const relativeY = mousePos.y;
-				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3) {
-        				boxHover = true;
-				}
-				else
-				{
-					boxHover = false;
-				}
 			}
-
-			function mouseClickHandler(e)
-			{
-				const mousePos = getMousePos(canvas, e);
-				const relativeX = mousePos.x;
-				const relativeY = mousePos.y;
-				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true && document.getElementsByClassName('content-game')[0].style.display === "block") {
-					menuBool = false;
-					winner = 0;
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					clearInterval(interval);
-					interval = setInterval(draw, 8);
-				}
-			}
-
 
 			function keyDownHandler(e)
 			{
-				if (e.key === "Up" || e.key === "ArrowUp")
+				if ((e.key === "Up" || e.key === "ArrowUp") && gameMode != 0)
 				{
-					e.preventDefault();
-					if (gameMode != 0)
-						rightPaddleUpPressed = true;
+					rightPaddleUpPressed = true;
 				}
 				else if (e.key === "a" || e.key === "A")
 				{
@@ -535,11 +471,9 @@
 				{
 					leftPaddleDownPressed = true;
 				}
-				else if (e.key === "Down" || e.key === "ArrowDown")
+				else if ((e.key === "Down" || e.key === "ArrowDown") && gameMode != 0)
 				{
-					e.preventDefault();
-					if (gameMode != 0)
-						rightPaddleDownPressed = true;
+					rightPaddleDownPressed = true;
 				}
 			}
 
@@ -562,42 +496,10 @@
 					rightPaddleDownPressed = false;
 				}
 			}
+			if (gameMode === 2)
+				findNextMatch();
 			interval = setInterval(drawMenu, 10);
+		</script>
+	</body>
+</html>
 
-			//---------- onClick functions for game mode ---------------------------------------------------
-
-			function onClickEasy()
-			{
-				resetWholeGame();
-				gameMode = 0;
-				player1 = "Player 1";
-				player2 = "Easy";
-			};
-
-			function onClickMedium()
-			{
-				resetWholeGame();
-				gameMode = 0;
-				player1 = "Player 1";
-				player2 = "Medium";
-			};
-
-			function onClickHard()
-			{
-				resetWholeGame();
-				gameMode = 0;
-				player1 = "Player 1";
-				player2 = "Hard";
-			};
-
-			function onClickDuo()
-			{
-				resetWholeGame();
-				gameMode = 1;
-			};
-
-			function onClickTournament()
-			{
-				resetWholeGame();
-				gameMode = 2;
-			};
