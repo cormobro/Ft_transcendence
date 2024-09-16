@@ -12,12 +12,12 @@ class ChartStatsView{
 		this.container.innerHTML = `
 			<h3 class="text-dark">Statistiques graphiques de ${this.player.username}</h3>
 			<div class="d-flex align-item-center">
-			<canvas class="bg-light" id="myChart"></canvas><br>
-			<div class="text-dark" for="myChartLegend"></div>
+			<canvas class="bg-light" id="myPlayerChart"></canvas>
+			<div class="text-dark" for="myPlayerChartLegend"></div>
 			</div>
 		`;
 
-		this.canvas = document.getElementById('myChart');
+		this.canvas = document.getElementById('myPlayerChart');
 		this.canvas.width = 500;
 		this.canvas.height = 500;
 	}
@@ -57,7 +57,7 @@ class ChartStatsView{
 
 		const legendOptions = {
 			canvas: this.canvas,
-			div: "myChartLegend",
+			div: "myPlayerChartLegend",
 			data: {
 				"Victoires": globalStats.matchsWon,
 				"Défaites": globalStats.matchsLost
@@ -111,7 +111,7 @@ class ChartStatsView{
 
 		const legendOptions = {
 			canvas: this.canvas,
-			div: "myChartLegend",
+			div: "myPlayerChartLegend",
 			data: {
 				"Solo": soloStats.matchsWon,
 				"Duo": duoStats.matchsWon,
@@ -138,9 +138,9 @@ class ChartStatsView{
 		var dataPointsWon = {};
 
 		for (let i = 0; i < pointsWonArray.length; i++) {
-    		dataPointsWon["Match " + i] = pointsWonArray[i];
+			dataPointsWon["Match " + i] = pointsWonArray[i];
 		}
-	
+
 		const plotChartOptions = {
 			canvas: this.canvas,
 				seriesName:"Points gagnés au cours des parties",
@@ -173,7 +173,7 @@ class ChartStatsView{
 
 		const legendOptions = {
 			canvas: this.canvas,
-			div: "myChartLegend",
+			div: "myPlayerChartLegend",
 			data: dataPointsWon,
 			colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
 		};

@@ -47,7 +47,9 @@ class PlayerController {
 
 	updateHistoricalStatsView(i){
 
-		this.historicalStatsView.init();
+		if (!i)
+			i = 0;
+		// this.historicalStatsView.init();
 		this.historicalStatsView.render(i);
 	}
 }

@@ -18,36 +18,13 @@ player4.addMatch(game3);
 player3.addTournament(tournament);
 player4.addTournament(tournament);
 
-player3.addMatch(new Match(4, "solo", player3, null, true, 10, 2));
+let player5 = new Player(3, "AI");
+
+player3.addMatch(new Match(4, "solo", player3, player5, true, 10, 2));
 player3.addMatch(new Match(5, "duo", player3, player4, false, 3, 10));
 
-var container = document.getElementById("matchStats");
-
-container.innerHTML = `
-		<h3 class="text-dark">Statistiques de la partie : ${player3.username} vs ${player4.username}</h3>
-		<p class="text-dark">Points gagnés par ${player3.username} : ${game1.pointsWonByPlayer1}</p>
-		<p class="text-dark">Points gagnés par ${player4.username} : ${game1.pointsWonByPlayer2}</p>
-		<p class="text-dark">Points joués : ${game1.pointsWonByPlayer1 + game1.pointsWonByPlayer2}</p>
-		<p class="text-dark">Victoire de : ${game1.resultPlayer1 === true ? player3.username : player4.username}</p>
-`;
-
-var container = document.getElementById("player1Stats");
-
-container.innerHTML = `
-		<h3 class="text-dark">Statistiques de ${player3.username}</h3>
-		<p class="text-dark">Points gagnés : ${game1.pointsWonByPlayer1}</p>
-		<p class="text-dark">Points perdus : ${game1.pointsWonByPlayer2}</p>
-		<p class="text-dark">Précision : ${Math.round(game1.pointsWonByPlayer1/(game1.pointsWonByPlayer1 + game1.pointsWonByPlayer2)*100)}%</p>
-`;
-
-var container = document.getElementById("player2Stats");
-
-container.innerHTML = `
-		<h3 class="text-dark">Statistiques de ${player4.username}</h3>
-		<p class="text-dark">Points gagnés : ${game1.pointsWonByPlayer2}</p>
-		<p class="text-dark">Points perdus : ${game1.pointsWonByPlayer1}</p>
-		<p class="text-dark">Précision : ${Math.round(game1.pointsWonByPlayer2/(game1.pointsWonByPlayer2 + game1.pointsWonByPlayer1)*100)}%</p>
-`;
+let myMatchController = new MatchController(game2, player3, player4);
+myMatchController.updateMatchStatsView();
 
 document.getElementById("globalStatsMenuButton").addEventListener('click', function(){
 
@@ -98,7 +75,6 @@ document.getElementById("playerStats").addEventListener("click", function(e) {
 
 	for (let i = 0; i < player3.matchHistory.length; i++){
 		if (e.target && e.target.id === "match" + player3.matchHistory[i].id) {
-			console.log(i);
 			myPlayerController.updateHistoricalStatsView(i);
 		}
 	}
