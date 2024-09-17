@@ -40,6 +40,8 @@
 			//---------- Interval is the current running "loop" --------------------------------------------
 
 			let interval = 0;
+			let time = new Date();
+			let oldTime = new Date();
 
 			//---------- Players related informations ------------------------------------------------------
 
@@ -69,6 +71,8 @@
 			let winner = 0;
 			let tournamentWinner = 0;
 			let index = 0;
+			let aiDir = 0;
+			let difficultyCoeff = 0.3;
 
 			//---------- gameMode 0 => SOLO ---------- gameMode 1 => DUO ---------- gameMode 2 => TOURNAMENT
 
@@ -121,6 +125,7 @@
 				rightScore = 0;
 				ballSpeed = canvas.width / 250;
 				menuBool = true;
+				aiDir = 0;
 			}
 
 			function drawMenu()
@@ -265,6 +270,50 @@
 				ctx.closePath();
 			}
 
+			function predict()
+			{
+				let xPredict = x;
+				let yPredict = y;
+				let dxPredict = dx;
+				let dyPredict = dy;
+				time = new Date();
+				if (time.getTime() - oldTime.getTime() >= 1000)
+				{
+					oldTime = new Date();
+					if (dx > 0)
+					{
+						//Predicts where the ball hits the left Y axis
+						while (xPredict + dxPredict < canvas.width - ballRadius - (paddleWidth / 2))
+						{
+							xPredict += dxPredict;
+							yPredict += dyPredict;
+							if (yPredict + dyPredict > canvas.height - ballRadius || yPredict + dyPredict < ballRadius)
+								dyPredict = -dyPredict;
+						}
+						//Randomize the hit according to difficulty coefficient
+						yPredict = yPredict + ((Math.random() * (difficultyCoeff - (-difficultyCoeff)) + (-difficultyCoeff)) * (paddleHeight / 2));
+						//Calculate how many key strokes are needed to get the paddle to the Y index
+						if (yPredict > rightPaddle + (paddleHeight / 2))
+						{
+							while (yPredict > rightPaddle + (paddleHeight / 2))
+							{
+								yPredict -= 7;
+								aiDir--;
+							}
+						}
+						else if (yPredict < rightPaddle + (paddleHeight / 2))
+						{
+							while (yPredict < rightPaddle + (paddleHeight / 2))
+							{
+								yPredict += 7;
+								aiDir++;
+							}
+						}
+
+					}
+				}
+			}
+
 			function draw()
 			{
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -272,10 +321,19 @@
 				drawLeftPaddle();
 				drawRightPaddle();
 				drawScore();
-				console.log("rightPaddle: ", rightPaddle);
-				simulateKeyPress("ArrowDown");
 				x += dx;
 				y += dy;
+				predict();
+				if (aiDir < 0)
+				{
+					aiDir++;
+					simulateKeyPress("ArrowDown");
+				}
+				else if (aiDir > 0)
+				{
+					aiDir--;
+					simulateKeyPress("ArrowUp");
+				}
 				if (x + dx - (paddleWidth / 2) < ballRadius)
 				{
 					if (y > leftPaddle && y < leftPaddle + paddleHeight)
@@ -585,6 +643,7 @@
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Easy";
+				difficultyCoeff = 0.3;
 			};
 
 			function onClickMedium()
@@ -593,6 +652,7 @@
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Medium";
+				difficultyCoeff = 0.6;
 			};
 
 			function onClickHard()
@@ -601,6 +661,7 @@
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Hard";
+				difficultyCoeff = 0.9;
 			};
 
 			function onClickDuo()
