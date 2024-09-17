@@ -156,3 +156,6 @@ def manage_request(request):
 				else:
 					return HttpResponse(f"Joueur {username} existe déjà")
 	return render(request, 'polls/index.html')
+
+
+
