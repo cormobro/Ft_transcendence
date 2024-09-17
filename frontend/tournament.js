@@ -1,10 +1,10 @@
 class Tournament{
 
-	constructor(id, winner, matchs){
+	constructor(id, winner, matches){
 
 		this.id = id;
 		this.winner = winner;
-		this.matchs = matchs;
+		this.matches = matches;
 	}
 
 	getPlayerStats(player){
@@ -14,5 +14,4 @@ class Tournament{
 		else
 			return (false);
 	}
-
 }
