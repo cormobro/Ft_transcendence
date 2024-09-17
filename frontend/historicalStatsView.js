@@ -39,7 +39,7 @@ class HistoricalStatsView{
 
 		for (let match of this.player.matchHistory){
 			this.container.innerHTML += `
-				<div class="btn btn-outline-dark mt-3 mb-3" id="match${match.id}">Match ${match.id}</div>
+				<button class="btn btn-outline-dark mt-3 mb-3" id="match${match.id}">Match ${match.id}</button>
 			`;
 		}
 

@@ -11,7 +11,7 @@ document.getElementById('addPlayer').addEventListener('click', function() {
 	const newLabel = document.createElement('label');
 	newLabel.setAttribute('for', 'player' + (playersNumber + 1));
 	newLabel.classList.add('form-label');
-	newLabel.textContent = 'Nom d\'utilisateur';
+	newLabel.textContent = 'Surnom (*)';
 
 	// Créer le nouvel input
 	const newInput = document.createElement('input');
