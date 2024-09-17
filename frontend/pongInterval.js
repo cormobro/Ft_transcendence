@@ -58,6 +58,18 @@
 				{name:"Player 7", score:0, alive:true},
 				{name:"Player 8", score:0, alive:true}
 			];
+			let idIndex = 4;
+			let matchId = 0;
+			let tournamentId = 0;
+			let tempMatchId = 0;
+			let matchesInstances = [];
+			let tempMatchesInstances = [];
+			let tournamentsInstances = [];
+			let playersInstances = [];
+			playersInstances.push(new Player(0, "Player 1"));
+			playersInstances.push(new Player(1, "Easy"));
+			playersInstances.push(new Player(2, "Medium"));
+			playersInstances.push(new Player(3, "Hard"));
 
 			//---------- Menu related informations ---------------------------------------------------------
 
@@ -101,6 +113,8 @@
 				foundPair = 0;
 				loopDirection = 0;
 				playersCount = 1;
+				tempMatchId = 0;
+				tempMatchesInstances = null;
 				players = [
 				{name:"Player 1", score:0, alive:true},
 				{name:"Player 2", score:0, alive:true},
@@ -126,6 +140,18 @@
 				ballSpeed = canvas.width / 250;
 				menuBool = true;
 				aiDir = 0;
+			}
+
+			function findInstance(name)
+			{
+				let InstanceIndex = 4;
+				while (playersInstances[InstanceIndex])
+				{
+					if (playersInstances[InstanceIndex].username === name)
+						return (InstanceIndex);
+					InstanceIndex++;
+				}
+				return (-1);
 			}
 
 			function drawMenu()
@@ -357,11 +383,29 @@
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player2;
+							if (gameMode != 2)
+							{
+								matchesInstances.push(new Match(matchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, rightScore, leftScore));
+								matchId++;
+							}
 							if (gameMode === 2)
 							{
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, rightScore, leftScore));
+								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
+								{
 									tournamentWinner = player2;
+									while (tempMatchId > 0)
+									{
+										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
+										tempMatchId--;
+										matchId++;
+									}
+									tempMatchesInstances = null;
+									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tournamentId++;
+								}
 								index = 0;
 								while (index < playersCount - 1)
 								{
@@ -411,11 +455,29 @@
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player1;
+							if (gameMode != 2)
+							{
+								matchesInstances.push(new Match(matchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, rightScore, leftScore));
+								matchId++;
+							}
 							if (gameMode === 2)
 							{
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, rightScore, leftScore));
+								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
+								{
 									tournamentWinner = player1;
+									while (tempMatchId > 0)
+									{
+										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
+										tempMatchId--;
+										matchId++;
+									}
+									tempMatchesInstances = null;
+									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tournamentId++;
+								}
 								index = 0;
 								while (index < playersCount - 1)
 								{
@@ -676,7 +738,6 @@
 				player2 = "Hard";
 				difficultyCoeff = 0.9;
 			};
-
 			function onClickDuo()
 			{
 				resetWholeGame();
