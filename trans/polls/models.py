@@ -40,10 +40,10 @@ class Tournament(models.Model):
 	def __str__(self):
 		return self.name
 
-# class Match(models.Model):
-# 	player1 = models.CharField(max_length=255, blank=False)
-# 	player2 = models.CharField(max_length=255, blank=False)
-# 	mode = models.CharField(max_length=255, blank=False)
-# 	result_player1 = models.CharField(max_length=255, blank=False)
-# 	player1_points = models.IntegerField()
-# 	player2_points = models.IntegerField()
+class Match(models.Model):
+	player1 = models.CharField(max_length=255, blank=False)
+	player2 = models.CharField(max_length=255, default='Anonymous')
+	mode = models.CharField(max_length=255, blank=False)
+	result_player1 = models.CharField(max_length=255, blank=False)
+	player1_points = models.IntegerField()
+	player2_points = models.IntegerField()

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
-from .models import Player, Tournament
+from .models import Player, Tournament, Match
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.hashers import make_password, check_password
 import requests
 import os
 
@@ -157,17 +158,54 @@ def manage_request(request):
 					return HttpResponse(f"Joueur {username} existe déjà")
 	return render(request, 'polls/index.html')
 
-	# 
+@csrf_protect
+def create_acc(request):
+    if request.method == 'POST':
+        data = request.POST
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username or not password:
+            message = "Username and password are required."
+        elif Player.objects.filter(username=username).exists():
+            message = "This username is already taken."
+        else:
+            new_player = Player(username=username)
+            new_player.set_password(password)
+            new_player.save()
+            message = "Account created successfully."
+    else:
+        message = "Bad request method"
+
+    return render(request, 'polls/index.html', {'message': message})
+
+
 @csrf_protect
 def manage_connection(request):
-	if request.method == 'POST':
-		data = request.POST
-		username = data.get('username')
-		# voir comment hasher le password
-		# if check si le username est dans la db
-		# si il ne l'est pas on l'ajoute
-		# si il l'est déjà on renvoie un msg ce nom est dejà pris
-	elif request.method == 'GET':
+    if request.method == 'POST':
+        data = request.POST
+        username = data.get('username')
+        password = data.get('password')
+
+        try:
+            player = Player.objects.get(username=username)
+            if check_password(password, player.password):
+
+                request.session['user_id'] = player.id
+                request.session['username'] = player.username
+
+                message = "Connexion réussie."
+                return render(request, 'polls/index.html', {'message': message})  # Redirigez vers la page de tableau de bord après la connexion
+            else:
+                message = "Mot de passe incorrect."
+        except Player.DoesNotExist:
+            message = "Ce joueur n'existe pas, veuillez créer un compte."
+    else:
+        message = "Méthode de requête incorrecte"
+
+    return render(request, 'polls/index.html', {'message': message})
+
+
 		# on va gérer comme ça pour la distinction
 		# si check si le username est dans la db 
 		# si pas on renvoie msg (user does not exist)
@@ -178,9 +216,41 @@ def manage_connection(request):
 		# du navigateur
 
 @csrf_protect
-def tournament_end(request):
+def logout(request):
+	request.session.flush()
+	return render(request, 'polls/index.html', {'message': "Vous avez été déconnecté."})
+
+# @csrf_protect
+# def tournament_end(request):
+# 	if request.method == 'POST':
+# 		tournament = Tournament()
+# 		data = request.POST
+# 		logged_player = data.get('player1')
+# 		if 
+		
+# 	# dans cette requete il y aura toute les infos sur les tournois
+# 	# on l'occurence les matchs/leurs données, dans l'ordre dans lequel
+# 	# ils ont été joués
+# 	# ajouter ce tournoi à la liste des tournois du joueur 1
+
+@csrf_protect
+def match_end(request):
 	if request.method == 'POST':
-		tournament = Tournament()
+		data = request.POST
+		player1 = data.get('player1')
+		player2 = data.get('player2')
+		mode = data.get('mode')
+		result_player1 = data.get('result')
+		player1_points = data.get('player1_points')
+		player2_points = data.get('player2_points')
+		match = Match(player1=player1, player2=player2, 
+				mode=mode, result_player1=result_player1, player1_points=player1_points, player2_points=player2_points)
+		match.save()
+	else:
+		message = "Wrong request method"
+
+	return render(request, 'polls/index.html', {'message': message})
+
 
 	
 
