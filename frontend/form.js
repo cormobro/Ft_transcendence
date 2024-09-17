@@ -1,6 +1,6 @@
 document.getElementById('addPlayer').addEventListener('click', function() {
 	// Compter le nombre actuel de champs d'input
-	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs').length;
 
 	if (playersNumber == 8)
 		return;
@@ -11,7 +11,7 @@ document.getElementById('addPlayer').addEventListener('click', function() {
 	const newLabel = document.createElement('label');
 	newLabel.setAttribute('for', 'player' + (playersNumber + 1));
 	newLabel.classList.add('form-label');
-	newLabel.textContent = 'Surnom (*)';
+	newLabel.textContent = 'Surnom *';
 
 	// Créer le nouvel input
 	const newInput = document.createElement('input');
@@ -31,8 +31,8 @@ document.getElementById('addPlayer').addEventListener('click', function() {
 });
 
 document.getElementById('removePlayer').addEventListener('click', function() {
-	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
-	const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs .col-12');
+	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs').length;
+	const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs');
 
 	if (playersNumber <= 3)
 		return;
