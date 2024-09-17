@@ -8,7 +8,7 @@ class ModeStatsView{
 
 	renderSolo(){
 
-		const stats = this.player.getModeStats("solo");
+		const stats = this.player.getModeStats(0);
 
 		this.container.innerHTML = `
 			<h3 class="text-dark">Statistiques de ${this.player.username} en mode solo</h3>
@@ -23,7 +23,7 @@ class ModeStatsView{
 
 	renderDuo(){
 
-		const stats = this.player.getModeStats("duo");
+		const stats = this.player.getModeStats(1);
 
 		this.container.innerHTML = `
 			<h3 class="text-dark">Statistiques de ${this.player.username} en mode duo</h3>
@@ -38,7 +38,7 @@ class ModeStatsView{
 
 	renderTournament(){
 
-		const stats = this.player.getModeStats("tournament");
+		const stats = this.player.getModeStats(2);
 
 		this.container.innerHTML = `
 			<h3 class="text-dark">Statistiques de ${this.player.username} en mode tournoi</h3>

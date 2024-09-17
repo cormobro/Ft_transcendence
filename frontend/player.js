@@ -18,6 +18,10 @@ class Player{
 		this.tournamentHistory.push(tournament);
 	}
 
+	// getPlayerMatches(){}
+
+	// getPlayerTournaments(){}
+
 	getGlobalStats(){
 
 		let stats = {
@@ -30,6 +34,7 @@ class Player{
 		};
 
 		for (let match of this.matchHistory){
+			// loop to retrieve all the matches played by the instance player, if (match.player1 == this || match.player2 == this)
 			const playerStats = match.getPlayerStats(this);
 			stats.pointsWon += playerStats.pointsWon;
 			stats.pointsLost += playerStats.pointsLost;
@@ -56,6 +61,7 @@ class Player{
 		};
 
 		for (let match of this.matchHistory){
+			// loop to retrieve all the matches played by the instance player, if (match.player1 == this || match.player2 == this)
 			if (mode === match.mode){
 				const playerStats = match.getPlayerStats(this);
 				stats.pointsWon += playerStats.pointsWon;
@@ -66,7 +72,7 @@ class Player{
 				stats.matchsPlayed++;
 			}
 		}
-		if (mode === "tournament"){
+		if (mode === 2){
 			for (let tournament of this.tournamentHistory){
 				if (tournament.getPlayerStats(this) === true)
 					stats.tournamentsWon++;

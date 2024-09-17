@@ -70,9 +70,9 @@ class ChartStatsView{
 
 	renderBarChart() {
 
-		const soloStats = this.player.getModeStats("solo");
-		const duoStats = this.player.getModeStats("duo");
-		const tournamentStats = this.player.getModeStats("tournament");
+		const soloStats = this.player.getModeStats(0);
+		const duoStats = this.player.getModeStats(1);
+		const tournamentStats = this.player.getModeStats(2);
 
 		var gridScaleValue = Math.ceil(soloStats.matchsWon +
 			duoStats.matchsWon +
@@ -128,6 +128,7 @@ class ChartStatsView{
 		let pointsWonArray = new Array(this.player.matchHistory.length).fill(0);
 
 		for (let i = 0; i < this.player.matchHistory.length; i++){
+			// loop to retrieve all the matches played by the instance player, if (match.player1 == this || match.player2 == this)
 			if (i == 0)
 				pointsWonArray[i] += this.player.matchHistory[i].pointsWonByPlayer1;
 			else{
