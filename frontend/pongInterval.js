@@ -323,16 +323,19 @@
 				drawScore();
 				x += dx;
 				y += dy;
-				predict();
-				if (aiDir < 0)
+				if (gameMode === 0)
 				{
-					aiDir++;
-					simulateKeyPress("ArrowDown");
-				}
-				else if (aiDir > 0)
-				{
-					aiDir--;
-					simulateKeyPress("ArrowUp");
+					predict();
+					if (aiDir < 0)
+					{
+						aiDir++;
+						simulateKeyPress("ArrowDown");
+					}
+					else if (aiDir > 0)
+					{
+						aiDir--;
+						simulateKeyPress("ArrowUp");
+					}
 				}
 				if (x + dx - (paddleWidth / 2) < ballRadius)
 				{
@@ -511,11 +514,11 @@
 
 			function simulateKeyPress(key) {
 				// Simulate keydown event
-				const keydownEvent = new KeyboardEvent('keydown', { key: key });
+				const keydownEvent = new KeyboardEvent('keydown', { key: key, isTrusted: false });
 				document.dispatchEvent(keydownEvent);
 				// Simulate keyup event after a short delay (for continuous pressing, you can adjust or skip this)
 				setTimeout(() => {
-					const keyupEvent = new KeyboardEvent('keyup', { key: key });
+					const keyupEvent = new KeyboardEvent('keyup', { key: key, isTrusted: false });
 					document.dispatchEvent(keyupEvent);
 				}, 8); // Delay in milliseconds, you can adjust as needed
 			}
@@ -597,6 +600,8 @@
 					e.preventDefault();
 					if (gameMode != 0)
 						rightPaddleUpPressed = true;
+					else if (!e.isTrusted)
+						rightPaddleUpPressed = true;
 				}
 				else if (e.key === "a" || e.key === "A")
 				{
@@ -611,14 +616,19 @@
 					e.preventDefault();
 					if (gameMode != 0)
 						rightPaddleDownPressed = true;
+					else if (!e.isTrusted)
+						rightPaddleDownPressed = true;
 				}
 			}
 
 			function keyUpHandler(e)
 			{
-				if ((e.key === "Up" || e.key === "ArrowUp") && gameMode != 0)
+				if (e.key === "Up" || e.key === "ArrowUp")
 				{
-					rightPaddleUpPressed = false;
+					if (gameMode != 0)
+						rightPaddleUpPressed = false;
+					else if (!e.isTrusted)
+						rightPaddleUpPressed = false;
 				}
 				else if (e.key === "a" || e.key === "A")
 				{
@@ -628,9 +638,12 @@
 				{
 					leftPaddleDownPressed = false;
 				}
-				else if ((e.key === "Down" || e.key === "ArrowDown") && gameMode != 0)
+				else if (e.key === "Down" || e.key === "ArrowDown")
 				{
-					rightPaddleDownPressed = false;
+					if (gameMode != 0)
+						rightPaddleDownPressed = false;
+					else if (!e.isTrusted)
+						rightPaddleDownPressed = false;
 				}
 			}
 			interval = setInterval(drawMenu, 10);
