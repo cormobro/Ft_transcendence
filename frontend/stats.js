@@ -33,6 +33,7 @@ document.getElementById("globalStatsMenuButton").addEventListener('click', funct
 
 	let container = document.getElementById("playerStatsButton");
 
+	container.innerHTML = null;
 	for (let player of playersInstances){
 		container.innerHTML += `
 			<button class="btn btn-outline-light mt-5 me-3" id="${player.username}">${player.username}</button>
@@ -42,7 +43,7 @@ document.getElementById("globalStatsMenuButton").addEventListener('click', funct
 
 // event listener sur chaque bouton permettant de choisir les statistiques de quel joueur afficher
 document.getElementById("playerStatsButton").addEventListener("click", function(e) {
-	
+
 	for (let player of playersInstances){
 
 		if (e.target && e.target.id === player.username) {
