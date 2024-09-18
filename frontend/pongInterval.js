@@ -40,8 +40,8 @@
 			//---------- Interval is the current running "loop" --------------------------------------------
 
 			let interval = 0;
-			let time = new Date();
 			let oldTime = new Date();
+			let matchDebut = new Date();
 
 			//---------- Players related informations ------------------------------------------------------
 
@@ -114,7 +114,7 @@
 				loopDirection = 0;
 				playersCount = 1;
 				tempMatchId = 0;
-				tempMatchesInstances = null;
+				tempMatchesInstances = [];
 				players = [
 				{name:"Player 1", score:0, alive:true},
 				{name:"Player 2", score:0, alive:true},
@@ -144,7 +144,7 @@
 
 			function findInstance(name)
 			{
-				let InstanceIndex = 4;
+				let InstanceIndex = 0;
 				while (playersInstances[InstanceIndex])
 				{
 					if (playersInstances[InstanceIndex].username === name)
@@ -302,8 +302,8 @@
 				let yPredict = y;
 				let dxPredict = dx;
 				let dyPredict = dy;
-				time = new Date();
-				if (time.getTime() - oldTime.getTime() >= 1000)
+				//time = new Date();
+				if (Date.now() - oldTime.getTime() >= 1000)
 				{
 					oldTime = new Date();
 					if (dx > 0)
@@ -380,17 +380,22 @@
 						rightScore++;
 						if (rightScore === 3)
 						{
+							let myMatchController = null;
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player2;
 							if (gameMode != 2)
 							{
-								matchesInstances.push(new Match(matchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, rightScore, leftScore));
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
 								matchId++;
 							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, rightScore, leftScore));
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
 								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
@@ -457,12 +462,16 @@
 							winner = player1;
 							if (gameMode != 2)
 							{
-								matchesInstances.push(new Match(matchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, rightScore, leftScore));
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
 								matchId++;
 							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, rightScore, leftScore));
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(),  playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
 								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
@@ -648,6 +657,7 @@
 				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true && document.getElementsByClassName('content-game')[0].style.display === "block") {
 					menuBool = false;
 					winner = 0;
+					matchDebut = new Date();
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					clearInterval(interval);
 					interval = setInterval(draw, 8);
