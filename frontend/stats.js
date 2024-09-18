@@ -25,8 +25,8 @@ let playersControllersInstances = [];
 let currPlayerController;
 
 //lorsqu'un match pong se termine
-let myMatchController = new MatchController(game1, player3, player4);
-myMatchController.updateMatchStatsView();
+// let myMatchController = new MatchController(game1, player3, player4);
+// myMatchController.updateMatchStatsView();
 
 // event listener sur le bouton stats dans le menu
 document.getElementById("globalStatsMenuButton").addEventListener('click', function(){
