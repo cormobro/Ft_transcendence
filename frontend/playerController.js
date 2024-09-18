@@ -45,11 +45,8 @@ class PlayerController {
 			this.chartStatsView.renderPlotChart();
 	}
 
-	updateHistoricalStatsView(i){
+	updateHistoricalStatsView(match){
 
-		if (!i)
-			i = 0;
-		// this.historicalStatsView.init();
-		this.historicalStatsView.render(i);
+		this.historicalStatsView.render(match);
 	}
 }
