@@ -12,13 +12,13 @@ class HistoricalStatsView{
 	// 		<h3 class="text-dark">Statistiques par partie de ${this.player.username}</h3>
 	// 	`;
 
-	// 	for (let match of this.player.matchHistory){
+	// 	for (let match of this.player.matches){
 	// 		this.container.innerHTML += `
 	// 			<div class="btn btn-outline-dark mt-3 mb-3" id="match${match.id}">Match ${match.id}</div>
 	// 		`;
 	// 	}
 
-	// 	var match = this.player.matchHistory[0];
+	// 	var match = this.player.matches[0];
 
 	// 	this.container.innerHTML += `
 	// 		<h3 class="text-dark">Statistiques de la partie #${match.id}</h3>
@@ -37,8 +37,16 @@ class HistoricalStatsView{
 			<h3 class="text-dark">Statistiques par partie de ${this.player.username}</h3>
 		`;
 
+		const playerMatches = [];
+
+		for (let match of matchesInstances){
+			if (match.hasAttended(this.player) === true)
+				playerMatches.push(match);
+		}
+
 		let i = 0;
-		for (let match of this.player.matchHistory){
+		
+		for (let match of playerMatches){
 			// loop to retrieve all the matches played by the instance player, if (match.player1 == this || match.player2 == this)
 			this.container.innerHTML += `
 				<button class="btn btn-outline-dark mt-3 mb-3" id="match${i}">Match ${i}</button>
