@@ -23,6 +23,7 @@
 //variables globales pour controler les vues de chaque joueur
 let playersControllersInstances = [];
 let currPlayerController;
+let currPlayer;
 
 //lorsqu'un match pong se termine
 // let myMatchController = new MatchController(game1, player3, player4);
@@ -47,6 +48,7 @@ document.getElementById("playerStatsButton").addEventListener("click", function(
 	for (let player of playersInstances){
 
 		if (e.target && e.target.id === player.username) {
+			currPlayer = player;
 			playersControllersInstances.push(new PlayerController(player));
 			currPlayerController = playersControllersInstances[playersControllersInstances.length - 1];
 			currPlayerController.updateGlobalStatsView();
@@ -151,7 +153,7 @@ document.getElementById("historicalStatsButton").addEventListener('click', funct
 	const playerMatches = [];
 
 	for (let match of matchesInstances){
-		if (match.hasAttended(player3) === true)
+		if (match.hasAttended(currPlayer) === true)
 			playerMatches.push(match);
 	}
 
@@ -180,7 +182,7 @@ document.getElementById("playerStats").addEventListener("click", function(e) {
 	const playerMatches = [];
 
 	for (let match of matchesInstances){
-		if (match.hasAttended(player3) === true)
+		if (match.hasAttended(currPlayer) === true)
 			playerMatches.push(match);
 	}
 
