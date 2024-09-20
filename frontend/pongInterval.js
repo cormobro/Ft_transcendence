@@ -40,6 +40,8 @@
 			//---------- Interval is the current running "loop" --------------------------------------------
 
 			let interval = 0;
+			let oldTime = new Date();
+			let matchDebut = new Date();
 
 			//---------- Players related informations ------------------------------------------------------
 
@@ -56,6 +58,18 @@
 				{name:"Player 7", score:0, alive:true},
 				{name:"Player 8", score:0, alive:true}
 			];
+			let idIndex = 4;
+			let matchId = 0;
+			let tournamentId = 0;
+			let tempMatchId = 0;
+			let matchesInstances = [];
+			let tempMatchesInstances = [];
+			let tournamentsInstances = [];
+			let playersInstances = [];
+			playersInstances.push(new Player(0, "Player 1"));
+			playersInstances.push(new Player(1, "Easy"));
+			playersInstances.push(new Player(2, "Medium"));
+			playersInstances.push(new Player(3, "Hard"));
 
 			//---------- Menu related informations ---------------------------------------------------------
 
@@ -69,6 +83,8 @@
 			let winner = 0;
 			let tournamentWinner = 0;
 			let index = 0;
+			let aiDir = 0;
+			let difficultyCoeff = 0.3;
 
 			//---------- gameMode 0 => SOLO ---------- gameMode 1 => DUO ---------- gameMode 2 => TOURNAMENT
 
@@ -97,6 +113,8 @@
 				foundPair = 0;
 				loopDirection = 0;
 				playersCount = 1;
+				tempMatchId = 0;
+				tempMatchesInstances = [];
 				players = [
 				{name:"Player 1", score:0, alive:true},
 				{name:"Player 2", score:0, alive:true},
@@ -121,6 +139,19 @@
 				rightScore = 0;
 				ballSpeed = canvas.width / 250;
 				menuBool = true;
+				aiDir = 0;
+			}
+
+			function findInstance(name)
+			{
+				let InstanceIndex = 0;
+				while (playersInstances[InstanceIndex])
+				{
+					if (playersInstances[InstanceIndex].username === name)
+						return (InstanceIndex);
+					InstanceIndex++;
+				}
+				return (-1);
 			}
 
 			function drawMenu()
@@ -265,6 +296,50 @@
 				ctx.closePath();
 			}
 
+			function predict()
+			{
+				let xPredict = x;
+				let yPredict = y;
+				let dxPredict = dx;
+				let dyPredict = dy;
+				//time = new Date();
+				if (Date.now() - oldTime.getTime() >= 1000)
+				{
+					oldTime = new Date();
+					if (dx > 0)
+					{
+						//Predicts where the ball hits the left Y axis
+						while (xPredict + dxPredict < canvas.width - ballRadius - (paddleWidth / 2))
+						{
+							xPredict += dxPredict;
+							yPredict += dyPredict;
+							if (yPredict + dyPredict > canvas.height - ballRadius || yPredict + dyPredict < ballRadius)
+								dyPredict = -dyPredict;
+						}
+						//Randomize the hit according to difficulty coefficient
+						yPredict = yPredict + ((Math.random() * (difficultyCoeff - (-difficultyCoeff)) + (-difficultyCoeff)) * (paddleHeight / 2));
+						//Calculate how many key strokes are needed to get the paddle to the Y index
+						if (yPredict > rightPaddle + (paddleHeight / 2))
+						{
+							while (yPredict > rightPaddle + (paddleHeight / 2))
+							{
+								yPredict -= 7;
+								aiDir--;
+							}
+						}
+						else if (yPredict < rightPaddle + (paddleHeight / 2))
+						{
+							while (yPredict < rightPaddle + (paddleHeight / 2))
+							{
+								yPredict += 7;
+								aiDir++;
+							}
+						}
+
+					}
+				}
+			}
+
 			function draw()
 			{
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -274,6 +349,20 @@
 				drawScore();
 				x += dx;
 				y += dy;
+				if (gameMode === 0)
+				{
+					predict();
+					if (aiDir < 0)
+					{
+						aiDir++;
+						simulateKeyPress("ArrowDown");
+					}
+					else if (aiDir > 0)
+					{
+						aiDir--;
+						simulateKeyPress("ArrowUp");
+					}
+				}
 				if (x + dx - (paddleWidth / 2) < ballRadius)
 				{
 					if (y > leftPaddle && y < leftPaddle + paddleHeight)
@@ -291,14 +380,37 @@
 						rightScore++;
 						if (rightScore === 3)
 						{
+							let myMatchController = null;
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player2;
+							if (gameMode != 2)
+							{
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
+								matchId++;
+							}
 							if (gameMode === 2)
 							{
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
+								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
+								{
 									tournamentWinner = player2;
+									while (tempMatchId > 0)
+									{
+										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
+										tempMatchId--;
+										matchId++;
+									}
+									tempMatchesInstances = null;
+									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tournamentId++;
+								}
 								index = 0;
 								while (index < playersCount - 1)
 								{
@@ -348,11 +460,33 @@
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player1;
+							if (gameMode != 2)
+							{
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
+								matchId++;
+							}
 							if (gameMode === 2)
 							{
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(),  playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
+								myMatchController.updateMatchStatsView();
+								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
+								{
 									tournamentWinner = player1;
+									while (tempMatchId > 0)
+									{
+										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
+										tempMatchId--;
+										matchId++;
+									}
+									tempMatchesInstances = null;
+									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tournamentId++;
+								}
 								index = 0;
 								while (index < playersCount - 1)
 								{
@@ -449,6 +583,17 @@
 				paddleHeight = canvas.height / 4.5;
 			}
 
+			function simulateKeyPress(key) {
+				// Simulate keydown event
+				const keydownEvent = new KeyboardEvent('keydown', { key: key, isTrusted: false });
+				document.dispatchEvent(keydownEvent);
+				// Simulate keyup event after a short delay (for continuous pressing, you can adjust or skip this)
+				setTimeout(() => {
+					const keyupEvent = new KeyboardEvent('keyup', { key: key, isTrusted: false });
+					document.dispatchEvent(keyupEvent);
+				}, 8); // Delay in milliseconds, you can adjust as needed
+			}
+
 			function getMousePos(canvas, evt) {
     				// Get the bounding rectangle of the canvas
     				const rect = canvas.getBoundingClientRect();    
@@ -512,6 +657,7 @@
 				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true && document.getElementsByClassName('content-game')[0].style.display === "block") {
 					menuBool = false;
 					winner = 0;
+					matchDebut = new Date();
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
 					clearInterval(interval);
 					interval = setInterval(draw, 8);
@@ -525,6 +671,8 @@
 				{
 					e.preventDefault();
 					if (gameMode != 0)
+						rightPaddleUpPressed = true;
+					else if (!e.isTrusted)
 						rightPaddleUpPressed = true;
 				}
 				else if (e.key === "a" || e.key === "A")
@@ -540,14 +688,19 @@
 					e.preventDefault();
 					if (gameMode != 0)
 						rightPaddleDownPressed = true;
+					else if (!e.isTrusted)
+						rightPaddleDownPressed = true;
 				}
 			}
 
 			function keyUpHandler(e)
 			{
-				if ((e.key === "Up" || e.key === "ArrowUp") && gameMode != 0)
+				if (e.key === "Up" || e.key === "ArrowUp")
 				{
-					rightPaddleUpPressed = false;
+					if (gameMode != 0)
+						rightPaddleUpPressed = false;
+					else if (!e.isTrusted)
+						rightPaddleUpPressed = false;
 				}
 				else if (e.key === "a" || e.key === "A")
 				{
@@ -557,9 +710,12 @@
 				{
 					leftPaddleDownPressed = false;
 				}
-				else if ((e.key === "Down" || e.key === "ArrowDown") && gameMode != 0)
+				else if (e.key === "Down" || e.key === "ArrowDown")
 				{
-					rightPaddleDownPressed = false;
+					if (gameMode != 0)
+						rightPaddleDownPressed = false;
+					else if (!e.isTrusted)
+						rightPaddleDownPressed = false;
 				}
 			}
 			interval = setInterval(drawMenu, 10);
@@ -572,6 +728,7 @@
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Easy";
+				difficultyCoeff = 0.3;
 			};
 
 			function onClickMedium()
@@ -580,6 +737,7 @@
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Medium";
+				difficultyCoeff = 0.6;
 			};
 
 			function onClickHard()
@@ -588,8 +746,8 @@
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Hard";
+				difficultyCoeff = 0.9;
 			};
-
 			function onClickDuo()
 			{
 				resetWholeGame();
