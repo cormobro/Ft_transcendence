@@ -224,7 +224,12 @@ def manage_connection(request):
 
 @csrf_protect
 def logout(request):
-	request.session.flush()
+	user_id = request.session.get('user_id')
+	if user_id:
+		player = Player.objects.get(id=user_id)
+		player.logged_in = False
+		player.save()
+		del request.session['user_id']
 	return render(request, 'polls/index.html', {'message': "Vous avez été déconnecté."})
 
 # @csrf_protect
