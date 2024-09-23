@@ -14,6 +14,7 @@ class Player(models.Model):
 	password = models.CharField(max_length=120)
 	scores = ArrayField(models.IntegerField(), default=list, blank=True)
 	tournaments = models.ManyToManyField('Tournament', related_name='players', blank=True)
+	logged_in = models.BooleanField(default=False)
 	#matches = models.ManyToManyField('Matches', related_name='players')
 	# champ demandes d'amis
 	# champ amis

@@ -182,28 +182,35 @@ def create_acc(request):
 
 @csrf_protect
 def manage_connection(request):
-    if request.method == 'POST':
-        data = request.POST
-        username = data.get('username')
-        password = data.get('password')
+	if request.method == 'POST':
+		data = request.POST
+		username = data.get('username')
+		password = data.get('password')
+		if not username or not password:
+			message = "Username and password required"
+		elif Player.objects.filter(username=username).exists():
+			player = Player.objects.get(username=username)
+			if check_password(password, player.password):
+				request.session['user_id'] = player.id
+				request.session['username'] = player.username
+				player.logged_in = True
+				player.save()
 
-        try:
-            player = Player.objects.get(username=username)
-            if check_password(password, player.password):
+				message = "Logged in"
+			else:
+				message = "Wrong password"
+		else:
+			new_player = Player(username=username)
+			new_player.set_password(password)
+			new_player.logged_in = True
+			new_player.save()
+			message = "acc created"
+			request.session['user_id'] = new_player.id
+			request.session['username'] = new_player.username
+	else:
+		message = "Wrong request method"
 
-                request.session['user_id'] = player.id
-                request.session['username'] = player.username
-
-                message = "Connexion réussie."
-                return render(request, 'polls/index.html', {'message': message})  # Redirigez vers la page de tableau de bord après la connexion
-            else:
-                message = "Mot de passe incorrect."
-        except Player.DoesNotExist:
-            message = "Ce joueur n'existe pas, veuillez créer un compte."
-    else:
-        message = "Méthode de requête incorrecte"
-
-    return render(request, 'polls/index.html', {'message': message})
+	return render(request, 'polls/index.html', {'message': message})
 
 
 		# on va gérer comme ça pour la distinction
