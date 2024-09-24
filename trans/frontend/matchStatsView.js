@@ -13,8 +13,8 @@ class MatchStatsView{
 
 	render(){
 
-		this.container1.innerHTML = `
-				<h3 class="text-dark">Statistiques de la partie : ${this.player1.username} - ${this.player2.username}</h3>
+		this.container1.innerHTML += `
+				<h3 class="text-dark">Statistiques de la partie : ${this.player1.username} vs ${this.player2.username}</h3>
 				<canvas class="bg-light" id="myMatchChart"></canvas>
 				<div class="text-dark" for="myMatchChartLegend"></div>
 				<p class="text-dark">Points gagnés par ${this.player1.username} : ${this.match.pointsWonByPlayer1}</p>

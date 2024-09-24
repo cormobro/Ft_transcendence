@@ -45,7 +45,7 @@ class HistoricalStatsView{
 		}
 
 		let i = 0;
-
+		
 		for (let match of playerMatches){
 			// loop to retrieve all the matches played by the instance player, if (match.player1 == this || match.player2 == this)
 			this.container.innerHTML += `
@@ -62,8 +62,6 @@ class HistoricalStatsView{
 			<p class="text-dark">Victoire de : ${match.resultPlayer1 === true ? match.player1.username : match.player2.username}</p>
 			<p class="text-dark">Points gagnés par ${match.player1.username} : ${match.pointsWonByPlayer1}</p>
 			<p class="text-dark">Points gagnés par ${match.player2.username} : ${match.pointsWonByPlayer2}</p>
-			<p class="text-dark">Date : ${match.date}</p>
-			<p class="text-dark">Durée de la partie :  ${match.matchTime}</p>
 		`;
 	}
 }

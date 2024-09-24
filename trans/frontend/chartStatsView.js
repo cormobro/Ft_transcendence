@@ -26,12 +26,6 @@ class ChartStatsView{
 
 		const globalStats = this.player.getGlobalStats();
 
-		if (globalStats.matchsWon === 0 && globalStats.matchsLost === 0){
-			this.container.innerHTML = `
-				<p class="text-dark">Pas de statistiques.</p
-			`
-			return;
-		}
 		const chartOptions = {
 			canvas: this.canvas,
 			seriesName: "Répartition des résultats",
@@ -79,13 +73,6 @@ class ChartStatsView{
 		const soloStats = this.player.getModeStats(0);
 		const duoStats = this.player.getModeStats(1);
 		const tournamentStats = this.player.getModeStats(2);
-
-		if (soloStats.matchsWon === 0 && duoStats.matchsWon === 0 && tournamentStats.matchsWon === 0){
-			this.container.innerHTML = `
-				<p class="text-dark">Pas de statistiques.</p
-			`
-			return;
-		}
 
 		var gridScaleValue = Math.ceil(soloStats.matchsWon +
 			duoStats.matchsWon +
@@ -154,19 +141,6 @@ class ChartStatsView{
 			else{
 				pointsWonArray.push(pointsWonArray[i - 1] + playerMatches[i].pointsWonByPlayer1);
 			}
-		}
-
-		let i = 0;
-		for (let point of pointsWonArray){
-			if (pointsWonArray != 0)
-				break;
-			i++;
-		}
-		if (i === pointsWonArray.length){
-			this.container.innerHTML = `
-				<p class="text-dark">Pas de statistiques.</p
-			`
-			return;
 		}
 
 		var dataPointsWon = {};

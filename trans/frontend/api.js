@@ -19,7 +19,7 @@ document.getElementById('postRequest').onclick = () => {
 		}
 	}
 	requestObj.open("POST", "/post/")
-	requestObj.setRequestHeader("X-CSRFToken", csrftoken)
+	// requestObj.setRequestHeader("X-CSRFToken", csrftoken)
 
 	const formdata = new FormData()
 	formdata.append('name', 'Gege')
