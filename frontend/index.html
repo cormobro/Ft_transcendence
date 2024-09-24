@@ -125,44 +125,17 @@
 			<div id="game" class="content content-game" style="display:none">
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
-						<div class="mb-5">
+						<div class="container">
 							<div class="py-5 text-light">
 								<h2>Pong</h2>
 							</div>
-							<div class="row">
-								<div class="col-6">
-									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#scores">
-										Scores
-									</button>
-								</div>
-								<div class="col-6">
-									<button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#leaderboard">
-										Leaderboard
-									</button>
-								</div>
-							</div>
-							<div class="row"></div>
-								<div class="collapse" id="scores">
-									<div class="card card-body">
-										<ol class="list-group">
-											<li class="list-group-item bg-primary text-light">
-												<h4>Current match</h4>
-												<p id="currentMatchDisplay" class="text-light"></p>
-											</li>
-										</ol>
-									</div>
-								</div>
-								<div class="collapse" id="leaderboard">
-									<div class="card card-body">
-										<ol class="list-group">
-											<li class="list-group-item bg-primary text-light">
-												<h4>Current leader</h4>
-												<p id="currentLeaderDisplay" class="text-light"></p>
-											</li>
-										</ol>
-									</div>
-								</div>
-							</div>
+								<button class="btn btn-outline-light m-3" id="matchInfoButton">
+									Partie suivante
+								</button>
+								<button class="btn btn-outline-light m-3" id="leaderboardButton">
+									Leaderboard
+								</button>
+								<div id="collapseContent" class="p-3 m-3 bg-light border rounded"></div>
 						</div>
 						<div class="d-flex justify-content-center" id="myGame">
 							<canvas style="margin-top:56px;" class="bg-light" id="myCanvas"></canvas>
@@ -189,10 +162,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="player1Stats" class="p-3 bg-light border rounded"></div></div></div>
-							<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="matchStats" class="p-3 bg-light border rounded"></div></div></div>
-							<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="player2Stats" class="p-3 bg-light border rounded"></div></div></div>
+						<div class="container">
+							<div class="row">
+								<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="player1Stats" class="p-3 bg-light border rounded"></div></div></div>
+								<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="matchStats" class="p-3 bg-light border rounded"></div></div></div>
+								<div class="col"><div class="d-flex flex-column justify-content-center align-items-center"><div id="player2Stats" class="p-3 bg-light border rounded"></div></div></div>
+							</div>
 						</div>
 					</div>
 				</section>
@@ -313,6 +288,7 @@
 		<script src="form.js"></script>
 		<script src="utils.js"></script>
 		<script src="chart.js"></script>
+		<script src="matchInfo.js"></script>
 		<script src="matchStatsView.js"></script>
 		<script src="globalStatsView.js"></script>
 		<script src="modeStatsView.js"></script>
