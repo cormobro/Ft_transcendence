@@ -65,11 +65,11 @@ def manage_42_api_step3(code, state, request):
 	response = requests.post("https://api.intra.42.fr/oauth/token", data=data)
 
 	request_info = f"""
-    Request Method: {response.request.method}
-    Request URL: {response.request.url}
-    Request Headers: {response.request.headers}
-    Request Body: {response.request.body}
-    """
+	Request Method: {response.request.method}
+	Request URL: {response.request.url}
+	Request Headers: {response.request.headers}
+	Request Body: {response.request.body}
+	"""
 	if response.status_code == 302 or response.status_code == 301 or response.status_code == 200:
 		token_data = response.json()
 		access_token = token_data.get('access_token')
@@ -80,38 +80,33 @@ def manage_42_api_step3(code, state, request):
 		#return HttpResponse(f"Error code : {response.status_code} and code was {code}")
 
 def use_access_token(access_token, request):
-    api_url = "https://api.intra.42.fr/v2/me"
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-    }
+	api_url = "https://api.intra.42.fr/v2/me"
+	headers = {
+		'Authorization': f'Bearer {access_token}',
+	}
 
-    response = requests.get(api_url, headers=headers)
+	response = requests.get(api_url, headers=headers)
 
-    if response.status_code == 200:
-        user_data = response.json()
-        username = user_data.get('login')
-        message = "Player is already logged in"
-        if not Player.objects.filter(username=username).exists():
-            player = Player(username=username)
-            player.save()
-            message = "Player added to the db"
-        # url = 'https://signin.intra.42.fr/users/sign_out?all=false'
-
-        # headers = {
-        #     'Content-Type': 'application/x-www-form-urlencoded',
-        #     }
-        # response = requests.post(url, headers=headers)
-        # return HttpResponse(response)
-        return render(request, 'polls/index.html', {'message': message})
-    else:
-        # Define request_info if needed
-        request_info = f"""
-        Request Method: {response.request.method}
-        Request URL: {response.request.url}
-        Request Headers: {response.request.headers}
-        Request Body: {response.request.body}
-        """
-        return HttpResponse(f"ERROR code is {response.status_code}. The request was {request_info}")
+	if response.status_code == 200:
+		user_data = response.json()
+		username_42 = user_data.get('login')
+		username = request.session.get('username')
+		player = Player.objects.get(username=username)
+		player.linked_42_acc = username_42
+		try:
+			player.save()
+			message = "Account linked succesfully"
+		except IntegrityError:
+			message = "This 42 acc is already linked to another player"
+		return render(request, 'polls/index.html', {'message': message})
+	else:
+		request_info = f"""
+		Request Method: {response.request.method}
+		Request URL: {response.request.url}
+		Request Headers: {response.request.headers}
+		Request Body: {response.request.body}
+		"""
+		return HttpResponse(f"ERROR code is {response.status_code}. The request was {request_info}")
 
 
 @csrf_protect
@@ -160,24 +155,24 @@ def manage_request(request):
 
 @csrf_protect
 def create_acc(request):
-    if request.method == 'POST':
-        data = request.POST
-        username = data.get('username')
-        password = data.get('password')
+	if request.method == 'POST':
+		data = request.POST
+		username = data.get('username')
+		password = data.get('password')
 
-        if not username or not password:
-            message = "Username and password are required."
-        elif Player.objects.filter(username=username).exists():
-            message = "This username is already taken."
-        else:
-            new_player = Player(username=username)
-            new_player.set_password(password)
-            new_player.save()
-            message = "Account created successfully."
-    else:
-        message = "Bad request method"
+		if not username or not password:
+			message = "Username and password are required."
+		elif Player.objects.filter(username=username).exists():
+			message = "This username is already taken."
+		else:
+			new_player = Player(username=username)
+			new_player.set_password(password)
+			new_player.save()
+			message = "Account created successfully."
+	else:
+		message = "Bad request method"
 
-    return render(request, 'polls/index.html', {'message': message})
+	return render(request, 'polls/index.html', {'message': message})
 
 
 @csrf_protect
@@ -212,16 +207,6 @@ def manage_connection(request):
 
 	return render(request, 'polls/index.html', {'message': message})
 
-
-		# on va gérer comme ça pour la distinction
-		# si check si le username est dans la db 
-		# si pas on renvoie msg (user does not exist)
-		# si il l'est on check mdp hashé contre mdp 
-		# et on log l'user 
-		# on peut potentiellement remplir les différents arrays du front
-		# à ce moment là, sinon avoir une variable login avec la session
-		# du navigateur
-
 @csrf_protect
 def logout(request):
 	user_id = request.session.get('user_id')
@@ -230,6 +215,7 @@ def logout(request):
 		player.logged_in = False
 		player.save()
 		del request.session['user_id']
+		del request.session['username']
 	return render(request, 'polls/index.html', {'message': "Vous avez été déconnecté."})
 
 # @csrf_protect
