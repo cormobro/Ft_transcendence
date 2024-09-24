@@ -386,14 +386,14 @@
 							winner = player2;
 							if (gameMode != 2)
 							{
-								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;
 							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
 								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								tempMatchId++;
@@ -462,14 +462,14 @@
 							winner = player1;
 							if (gameMode != 2)
 							{
-								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;
 							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(),  playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000,  playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
 								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								tempMatchId++;
