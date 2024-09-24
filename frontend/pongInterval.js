@@ -142,6 +142,22 @@
 				aiDir = 0;
 			}
 
+			function cleanseTournamentArray()
+			{
+				winner = 0;
+				tournamentWinner = 0;
+				matchmakingIndex = 0;
+				loopDirection = 0;
+				for(let z = 0; z < 8; z++)
+				{
+					players[z].score = 0;
+					players[z].alive = true;
+					console.log("Name: ", players[z].name, " Score: ", players[z].score, " alive: ", players[z].alive);
+				}
+				totalPoints = 0;
+				findNextMatch();
+			}
+
 			function findInstance(name)
 			{
 				let InstanceIndex = 0;
@@ -407,8 +423,8 @@
 										tempMatchId--;
 										matchId++;
 									}
-									tempMatchesInstances = null;
-									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tempMatchesInstances = [];
+									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
 									tournamentId++;
 								}
 								index = 0;
@@ -483,8 +499,8 @@
 										tempMatchId--;
 										matchId++;
 									}
-									tempMatchesInstances = null;
-									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tempMatchesInstances = [];
+									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
 									tournamentId++;
 								}
 								index = 0;
@@ -656,6 +672,8 @@
 				const relativeY = mousePos.y;
 				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true && document.getElementsByClassName('content-game')[0].style.display === "block") {
 					menuBool = false;
+					if (tournamentWinner != 0)
+						cleanseTournamentArray();
 					winner = 0;
 					matchDebut = new Date();
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -724,38 +742,48 @@
 
 			function onClickEasy()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Easy";
 				difficultyCoeff = 0.3;
+				interval = setInterval(drawMenu, 10);
 			};
 
 			function onClickMedium()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Medium";
 				difficultyCoeff = 0.6;
+				interval = setInterval(drawMenu, 10);
 			};
 
 			function onClickHard()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Hard";
 				difficultyCoeff = 0.9;
+				interval = setInterval(drawMenu, 10);
 			};
 			function onClickDuo()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 1;
+				interval = setInterval(drawMenu, 10);
 			};
 
 			function onClickTournament()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 2;
+				interval = setInterval(drawMenu, 10);
 			};
