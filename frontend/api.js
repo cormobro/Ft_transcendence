@@ -1,6 +1,6 @@
 var csrftoken = '{{ csrf_token }}'
 
-document.getElementById('getRequest').onclick = () => {
+/*document.getElementById('getRequest').onclick = () => {
 	const requestObj = new XMLHttpRequest()
 	requestObj.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200){
@@ -28,7 +28,7 @@ document.getElementById('postRequest').onclick = () => {
 }
 
 document.getElementById('/post/match').onclick = () => {
-	/*const params =
+	const params =
 	{
 		player1: player1,
 		player2: player2,
@@ -43,7 +43,7 @@ document.getElementById('/post/match').onclick = () => {
 	{
 		method: 'POST',
 		body: JSON.stringify( params )
-	};*/
+	};
 	fetch("/post/match", {
 		method: "POST",
 		body: JSON.stringify({
@@ -69,8 +69,8 @@ document.getElementById('/post/login').onclick = () => {
 	fetch("/post/login", {
 		method: "POST",
 		body: JSON.stringify({
-			username: /*USERNAME HERE*/,
-			password: /*PASSWORD HERE*/
+			username: //USERNAME HERE,
+			password: //PASSWORD HERE
 		}),
 		headers: {
 			"X-CSRF-Token": csrftoken,
@@ -85,7 +85,7 @@ document.getElementById('/post/changeusername').onclick = () => {
 	fetch("/post/changeusername", {
 		method: "POST",
 		body: JSON.stringify({
-			username: /*NEW USERNAME HERE*/
+			username: //NEW USERNAME HERE
 		}),
 		headers: {
 			"X-CSRF-Token": csrftoken,
@@ -100,7 +100,7 @@ document.getElementById('/post/changepassword').onclick = () => {
 	fetch("/post/changepassword", {
 		method: "POST",
 		body: JSON.stringify({
-			password: /*NEW PASSWORD HERE*/
+			password: //NEW PASSWORD HERE
 		}),
 		headers: {
 			"X-CSRF-Token": csrftoken,
@@ -111,7 +111,6 @@ document.getElementById('/post/changepassword').onclick = () => {
 		.then((json) => console.log(json));
 }
 
-/* AVATAR UPLOADING
 document.getElementById('/post/changeavatar').onclick = () => {
 	fetch("/post/changeavatar", {
 		method: "POST",
@@ -125,13 +124,13 @@ document.getElementById('/post/changeavatar').onclick = () => {
 	})
 		.then((response) => response.json())
 		.then((json) => console.log(json));
-}*/
+}
 
 document.getElementById('/post/42api').onclick = () => {
 	fetch("/post/42api", {
 		method: "POST",
 		body: JSON.stringify({
-			42name: /*42NAME HERE*/
+			42name: //42NAME HERE
 		}),
 		headers: {
 			"X-CSRF-Token": csrftoken,
@@ -147,7 +146,7 @@ document.getElementById('/post/friend/add').onclick = () => {
 		method: "POST",
 		body: JSON.stringify({
 			type: "request",
-			username: /*USERNAME HERE*/
+			username: //USERNAME HERE
 		}),
 		headers: {
 			"X-CSRF-Token": csrftoken,
@@ -163,7 +162,7 @@ document.getElementById('/post/friend/accept').onclick = () => {
 		method: "POST",
 		body: JSON.stringify({
 			type: "accept",
-			username: /*USERNAME HERE*/
+			username: //USERNAME HERE
 		}),
 		headers: {
 			"X-CSRF-Token": csrftoken,
@@ -179,7 +178,7 @@ document.getElementById('/post/friend/decline').onclick = () => {
 		method: "POST",
 		body: JSON.stringify({
 			type: "decline",
-			username: /*USERNAME HERE*/
+			username: //USERNAME HERE
 		}),
 		headers: {
 			"X-CSRF-Token": csrftoken,
@@ -227,4 +226,37 @@ document.getElementById('/get/user').onclick = () => {
 	})
 		.then((response) => response.json())
 		.then((json) => console.log(json));
+}*/
+
+
+
+async function backendPost(path, ...data)
+{
+	let _data = [];
+	let dataIndex = 0;
+	for (const arg of data)
+	{
+		_data[dataIndex] = arg;
+		dataIndex++;
+	}
+	try {
+		const response = await fetch(path, {
+			method: "POST",
+			body: JSON.stringify(_data),
+			headers: {
+				"X-CSRF-Token": csrftoken,
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
+
+		const json = await response.json();
+		console.log(json);
+	} catch (error) {
+		console.error(error.message);
+	}
 }
+
