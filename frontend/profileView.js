@@ -10,6 +10,7 @@ class ProfileView{
 
 	// METHOD DEFINITIONS
 	// Render private view of the current logged in user's profile
+
 	renderPrivateView(){
 
 		const stats = this.player.getGlobalStats();
@@ -21,26 +22,41 @@ class ProfileView{
 						<h2 class="text-center">${this.player.username}</h2>
 					</div>
 					<div class="row">
-						<p>En ligne</p>
-					</div>
-					<div class="row">
 						<div class="col">
-							<img src="img/default_avatar.png" alt="avatar" width="200" height="200">
+							<form action="upload.php" method="POST" enctype="multipart/form-data">
+								<div class="d-flex image">
+									<label for="filePath">
+										<img src="img/default_avatar.png" class="img-fluid cursor-pointer rounded-5" alt="avatar" width="200" height="200">
+										<div class="bg-primary rounded-circle d-inline-block" style="width: 40px; height: 40px;">
+											<i class="bi bi-camera-fill"></i>
+										</div>
+									</label>
+								</div>
+								<input type="file" class="d-none" id="filePath" name="file" accept="image/jpeg, image/png, image/jpg">
+							</form>
 						</div>
 						<div class="col">
-							<p class="text-center">Victoires: ${stats.matchsWon}</p>
-							<p class="text-center">Défaites: ${stats.matchsLost}</p>
+							<h5 class="text-center">Victoires: ${stats.matchsWon}</h5>
+							<h5 class="text-center">Défaites: ${stats.matchsLost}</h5>
 						</div>
 					</div>
 					<div class="row">
-						<p class="text-center">Amis</p>
+						<h4 class="text-center">Ajouter des amis</h4>
+						<input type="search" id="searchInput" autofocus="autofocus" placeholder="Search" onkeyup="searchNow()"/>
+						<div>
+							<ul id="foundUsersList"></ul>
+						</div>
+						<h4 class="text-center">Liste d'amis</h4>
+						<div>
+							<ul id="friendsList"></ul>
+						</div>
 					</div>
 					<div class="d-flex justify-content-center">
-						<button class="btn btn-outline-light">Se connecter avec <img src="img/42_Logo.png" alt="42" width="30" height="30"></button>
+						<button class="btn btn-outline-light" id="42LogInButton">Se connecter avec <img src="img/42_Logo.png" alt="42" width="30" height="30"></button>
 					</div>
 				</div>
 			</div>
-			<div class="m-3 d-flex justify-content-center">
+			<div class="mt-3 d-flex justify-content-center">
 				<div class="col-8 border rounded-2 p-5 text-light">
 					<h3 class="text-center mb-4"> Informations personnelles</h3>
 					<form class="row gy-4" id="personnalInformationsForm" method="POST">
@@ -70,6 +86,8 @@ class ProfileView{
 				</div>
 			</div>
 		`;
+		uploadAvatar();
+		renderFriendsList();
 	}
 
 	// Render public view of the current logged in user's profile
@@ -78,3 +96,80 @@ class ProfileView{
 	// 	this.container.innerHTML = `<p class="text-dark">Hello ${this.player.username}, here is your public profile</p>`;
 	// }
 }
+
+function searchNow(){
+	input = document.getElementById('searchInput');
+	let container = document.getElementById("foundUsersList");
+	container.innerHTML = null;
+	for (let i = 0; i < playersInstances.length; i++){
+		if (input.value === playersInstances[i].username){
+			//if searched player is already a friend display 'friend' next to his name
+			container.innerHTML += `
+				<li class="mt-3">
+					<h5 class="mt-2">${playersInstances[i].username} is already your friend</h5>
+				</li>
+			`
+			//if searched player already sent a friend request display 'accept and refuse buttons' next to his name
+			container.innerHTML += `
+				<li class="d-flex inline mt-3">
+					<h5 class="mt-2 me-1">${playersInstances[i].username}</h5>
+					<button type="button" class="btn btn-outline-light ms-2" id="acceptFriendRequestButton"><i class="bi bi-check-circle" style="font-size: 20px"></i></button>
+					<button type="button" class="btn btn-outline-light ms-3" id="refuseFriendRequestButton"><i class="bi bi-slash-circle" style="font-size: 20px"></i></button>
+				</li>
+			`
+			//else display 'add button' next to his name
+			container.innerHTML += `
+				<li class="d-flex inline mt-3">
+					<h5 class="mt-2 me-1">${playersInstances[i].username}</h5>
+					<button type="button" class="btn btn-outline-light ms-2" id="addFriendButton"><i class="bi bi-plus-circle" style="font-size:20px"></i></button>
+				</li>
+			`
+		}
+	}
+}
+
+function renderFriendsList() {
+
+	//loop here to display friends request
+	//loop here to display friends
+	let container = document.getElementById("friendsList");
+	for (let i = 0; i < playersInstances.length; i++){
+		//if friend is online display a 'green circle'
+		container.innerHTML += `
+			<li class="d-flex inline">
+				<h5>${playersInstances[i].username}</h5><img src="img/icons8-point-final-24.png" alt="online" width="24" height="24"></img>
+			</li>
+		`
+		//else display a 'red circle'
+		container.innerHTML += `
+			<li class="d-flex inline">
+				<h5>${playersInstances[i].username}</h5><img src="img/icons8-point-final-24 (1).png" alt="online" width="24" height="24"></img>
+			</li>
+		`
+	}
+}
+
+function uploadAvatar(){
+
+	const avatarPicture = document.querySelector(".image img");
+	const userFile = document.getElementById("filePath");
+
+	userFile.onchange = function() {
+		avatarPicture.src = URL.createObjectURL(userFile.files[0]);
+	}
+}
+
+document.getElementById("playerProfile").addEventListener('click', function(e){
+
+	if (e.target && e.target.id === "acceptFriendRequest") {}
+})
+
+document.getElementById("playerProfile").addEventListener('click', function(e){
+
+	if (e.target && e.target.id === "refuseFriendRequest") {}
+})
+
+document.getElementById("playerProfile").addEventListener('click', function(e){
+
+	if (e.target && e.target.id === "addFriendButton") {}
+})

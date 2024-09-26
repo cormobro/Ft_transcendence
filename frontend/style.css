@@ -1,0 +1,14 @@
+body {
+	background-color: #212529;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* CAMERA ICON */
+
+.image label{
+	cursor: pointer;
+}
+
