@@ -25,7 +25,7 @@ class ProfileView{
 					</div>
 					<div class="row">
 						<div class="col">
-							<img src="img/default_avatar.png" alt="logo" width="200" height="200">
+							<img src="img/default_avatar.png" alt="avatar" width="200" height="200">
 						</div>
 						<div class="col">
 							<p class="text-center">Victoires: ${stats.matchsWon}</p>
@@ -35,8 +35,8 @@ class ProfileView{
 					<div class="row">
 						<p class="text-center">Amis</p>
 					</div>
-					<div class="row">
-						<p class="text-center">Se connecter avec 42auth</p>
+					<div class="d-flex justify-content-center">
+						<button class="btn btn-outline-light">Se connecter avec <img src="img/42_Logo.png" alt="42" width="30" height="30"></button>
 					</div>
 				</div>
 			</div>
@@ -47,7 +47,7 @@ class ProfileView{
 						<div class="form-group row">
 							<label for="staticUsername" class="col-sm-2 col-form-label">Nom d'utilisateur</label>
 							<div class="col-sm-8">
-								<input type="text" readonly class="form-control-plaintext" id="staticUsername" value="${this.player.username}">
+								<input type="text" readonly class="form-control-plaintext text-light" id="staticUsername" value="${this.player.username}">
 							</div>
 						</div>
 						<div class="form-group row">
