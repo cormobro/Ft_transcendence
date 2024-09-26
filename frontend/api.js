@@ -228,8 +228,6 @@ document.getElementById('/get/user').onclick = () => {
 		.then((json) => console.log(json));
 }*/
 
-
-
 async function backendPost(path, ...data)
 {
 	let _data = [];
