@@ -30,7 +30,7 @@ let currPlayer;
 // myMatchController.updateMatchStatsView();
 
 // event listener sur le bouton stats dans le menu
-document.getElementById("globalStatsMenuButton").addEventListener('click', function(){
+document.getElementById("statsMenuButton").addEventListener('click', function(){
 
 	let startingListIndex = 0;
 	let endingListIndex = 4;
