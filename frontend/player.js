@@ -3,7 +3,7 @@ class Player{
 	// CONSTRUCTOR
 	constructor(id, username){
 
-		//INSTANCE PROPERTIES
+		// INSTANCE PROPERTIES
 		this.id = id;
 		this.username = username;
 		// this.matches = [];
@@ -76,7 +76,10 @@ class Player{
 
 		for (let tournament of tournamentsInstances){
 			if (tournament.hasAttended(this) === true)
+			{
+				console.log(tournament);
 				playerTournaments.push(tournament);
+			}
 		}
 
 		let stats = {

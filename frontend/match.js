@@ -16,7 +16,7 @@ class Match{
 	}
 
 	// METHOD DEFINITIONS
-	// check if a specific player played the match
+	// Return true if a specific player played the match else return false
 	hasAttended(player){
 
 		if (player === this.player1 || player === this.player2)
@@ -24,7 +24,7 @@ class Match{
 		return (false);
 	}
 
-	// get the match stats for a specific player
+	// Get the match stats for a specific player
 	getPlayerStats(player){
 
 		let stats = {

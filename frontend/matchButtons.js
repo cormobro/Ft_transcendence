@@ -1,4 +1,4 @@
-document.getElementById("matchInfoButton").addEventListener('click', function() {
+document.getElementById("nextMatchButton").addEventListener('click', function() {
 
 	var container = document.getElementById("collapseContent");
 
