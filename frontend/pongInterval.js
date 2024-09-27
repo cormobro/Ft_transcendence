@@ -403,6 +403,7 @@
 							if (gameMode != 2)
 							{
 								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								backendPost("/post/match", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;
@@ -479,6 +480,7 @@
 							if (gameMode != 2)
 							{
 								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								backendPost("/post/match", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;
