@@ -24,11 +24,11 @@ class ProfileView{
 					<div class="row">
 						<div class="col">
 							<form action="upload.php" method="POST" enctype="multipart/form-data">
-								<div class="d-flex image">
-									<label for="filePath">
-										<img src="img/default_avatar.png" class="img-fluid cursor-pointer rounded-5" alt="avatar" width="200" height="200">
-										<div class="bg-primary rounded-circle d-inline-block" style="width: 40px; height: 40px;">
-											<i class="bi bi-camera-fill"></i>
+								<div class="d-flex image position-relative">
+									<img src="img/default_avatar.png" class="img-fluid rounded-5" alt="avatar" width="200" height="200" id="avatarImg">
+									<label for="filePath" class="position-relative">
+										<div id="cameraIcon" class="bg-primary rounded-circle d-flex justify-content-center align-items-center position-absolute" style="width: 40px; height: 40px; top: 0; right: 0; transform: translate(-25%, 25%) rotate(45deg);">
+											<i class="bi bi-camera-fill" style="transform: rotate(-45deg);"></i>
 										</div>
 									</label>
 								</div>
@@ -42,9 +42,9 @@ class ProfileView{
 					</div>
 					<div class="row">
 						<h4 class="text-center">Ajouter des amis</h4>
-						<input type="search" id="searchInput" placeholder="Search" onkeyup="searchNow()"/>
+						<input type="search" id="searchInputProfile" placeholder="Recherche" onkeyup="searchProfileNow()"/>
 						<div>
-							<ul id="foundUsersList"></ul>
+							<ul id="usersProfileFoundList"></ul>
 						</div>
 						<h4 class="text-center">Liste d'amis</h4>
 						<div>
@@ -69,13 +69,13 @@ class ProfileView{
 						<div class="form-group row">
 							<label for="inputOldPassword" class="col-sm-2 col-form-label">Ancien mot de passe</label>
 							<div class="col-sm-8">
-								<input type="password" class="form-control" id="inputOldPassword" placeholder="Password">
+								<input type="password" class="form-control" id="inputOldPassword" placeholder="Mot de passe">
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="inputNewPassword" class="col-sm-2 col-form-label">Nouveau mot de passe</label>
 							<div class="col-sm-8">
-								<input type="password" class="form-control" id="inputNewPassword" placeholder="Password">
+								<input type="password" class="form-control" id="inputNewPassword" placeholder="Mot de passe">
 							</div>
 						</div>
 						<div class="d-flex justify-content-center">
@@ -97,9 +97,10 @@ class ProfileView{
 	// }
 }
 
-function searchNow(){
-	input = document.getElementById('searchInput');
-	let container = document.getElementById("foundUsersList");
+// function that matches the user's search input with the players profile
+function searchProfileNow(){
+	input = document.getElementById('searchInputProfile');
+	let container = document.getElementById("usersProfileFoundList");
 	container.innerHTML = null;
 	for (let i = 0; i < playersInstances.length; i++){
 		if (input.value === playersInstances[i].username){
@@ -172,4 +173,9 @@ document.getElementById("playerProfile").addEventListener('click', function(e){
 document.getElementById("playerProfile").addEventListener('click', function(e){
 
 	if (e.target && e.target.id === "addFriendButton") {}
+})
+
+document.getElementById("playerProfile").addEventListener('click', function(e){
+
+	if (e.target && e.target.id === "confirmationSubmitButton") {}
 })
