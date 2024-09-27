@@ -15,10 +15,10 @@ class Player(models.Model):
 	tournaments = models.ManyToManyField('Tournament', related_name='players', blank=True)
 	logged_in = models.BooleanField(default=False)
 	linked_42_acc = models.CharField(max_length=30, unique=True, blank=True, null=True)
-	friends = models.ManyToManyField('self', symmetrical=False, blank=True)
+	friends = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='friended_by')
 	matches = models.ManyToManyField('Match', related_name='players', blank=True)
 	# tournament_matches = models.ManyToManyField('Match', related_name='players', blank=True)
-	friends_request = models.ManyToManyField('self', symmetrical=False, blank=True)
+	friends_request = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='request_by')
 
 	def set_password(self, raw_password):
 		self.password = make_password(raw_password)
