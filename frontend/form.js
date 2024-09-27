@@ -111,16 +111,16 @@ tournamentSubmitButton.addEventListener('click', function(e) {
 	hideAllContentDivs();
 	onClickTournament();
 	for (var i = 0; i < inputs.length; i++)
+	{
+		players[i].name = inputs[i].value;
+		if (findInstance(players[i].name) === -1)
 		{
-			players[i].name = inputs[i].value;
-			if (findInstance(players[i].name) === -1)
-			{
-				playersInstances.push(new Player(idIndex, players[i].name));
-				idIndex++;
-			}
+			playersInstances.push(new Player(idIndex, players[i].name));
+			idIndex++;
 		}
-		playersCount = inputs.length;
-		findNextMatch();
-		document.getElementsByClassName('content-game')[0].style.display='block';
-		window.location.href = "#myGame";
+	}
+	playersCount = inputs.length;
+	findNextMatch();
+	document.getElementsByClassName('content-game')[0].style.display='block';
+	window.location.href = "#myGame";
 });
