@@ -241,10 +241,10 @@ async function backendPost(path, ...data)
 		const response = await fetch(path, {
 			method: "POST",
 			body: JSON.stringify(_data),
-			/*headers: {
+			headers: {
 				"X-CSRF-Token": csrftoken,
 				"Content-type": "application/json; charset=UTF-8"
-			}*/
+			}
 		});
 
 		if (!response.ok) {
