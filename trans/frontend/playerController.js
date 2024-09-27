@@ -7,6 +7,7 @@ class PlayerController {
 		this.modeStatsView = new ModeStatsView(player);
 		this.chartStatsView = new ChartStatsView(player);
 		this.historicalStatsView = new HistoricalStatsView(player);
+		this.profileView = new ProfileView(player);
 	}
 
 	init() {
@@ -48,5 +49,10 @@ class PlayerController {
 	updateHistoricalStatsView(match){
 
 		this.historicalStatsView.render(match);
+	}
+
+	updateProfileView(){
+
+		this.profileView.renderPrivateView();
 	}
 }
