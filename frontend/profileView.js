@@ -42,7 +42,7 @@ class ProfileView{
 					</div>
 					<div class="row">
 						<h4 class="text-center">Ajouter des amis</h4>
-						<input type="search" id="searchInput" autofocus="autofocus" placeholder="Search" onkeyup="searchNow()"/>
+						<input type="search" id="searchInput" placeholder="Search" onkeyup="searchNow()"/>
 						<div>
 							<ul id="foundUsersList"></ul>
 						</div>
@@ -86,8 +86,8 @@ class ProfileView{
 				</div>
 			</div>
 		`;
-		uploadAvatar();
-		renderFriendsList();
+		// uploadAvatar();
+		// renderFriendsList();
 	}
 
 	// Render public view of the current logged in user's profile
