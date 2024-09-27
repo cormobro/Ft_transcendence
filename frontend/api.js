@@ -228,8 +228,6 @@ document.getElementById('/get/user').onclick = () => {
 		.then((json) => console.log(json));
 }*/
 
-
-
 async function backendPost(path, ...data)
 {
 	let _data = [];
@@ -260,3 +258,47 @@ async function backendPost(path, ...data)
 	}
 }
 
+async function avatarPost(fileInput)
+{
+	const formData = new FormData();
+
+	formData.append('file', fileInput.files[0]);
+	try {
+		const response = await fetch("/post/changeavatar", {
+			method: "POST",
+			body: formData,
+			headers: {
+				"X-CSRF-Token": csrftoken,
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
+
+		const json = await response.json();
+		console.log(json);
+	} catch (error) {
+		console.error(error.message);
+	}
+}
+
+async function avatarGet()
+{
+	try {
+		const response = await fetch("/get/avatar", {
+			method: "GET",
+			headers: {
+				"X-CSRF-Token": csrftoken,
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
+
+		//WRITE WHAT TO DO WITH IMAGE
+	} catch (error) {
+		console.error(error.message);
+	}
+}
