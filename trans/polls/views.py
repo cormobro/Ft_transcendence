@@ -27,13 +27,6 @@ def manage_42_api_step1(request):
 		f"&state={state}"
 	)
 
-	# response = requests.get(auth_url, allow_redirects=True)
-
-	# # Récupérez l'URL de redirection (la dernière URL dans la chaîne de redirections)
-	# redirect_url = response.url
-
-	# # Retournez l'URL de redirection au navigateur
-	# return HttpResponseRedirect(redirect_url)
 	return redirect(auth_url)
 
 @csrf_protect
@@ -157,36 +150,74 @@ def logout(request):
 		del request.session['username']
 	return render(request, 'polls/index.html', {'message': "Vous avez été déconnecté."})
 
-# @csrf_protect
-# def tournament_end(request):
-# 	if request.method == 'POST':
-# 		tournament = Tournament()
-# 		data = request.POST
-# 		logged_player = data.get('player1')
-# 		if 
+@csrf_protect
+def tournament_end(request):
+	if request.method == 'POST':
+		try:
+			data = json.loads(request.body)
+			winner = data[0]
+			matches_data = data[1:]
+			tournament = Tournament(winner=winner)
+			for match_info in matches_data:
+
+				player1 = match_info[0]
+				player2 = match_info[1]
+				mode = match_info[2]
+				result_player1 = match_info[3]
+				player1_points = match_info[4]
+				player2_points = match_info[5]
+
+				match = Match(
+					player1=player1,
+					player2=player2,
+					mode=mode,
+					result_player1=result_player1,
+					player1_points=player1_points,
+					player2_points=player2_points
+				)
+				match.save()
+				tournament.matchs.add(match)
+			tournament.save()
+			return JsonResponse({'message': 'Enregistré'}, status=200)
+		except IndexError as e:
+			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+		except json.JSONDecodeError:
+			return JsonResponse({'error': 'invalid JSON'}, status=400)
+			
+
+	return JsonResponse({'error: Unothaurized methdod'}, status=405)
 		
-# 	# dans cette requete il y aura toute les infos sur les tournois
-# 	# on l'occurence les matchs/leurs données, dans l'ordre dans lequel
-# 	# ils ont été joués
-# 	# ajouter ce tournoi à la liste des tournois du joueur 1
+	# dans cette requete il y aura toute les infos sur les tournois
+	# on l'occurence les matchs/leurs données, dans l'ordre dans lequel
+	# ils ont été joués
+	# ajouter ce tournoi à la liste des tournois du joueur 1
 
 @csrf_protect
 def match_end(request):
 	if request.method == 'POST':
-		data = request.POST
-		player1 = data.get('player1')
-		player2 = data.get('player2')
-		mode = data.get('mode')
-		result_player1 = data.get('result')
-		player1_points = data.get('player1_points')
-		player2_points = data.get('player2_points')
-		match = Match(player1=player1, player2=player2, 
-				mode=mode, result_player1=result_player1, player1_points=player1_points, player2_points=player2_points)
-		match.save()
-	else:
-		message = "Wrong request method"
-
-	return render(request, 'polls/index.html', {'message': message})
+		try:	
+			data = json.loads(request.body)
+			player1 = data[0]
+			player2 = data[1]
+			mode = data[2]
+			result_player1 = data[3]
+			player1_points = data[4]
+			player2_points = data[5]
+			match = Match(
+				player1=player1,
+				player2=player2,
+				mode=mode,
+				result_player1=result_player1,
+				player1_points=player1_points,
+		   		player2_points=player2_points
+			)	
+			match.save()
+			return JsonResponse({'message: Match'}, status=200)
+		except IndexError as e:
+			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+		except json.JSONDecodeError:
+			return JsonResponse({'error': 'invalid JSON'}, status=400)
+	return JsonResponse({'error: Unothaurized methdod'}, status=405)
 
 
 	

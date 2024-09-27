@@ -18,7 +18,7 @@ class Player(models.Model):
 	friends = models.ManyToManyField('self', symmetrical=False, blank=True)
 	matches = models.ManyToManyField('Match', related_name='players', blank=True)
 	# tournament_matches = models.ManyToManyField('Match', related_name='players', blank=True)
-	# friends_request = models.ManyToManyField('self', symmetrical=False, blank=True)
+	friends_request = models.ManyToManyField('self', symmetrical=False, blank=True)
 
 	def set_password(self, raw_password):
 		self.password = make_password(raw_password)
@@ -31,7 +31,7 @@ class Player(models.Model):
 
 class Tournament(models.Model):
 	winner = models.CharField(max_length=255, blank=False)
-	# matchs = models.ManyToManyField('Match', related_name='player', blank=True)
+	matchs = models.ManyToManyField('Match', related_name='tournament', blank=True)
 	# stocker les matchs de manières à pouvoir trouver ceux du joueur X
 	# donc probablement une fonction qui ira chercher l'id du joueur dans les matchs
 	

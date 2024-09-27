@@ -32,6 +32,7 @@ urlpatterns = [
 	path ('api_42/', manage_42_api_step1, name='home'),
 	path ('api_code/', manage_42_api_step2, name='home'),
 	path ('new_connection/', manage_connection, name='home'),
+	# path ('register/', create_account, name='home'),
 	path ('logout/', logout, name='home'),
 	path ('match_result/', match_end, name='home'),
 	# path ('tournament_end/', tournament_end, name='home'),
