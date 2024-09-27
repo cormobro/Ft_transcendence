@@ -46,3 +46,5 @@ class Match(models.Model):
 	result_player1 = models.CharField(max_length=255, blank=False)
 	player1_points = models.IntegerField()
 	player2_points = models.IntegerField()
+	date = models.DateField()
+	match_time = models.DurationField()
