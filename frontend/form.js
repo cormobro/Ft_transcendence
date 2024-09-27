@@ -1,6 +1,6 @@
 document.getElementById('addPlayer').addEventListener('click', function() {
 	// Compter le nombre actuel de champs d'input
-	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs').length;
+	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
 
 	if (playersNumber == 8)
 		return;
@@ -31,8 +31,8 @@ document.getElementById('addPlayer').addEventListener('click', function() {
 });
 
 document.getElementById('removePlayer').addEventListener('click', function() {
-	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs').length;
-	const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs');
+	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
+	const divInputs = document.querySelectorAll('#tournamentInputs #playerInputs .col-12');
 
 	if (playersNumber <= 3)
 		return;
@@ -111,16 +111,16 @@ tournamentSubmitButton.addEventListener('click', function(e) {
 	hideAllContentDivs();
 	onClickTournament();
 	for (var i = 0; i < inputs.length; i++)
+	{
+		players[i].name = inputs[i].value;
+		if (findInstance(players[i].name) === -1)
 		{
-			players[i].name = inputs[i].value;
-			if (findInstance(players[i].name) === -1)
-			{
-				playersInstances.push(new Player(idIndex, players[i].name));
-				idIndex++;
-			}
+			playersInstances.push(new Player(idIndex, players[i].name));
+			idIndex++;
 		}
-		playersCount = inputs.length;
-		findNextMatch();
-		document.getElementsByClassName('content-game')[0].style.display='block';
-		window.location.href = "#myGame";
+	}
+	playersCount = inputs.length;
+	findNextMatch();
+	document.getElementsByClassName('content-game')[0].style.display='block';
+	window.location.href = "#myGame";
 });

@@ -23,30 +23,75 @@
 //variables globales pour controler les vues de chaque joueur
 let playersControllersInstances = [];
 let currPlayerController;
+let currPlayer;
 
 //lorsqu'un match pong se termine
 // let myMatchController = new MatchController(game1, player3, player4);
 // myMatchController.updateMatchStatsView();
 
-// event listener sur le bouton stats dans le menu
-document.getElementById("globalStatsMenuButton").addEventListener('click', function(){
+// function that matches the user's search input with the players
+function searchPlayerNow(){
 
-	let container = document.getElementById("playerStatsButton");
-
+	input = document.getElementById('searchInputPlayer');
+	let container = document.getElementById("playersFoundList");
 	container.innerHTML = null;
-	for (let player of playersInstances){
-		container.innerHTML += `
-			<button class="btn btn-outline-light mt-5 me-3" id="${player.username}">${player.username}</button>
-		`
+	for (let i = 0; i < playersInstances.length; i++){
+		if (input.value === playersInstances[i].username){
+			container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="${playersInstances[i].username}PlayerButton">${playersInstances[i].username}</button>`
+		}
 	}
-})
+}
+
+// event listener sur le bouton stats dans le menu
+// document.getElementById("statsMenuButton").addEventListener('click', function(){
+
+// 	let startingListIndex = 0;
+// 	let endingListIndex = 4;
+// 	let container = document.getElementById("playerStatsButton");
+
+// 	container.innerHTML = null;
+// 	container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="previousPlayerButton">Précédent</button>`;
+// 	for (let i = startingListIndex; i < endingListIndex; i++)
+// 		container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="${playersInstances[i].username}PlayerButton">${playersInstances[i].username}</button>`
+// 	container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="nextPlayerButton">Suivant</button>`;
+// 	updatePlayersList(startingListIndex, endingListIndex);
+// })
+
+// function updatePlayersList(startingListIndex, endingListIndex){
+// 	document.getElementById("playerStatsButton").addEventListener("click", function(e) {
+
+// 		if (e.target && e.target.id === "previousPlayerButton")
+// 		{
+// 			if (startingListIndex > 0)
+// 			{
+// 				startingListIndex--;
+// 				endingListIndex--;
+// 			}
+// 		}
+// 		if (e.target && e.target.id === "nextPlayerButton")
+// 		{
+// 			if (endingListIndex < playersInstances.length)
+// 			{
+// 				startingListIndex++;
+// 				endingListIndex++;
+// 			}
+// 		}
+// 		let container = document.getElementById("playerStatsButton");
+// 		container.innerHTML = null;
+// 		container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="previousPlayerButton">Précédent</button>`;
+// 		for (let i = startingListIndex; i < endingListIndex; i++)
+// 			container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="${playersInstances[i].username}PlayerButton">${playersInstances[i].username}</button>`
+// 		container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="nextPlayerButton">Suivant</button>`;
+// 	})
+// }
 
 // event listener sur chaque bouton permettant de choisir les statistiques de quel joueur afficher
-document.getElementById("playerStatsButton").addEventListener("click", function(e) {
+document.getElementById("playersFoundList").addEventListener("click", function(e) {
 
 	for (let player of playersInstances){
 
-		if (e.target && e.target.id === player.username) {
+		if (e.target && e.target.id === player.username+"PlayerButton") {
+			currPlayer = player;
 			playersControllersInstances.push(new PlayerController(player));
 			currPlayerController = playersControllersInstances[playersControllersInstances.length - 1];
 			currPlayerController.updateGlobalStatsView();
@@ -151,7 +196,7 @@ document.getElementById("historicalStatsButton").addEventListener('click', funct
 	const playerMatches = [];
 
 	for (let match of matchesInstances){
-		if (match.hasAttended(player3) === true)
+		if (match.hasAttended(currPlayer) === true)
 			playerMatches.push(match);
 	}
 
@@ -180,7 +225,7 @@ document.getElementById("playerStats").addEventListener("click", function(e) {
 	const playerMatches = [];
 
 	for (let match of matchesInstances){
-		if (match.hasAttended(player3) === true)
+		if (match.hasAttended(currPlayer) === true)
 			playerMatches.push(match);
 	}
 

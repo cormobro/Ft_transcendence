@@ -142,6 +142,22 @@
 				aiDir = 0;
 			}
 
+			function cleanseTournamentArray()
+			{
+				winner = 0;
+				tournamentWinner = 0;
+				matchmakingIndex = 0;
+				loopDirection = 0;
+				for(let z = 0; z < 8; z++)
+				{
+					players[z].score = 0;
+					players[z].alive = true;
+					console.log("Name: ", players[z].name, " Score: ", players[z].score, " alive: ", players[z].alive);
+				}
+				totalPoints = 0;
+				findNextMatch();
+			}
+
 			function findInstance(name)
 			{
 				let InstanceIndex = 0;
@@ -386,14 +402,15 @@
 							winner = player2;
 							if (gameMode != 2)
 							{
-								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								backendPost("/post/match", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;
 							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
 								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								tempMatchId++;
@@ -407,8 +424,8 @@
 										tempMatchId--;
 										matchId++;
 									}
-									tempMatchesInstances = null;
-									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tempMatchesInstances = [];
+									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
 									tournamentId++;
 								}
 								index = 0;
@@ -462,14 +479,15 @@
 							winner = player1;
 							if (gameMode != 2)
 							{
-								matchesInstances.push(new Match(matchId, gameMode, matchDebut, Date.now(), playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								backendPost("/post/match", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;
 							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, Date.now(),  playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
+								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000,  playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
 								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								tempMatchId++;
@@ -483,8 +501,8 @@
 										tempMatchId--;
 										matchId++;
 									}
-									tempMatchesInstances = null;
-									tournamentsInstances.push(new Tournament(tournamentId, tournamentWinner, matchId - totalPoints, matchId - 1));
+									tempMatchesInstances = [];
+									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
 									tournamentId++;
 								}
 								index = 0;
@@ -656,6 +674,8 @@
 				const relativeY = mousePos.y;
 				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3 && menuBool === true && document.getElementsByClassName('content-game')[0].style.display === "block") {
 					menuBool = false;
+					if (tournamentWinner != 0)
+						cleanseTournamentArray();
 					winner = 0;
 					matchDebut = new Date();
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -724,38 +744,48 @@
 
 			function onClickEasy()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Easy";
 				difficultyCoeff = 0.3;
+				interval = setInterval(drawMenu, 10);
 			};
 
 			function onClickMedium()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Medium";
 				difficultyCoeff = 0.6;
+				interval = setInterval(drawMenu, 10);
 			};
 
 			function onClickHard()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 0;
 				player1 = "Player 1";
 				player2 = "Hard";
 				difficultyCoeff = 0.9;
+				interval = setInterval(drawMenu, 10);
 			};
 			function onClickDuo()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 1;
+				interval = setInterval(drawMenu, 10);
 			};
 
 			function onClickTournament()
 			{
+				clearInterval(interval);
 				resetWholeGame();
 				gameMode = 2;
+				interval = setInterval(drawMenu, 10);
 			};
