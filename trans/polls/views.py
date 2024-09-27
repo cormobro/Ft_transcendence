@@ -5,6 +5,7 @@ from .models import Player, Tournament, Match
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password, check_password
 import requests
+import json
 import os
 
 @csrf_protect
@@ -212,12 +213,12 @@ def match_end(request):
 		   		player2_points=player2_points
 			)	
 			match.save()
-			return JsonResponse({'message: Match'}, status=200)
+			return JsonResponse({'message': 'Match'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
 			return JsonResponse({'error': 'invalid JSON'}, status=400)
-	return JsonResponse({'error: Unothaurized methdod'}, status=405)
+	return JsonResponse({'error': 'Unothaurized methdod'}, status=405)
 
 
 	

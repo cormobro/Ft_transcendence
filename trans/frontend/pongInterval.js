@@ -223,7 +223,7 @@
 				ctx.textAlign="center";
 				ctx.textBaseline = "middle";
 				if (tournamentWinner === 0)
-					ctx.fillText(`${winner} has won!`, canvas.width / 2, canvas.height / 6);
+					ctx.fillText(`${winner} has won lol!`, canvas.width / 2, canvas.height / 6);
 				else
 				{
 					ctx.font = canvas.height/15 + "px Arial";
@@ -403,7 +403,7 @@
 							if (gameMode != 2)
 							{
 								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
-								backendPost("/post/match", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
+								backendPost("/post/match/", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;
@@ -480,7 +480,7 @@
 							if (gameMode != 2)
 							{
 								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
-								backendPost("/post/match", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
+								backendPost("/post/match/", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
 								myMatchController.updateMatchStatsView();
 								matchId++;

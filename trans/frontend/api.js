@@ -228,8 +228,25 @@ document.getElementById('/get/user').onclick = () => {
 		.then((json) => console.log(json));
 }*/
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Vérifie si cette chaîne de cookie commence par le nom que nous voulons
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 async function backendPost(path, ...data)
 {
+	console.log("hello");
 	let _data = [];
 	let dataIndex = 0;
 	for (const arg of data)
@@ -238,11 +255,13 @@ async function backendPost(path, ...data)
 		dataIndex++;
 	}
 	try {
+		const csrfToken = getCookie('csrftoken');
+
 		const response = await fetch(path, {
 			method: "POST",
 			body: JSON.stringify(_data),
 			headers: {
-				"X-CSRF-Token": csrftoken,
+				'X-CSRFToken': csrfToken,
 				"Content-type": "application/json; charset=UTF-8"
 			}
 		});
@@ -268,7 +287,7 @@ async function avatarPost(fileInput)
 			method: "POST",
 			body: formData,
 			headers: {
-				"X-CSRF-Token": csrftoken,
+				'X-CSRFToken': formData.get('csrfmiddlewaretoken')
 			}
 		});
 
@@ -289,7 +308,7 @@ async function avatarGet()
 		const response = await fetch("/get/avatar", {
 			method: "GET",
 			headers: {
-				"X-CSRF-Token": csrftoken,
+				'X-CSRFToken': formData.get('csrfmiddlewaretoken')
 			}
 		});
 

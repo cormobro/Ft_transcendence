@@ -34,7 +34,7 @@ urlpatterns = [
 	path ('new_connection/', manage_connection, name='home'),
 	# path ('register/', create_account, name='home'),
 	path ('logout/', logout, name='home'),
-	path ('match_result/', match_end, name='home'),
+	path ('post/match/', match_end, name='home'),
 	# path ('tournament_end/', tournament_end, name='home'),
 	# path ('get_user_info', give_user_info, name='home'),
     path('admin/', admin.site.urls),
