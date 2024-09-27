@@ -35,13 +35,13 @@ class ProfileView{
 								<input type="file" class="d-none" id="filePath" name="file" accept="image/jpeg, image/png, image/jpg">
 							</form>
 						</div>
-						<div class="col">
+						<div class="col d-flex flex-column justify-content-center">
 							<h5 class="text-center">Victoires: ${stats.matchsWon}</h5>
 							<h5 class="text-center">Défaites: ${stats.matchsLost}</h5>
 						</div>
 					</div>
 					<div class="row">
-						<h4 class="text-center">Ajouter des amis</h4>
+						<h4 class="mt-5 mb-3 text-center">Ajouter des amis</h4>
 						<input type="search" id="searchInputProfile" placeholder="Recherche" onkeyup="searchProfileNow()"/>
 						<div>
 							<ul id="usersProfileFoundList"></ul>
