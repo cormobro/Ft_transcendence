@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Player, Tournament, Match
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password, check_password
+from datetime import datetime, timedelta
 import requests
 import json
 import os
@@ -116,6 +117,7 @@ def manage_connection(request):
 		password = data.get('password')
 		if not username or not password:
 			message = "Username and password required"
+			# return HttpResponse("1")
 		elif Player.objects.filter(username=username).exists():
 			player = Player.objects.get(username=username)
 			if check_password(password, player.password):
@@ -127,6 +129,7 @@ def manage_connection(request):
 				message = "Logged in"
 			else:
 				message = "Wrong password"
+			# return HttpResponse("2")
 		else:
 			new_player = Player(username=username)
 			new_player.set_password(password)
@@ -135,9 +138,9 @@ def manage_connection(request):
 			message = "acc created"
 			request.session['user_id'] = new_player.id
 			request.session['username'] = new_player.username
+			# return HttpResponse("3")
 	else:
 		message = "Wrong request method"
-
 	return render(request, 'polls/index.html', {'message': message})
 
 @csrf_protect
@@ -164,17 +167,21 @@ def tournament_end(request):
 				player1 = match_info[0]
 				player2 = match_info[1]
 				mode = match_info[2]
-				result_player1 = match_info[3]
+				winner = match_info[3]
 				player1_points = match_info[4]
 				player2_points = match_info[5]
+				date = data[6]
+				duration = data[7]
 
 				match = Match(
 					player1=player1,
 					player2=player2,
 					mode=mode,
-					result_player1=result_player1,
+					winner=winner,
 					player1_points=player1_points,
-					player2_points=player2_points
+					player2_points=player2_points,
+					date=date,
+					duration=duration
 				)
 				match.save()
 				tournament.matchs.add(match)
@@ -201,16 +208,23 @@ def match_end(request):
 			player1 = data[0]
 			player2 = data[1]
 			mode = data[2]
-			result_player1 = data[3]
+			winner = data[3]
 			player1_points = data[4]
 			player2_points = data[5]
+			date = data[6]
+			duration = data[7]
+
+			# date = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%fZ').date()
+			# duration = timedelta(seconds=float(duration_numeric))
 			match = Match(
 				player1=player1,
 				player2=player2,
 				mode=mode,
-				result_player1=result_player1,
+				winner=winner,
 				player1_points=player1_points,
-		   		player2_points=player2_points
+		   		player2_points=player2_points,
+				date=date,
+				match_time=duration
 			)	
 			match.save()
 			return JsonResponse({'message': 'Match'}, status=200)
