@@ -1,4 +1,19 @@
 var csrftoken = '{{ csrf_token }}'
+function getCookie(name) {
+	let cookieValue = null;
+	if (document.cookie && document.cookie !== '') {
+		const cookies = document.cookie.split(';');
+		for (let i = 0; i < cookies.length; i++) {
+			const cookie = cookies[i].trim();
+			// Vérifie si cette chaîne de cookie commence par le nom que nous voulons
+			if (cookie.substring(0, name.length + 1) === (name + '=')) {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
+}
 
 /*document.getElementById('getRequest').onclick = () => {
 	const requestObj = new XMLHttpRequest()
@@ -211,38 +226,37 @@ document.getElementById('/get/profile').onclick = () => {
 	})
 		.then((response) => response.json())
 		.then((json) => console.log(json));
-}
-
-document.getElementById('/get/user').onclick = () => {
-	fetch("/get/user", {
-		method: "GET",
-		body: JSON.stringify({
-			username: //USERNAME HERE
-		}),
-		headers: {
-			"X-CSRF-Token": csrftoken,
-			"Content-type": "application/json; charset=UTF-8"
-		}
-	})
-		.then((response) => response.json())
-		.then((json) => console.log(json));
 }*/
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Vérifie si cette chaîne de cookie commence par le nom que nous voulons
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
+async function getUsers(path, username)
+{
+	try
+	{
+		const csrfToken = getCookie('csrftoken');
+		const response = await fetch(path, 
+		{
+			method: "GET",
+			query: username=username,
+			headers: {
+				'X-CSRFToken': csrfToken,
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
+
+		const json = await response.json();
+		console.log(json);
+	} 
+	catch (error)
+	{
+		console.error(error.message);
+	}
+	
 }
+
 
 async function backendPost(path, ...data)
 {

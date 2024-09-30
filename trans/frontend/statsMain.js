@@ -35,6 +35,12 @@ function searchPlayerNow(){
 	input = document.getElementById('searchInputPlayer');
 	let container = document.getElementById("playersFoundList");
 	container.innerHTML = null;
+
+	//créer une fonction qui getUser et renvoie une playersInstance
+	//get user dans le backend si il existe rempli une instance 
+	//joueur avec ses infos
+	//crée le bouton comme ci dessous et return
+
 	for (let i = 0; i < playersInstances.length; i++){
 		if (input.value === playersInstances[i].username){
 			container.innerHTML += `<button class="btn btn-outline-light mt-5 me-3" id="${playersInstances[i].username}PlayerButton">${playersInstances[i].username}</button>`

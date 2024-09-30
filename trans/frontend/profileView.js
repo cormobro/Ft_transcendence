@@ -25,7 +25,7 @@ class ProfileView{
 						<div class="col">
 							<form action="upload.php" method="POST" enctype="multipart/form-data">
 								<div class="d-flex image position-relative">
-									<img src="img/default_avatar.png" class="img-fluid rounded-5" alt="avatar" width="200" height="200" id="avatarImg">
+									<img src="/static/img/default_avatar.png" class="img-fluid rounded-5" alt="avatar" width="200" height="200" id="avatarImg">
 									<label for="filePath" class="position-relative">
 										<div id="cameraIcon" class="bg-primary rounded-circle d-flex justify-content-center align-items-center position-absolute" style="width: 40px; height: 40px; top: 0; right: 0; transform: translate(-25%, 25%) rotate(45deg);">
 											<i class="bi bi-camera-fill" style="transform: rotate(-45deg);"></i>
@@ -52,7 +52,7 @@ class ProfileView{
 						</div>
 					</div>
 					<div class="d-flex justify-content-center">
-						<button class="btn btn-outline-light" id="42LogInButton">Se connecter avec <img src="img/42_Logo.png" alt="42" width="30" height="30"></button>
+						<button class="btn btn-outline-light" id="42LogInButton">Se connecter avec <img src="/static/img/42_Logo.png" alt="42" width="30" height="30"></button>
 					</div>
 				</div>
 			</div>

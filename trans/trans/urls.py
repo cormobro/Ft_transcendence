@@ -20,9 +20,10 @@ from polls.views import home
 from polls.views import manage_request
 from polls.views import manage_42_api_step1
 from polls.views import manage_42_api_step2
-from polls.views import manage_connection
+from polls.views import create_account
 from polls.views import logout
 from polls.views import match_end
+from polls.views import log_in
 # from polls.views import tournament_end
 
 urlpatterns = [
@@ -31,8 +32,8 @@ urlpatterns = [
 	path ('post/', manage_request, name='home'),
 	path ('api_42/', manage_42_api_step1, name='home'),
 	path ('api_code/', manage_42_api_step2, name='home'),
-	path ('new_connection/', manage_connection, name='home'),
-	# path ('register/', create_account, name='home'),
+	path ('register/', create_account, name='home'),
+	path ('login/', log_in, name='home'),
 	path ('logout/', logout, name='home'),
 	path ('post/match/', match_end, name='home'),
 	# path ('tournament_end/', tournament_end, name='home'),

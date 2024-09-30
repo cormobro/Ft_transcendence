@@ -5,6 +5,7 @@ from .models import Player, Tournament, Match
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password, check_password
 from datetime import datetime, timedelta
+from django.db import IntegrityError
 import requests
 import json
 import os
@@ -110,7 +111,32 @@ def manage_request(request):
 
 
 @csrf_protect
-def manage_connection(request):
+def create_account(request):
+	if request.method == 'POST':
+		try:
+			data = request.POST
+			username = data.get('username')
+			password = data.get('password')
+			if not username or not password:
+				message = "Username and password required"
+			else:
+				new_player = Player(username=username)
+				new_player.set_password(password)
+				new_player.logged_in = True
+				new_player.save()
+				message = "acc created"
+				request.session['user_id'] = new_player.id
+				request.session['username'] = new_player.username
+				# return HttpResponse("3")
+		except IntegrityError:
+			message = "Ce nom d'utilisateur existe déjà"
+	else:
+		message = "Wrong request method"
+
+	return render(request, 'polls/index.html', {'message': message})
+
+@csrf_protect
+def log_in(request):
 	if request.method == 'POST':
 		data = request.POST
 		username = data.get('username')
@@ -131,17 +157,11 @@ def manage_connection(request):
 				message = "Wrong password"
 			# return HttpResponse("2")
 		else:
-			new_player = Player(username=username)
-			new_player.set_password(password)
-			new_player.logged_in = True
-			new_player.save()
-			message = "acc created"
-			request.session['user_id'] = new_player.id
-			request.session['username'] = new_player.username
-			# return HttpResponse("3")
+			message = "This account does not exist"
 	else:
 		message = "Wrong request method"
 	return render(request, 'polls/index.html', {'message': message})
+
 
 @csrf_protect
 def logout(request):
