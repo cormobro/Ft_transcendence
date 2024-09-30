@@ -47,6 +47,9 @@
 							<li class="nav-item">
 								<a class="nav-link" href="#" id="profileMenuButton" onclick="hideAllContentDivs();document.getElementsByClassName('content-profile')[0].style.display='block';">Profil</a>
 							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" id="blockchainMenuButton" onclick="hideAllContentDivs();document.getElementsByClassName('content-blockchain')[0].style.display='block';">Blockchain</a>
+							</li>
 						</ul>
 					</div>
 					<div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
@@ -274,44 +277,60 @@
 				<section class="py-5 mt-5 bg-dark">
 					<div class="container">
 						<div class="py-5 text-light">
-								<div class="container">
-									<h2>Statistiques</h2>
-									<div class="row">
-										<div class="d-flex justify-content-start" id="playerStatsButton">
+							<div class="container">
+								<h2>Statistiques</h2>
+								<div class="row">
+									<div class="d-flex justify-content-start" id="playerStatsButton">
+									</div>
+								</div>
+								<div class="row mt-5">
+									<h4 class="mb-3 text-center">Chercher des utilisateurs</h4>
+									<input type="search" id="searchInputPlayer" placeholder="Recherche" onkeyup="searchPlayerNow()"/>
+									<div>
+										<ul id="playersFoundList"></ul>
+									</div>
+								</div>
+								<div class="row">
+									<div class="d-flex justify-content-start">
+										<button class="btn btn-outline-light mt-5 mb-5 me-3" id="globalStatsButton">Global</button>
+										<div class="dropdown">
+											<button class="btn btn-outline-light mt-5 mb-5 me-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+												Modes
+											</button>
+											<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+												<li><a class="dropdown-item" id="soloModeStatsButton">Solo</a></li>
+												<li><a class="dropdown-item" id="duoModeStatsButton">Duo</a></li>
+												<li><a class="dropdown-item" id="tournamentModeStatsButton">Tournoi</a></li>
+											</ul>
+										</div>
+										<button class="btn btn-outline-light mt-5 mb-5 me-3" id="pieChartButton">Pie Chart</button>
+										<button class="btn btn-outline-light mt-5 mb-5 me-3" id="barChartButton">Bar Chart</button>
+										<button class="btn btn-outline-light mt-5 mb-5 me-3" id="plotChartButton">Plot Chart</button>
+										<button class="btn btn-outline-light mt-5 mb-5 me-3" id="historicalStatsButton">Historique</button>
+									</div>
+								</div>
+								<div class="row mt-5">
+									<div class="col-12">
+										<div id="playerStats" class="p-3 bg-light border rounded">
 										</div>
 									</div>
-									<div class="row mt-5">
-										<h4 class="mb-3 text-center">Chercher des utilisateurs</h4>
-										<input type="search" id="searchInputPlayer" placeholder="Recherche" onkeyup="searchPlayerNow()"/>
-										<div>
-											<ul id="playersFoundList"></ul>
-										</div>
-									</div>
-									<div class="row">
-										<div class="d-flex justify-content-start">
-											<button class="btn btn-outline-light mt-5 mb-5 me-3" id="globalStatsButton">Global</button>
-											<div class="dropdown">
-												<button class="btn btn-outline-light mt-5 mb-5 me-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-													Modes
-												</button>
-												<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-													<li><a class="dropdown-item" id="soloModeStatsButton">Solo</a></li>
-													<li><a class="dropdown-item" id="duoModeStatsButton">Duo</a></li>
-													<li><a class="dropdown-item" id="tournamentModeStatsButton">Tournoi</a></li>
-												</ul>
-											</div>
-											<button class="btn btn-outline-light mt-5 mb-5 me-3" id="pieChartButton">Pie Chart</button>
-											<button class="btn btn-outline-light mt-5 mb-5 me-3" id="barChartButton">Bar Chart</button>
-											<button class="btn btn-outline-light mt-5 mb-5 me-3" id="plotChartButton">Plot Chart</button>
-											<button class="btn btn-outline-light mt-5 mb-5 me-3" id="historicalStatsButton">Historique</button>
-										</div>
-									</div>
-									<div class="row mt-5">
-										<div class="col-12">
-											<div id="playerStats" class="p-3 bg-light border rounded">
-											</div>
-										</div>
-									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div id="blockchain" class="content content-blockchain" style="display:none">
+				<section class="py-5 mt-5 bg-dark">
+					<div class="container">
+						<div class="py-5 text-light">
+							<div class="container">
+								<div class="d-flex flex-column align-items-center">
+									<h2>Afficher un bloc</h2>
+									<input type="number" class="btn btn-outline-light mt-3" id="tournamentId" placeholder="Tournament ID">
+									<button class="btn btn-outline-light mt-3" id="getTournamentScores">Afficher</button>
+									<pre class="mt-3" id="outputMatches"></pre>
+									<pre id="outputWinner"></pre>
 								</div>
 							</div>
 						</div>
@@ -341,6 +360,8 @@
 		<script src="statsMain.js"></script>
 		<script src="pongInterval.js"></script>
 		<script src="profileMain.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/web3@1.7.5/dist/web3.min.js"></script>
+		<script src="blockchain.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	</body>
 </html>
