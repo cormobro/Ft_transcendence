@@ -213,7 +213,7 @@ def tournament_end(request):
 			return JsonResponse({'error': 'invalid JSON'}, status=400)
 			
 
-	return JsonResponse({'error: Unothaurized methdod'}, status=405)
+	return JsonResponse({'error: Unauthorized methdod'}, status=405)
 		
 	# dans cette requete il y aura toute les infos sur les tournois
 	# on l'occurence les matchs/leurs données, dans l'ordre dans lequel
@@ -252,9 +252,4 @@ def match_end(request):
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
 			return JsonResponse({'error': 'invalid JSON'}, status=400)
-	return JsonResponse({'error': 'Unothaurized methdod'}, status=405)
-
-
-	
-
-
+	return JsonResponse({'error': 'Unauthorized methdod'}, status=405)

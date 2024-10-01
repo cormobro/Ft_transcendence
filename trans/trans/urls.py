@@ -26,6 +26,22 @@ from polls.views import match_end
 from polls.views import log_in
 # from polls.views import tournament_end
 
+
+#urlpatterns = [
+#	path ('', manage_request, name='home'),
+#	path ('get/', manage_request, name='home'),
+#	path ('post/', manage_request, name='home'),
+#	path ('api_42/', manage_42_api_step1, name='home'),
+#	path ('api_code/', manage_42_api_step2, name='home'),
+#	path ('register/', create_account, name='home'),
+#	path ('login/', log_in, name='home'),
+#	path ('logout/', logout, name='home'),
+#	path ('post/match/', match_end, name='home'),
+	# path ('tournament_end/', tournament_end, name='home'),
+	# path ('get_user_info', give_user_info, name='home'),
+#    path('admin/', admin.site.urls),
+#]
+
 urlpatterns = [
 	path ('', manage_request, name='home'),
 	path ('get/', manage_request, name='home'),
