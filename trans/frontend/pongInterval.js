@@ -1,6 +1,6 @@
 			//---------- Canvas infos ----------------------------------------------------------------------
 
-			
+
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
 			//canvas.width = window.innerWidth * 3/4;
@@ -614,7 +614,7 @@
 
 			function getMousePos(canvas, evt) {
     				// Get the bounding rectangle of the canvas
-    				const rect = canvas.getBoundingClientRect();    
+    				const rect = canvas.getBoundingClientRect();
     				// Calculate mouse position within the canvas, accounting for scroll offset
     				const x = evt.clientX - rect.left;
 				//+ window.scrollX;
