@@ -233,7 +233,7 @@ async function getUsers(path, username)
 	try
 	{
 		const csrfToken = getCookie('csrftoken');
-		const response = await fetch(path, 
+		const response = await fetch(path,
 		{
 			method: "GET",
 			query: username=username,
@@ -249,20 +249,20 @@ async function getUsers(path, username)
 
 		const json = await response.json();
 		console.log(json);
-	} 
+	}
 	catch (error)
 	{
 		console.error(error.message);
 	}
-	
+
 }
 
 
 async function backendPost(path, ...data)
 {
-	console.log("hello");
 	let _data = [];
 	let dataIndex = 0;
+	console.log("Loading datas");
 	for (const arg of data)
 	{
 		_data[dataIndex] = arg;
@@ -270,7 +270,7 @@ async function backendPost(path, ...data)
 	}
 	try {
 		const csrfToken = getCookie('csrftoken');
-
+		console.log("Calling fetch request");
 		const response = await fetch(path, {
 			method: "POST",
 			body: JSON.stringify(_data),

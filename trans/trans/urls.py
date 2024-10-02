@@ -24,6 +24,8 @@ from polls.views import create_account
 from polls.views import logout
 from polls.views import match_end
 from polls.views import log_in
+from polls.views import set_block
+from polls.views import get_block
 # from polls.views import tournament_end
 
 
@@ -54,5 +56,7 @@ urlpatterns = [
 	path ('post/match/', match_end, name='home'),
 	# path ('tournament_end/', tournament_end, name='home'),
 	# path ('get_user_info', give_user_info, name='home'),
-    path('admin/', admin.site.urls),
+	path('admin/', admin.site.urls),
+	path('get/setblock/', set_block, name='home'),
+	path('get/getblock/', get_block, name='home')
 ]

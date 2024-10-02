@@ -9,6 +9,7 @@ from django.db import IntegrityError
 import requests
 import json
 import os
+from web3 import Web3, HTTPProvider
 
 @csrf_protect
 def home(request):
@@ -16,7 +17,7 @@ def home(request):
 
 @csrf_protect
 def manage_42_api_step1(request):
-	
+
 	client_id = os.getenv('API_CLIENT_ID')
 	redirect_uri = 'http://localhost:8000/api_code'
 	state = os.getenv('API_PROTECTION_STRING')
@@ -211,10 +212,10 @@ def tournament_end(request):
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
 			return JsonResponse({'error': 'invalid JSON'}, status=400)
-			
+
 
 	return JsonResponse({'error: Unauthorized methdod'}, status=405)
-		
+
 	# dans cette requete il y aura toute les infos sur les tournois
 	# on l'occurence les matchs/leurs données, dans l'ordre dans lequel
 	# ils ont été joués
@@ -223,7 +224,7 @@ def tournament_end(request):
 @csrf_protect
 def match_end(request):
 	if request.method == 'POST':
-		try:	
+		try:
 			data = json.loads(request.body)
 			player1 = data[0]
 			player2 = data[1]
@@ -245,9 +246,100 @@ def match_end(request):
 		   		player2_points=player2_points,
 				date=date,
 				match_time=duration
-			)	
+			)
 			match.save()
 			return JsonResponse({'message': 'Match'}, status=200)
+		except IndexError as e:
+			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+		except json.JSONDecodeError:
+			return JsonResponse({'error': 'invalid JSON'}, status=400)
+	return JsonResponse({'error': 'Unauthorized methdod'}, status=405)
+
+@csrf_protect
+def set_block(request):
+	print("Set Block Views")
+	if request.method == 'POST':
+		try:
+			print("Loading json")
+			data = json.loads(request.body)
+			print("Parse header datas")
+			node_url = data[0]
+			contract_address = data[1]
+			tournament_id = data[2]
+			tournament_winner = data[3]
+			matches_number = data[4]
+			matches_data = data[5]
+			print("Initialize arrays")
+			matches_id = []
+			players1 = []
+			players2 = []
+			matches_winners = []
+			players1_points = []
+			players2_points = []
+			print("Get datas from each match")
+			for match_info in matches_data:
+				matches_id.append(match_info[0])
+				players1.append(match_info[1])
+				players2.append(match_info[2])
+				matches_winners.append(match_info[3])
+				players1_points.append(match_info[4])
+				players2_points.append(match_info[5])
+			print("Connect with web3")
+			web3 = Web3(Web3.HTTPProvider(node_url))
+
+			if web3.is_connected():
+				print("-" * 50)
+				print("Connection Successful")
+				print("-" * 50)
+			else:
+				print("Connection Failed")
+				return JsonResponse({'error': 'Connection to blockchain failed'}, status=500)
+
+			web3.eth.defaultAccount = web3.eth.accounts[0]
+			compiled_contract_path = '/dapp/build/contracts/TournamentScores.json'
+
+			with open(compiled_contract_path) as file:
+				contract_json = json.load(file)
+				contract_abi = contract_json['abi']
+
+			contract = web3.eth.contract(address=contract_address, abi=contract_abi)
+
+			txn = contract.functions.setTournamentMatches(
+				tournament_id,
+				matches_id,
+				players1,
+				players2,
+				matches_winners,
+				players1_points,
+				players2_points,
+				tournament_winner,
+				matches_number
+			).transact({'from': w3.eth.defaultAccount, 'gas': 3000000})
+
+			receipt = w3.eth.waitForTransactionReceipt(txn)
+
+			print("Transaction receipt: ", receipt)
+
+			message = contract.functions.getTournamentMatches(tournament_id).call()
+			winner = contract.functions.getTournamentWinner(tournament_id).call()
+			print("Tournament matches: ", message)
+			print("Tournament winner: ", winner)
+			return JsonResponse({'message': 'Tournament and matches data sent successfully'}, status=200)
+		except IndexError as e:
+			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+		except json.JSONDecodeError:
+			return JsonResponse({'error': 'invalid JSON'}, status=400)
+	return JsonResponse({'error': 'Unauthorized methdod'}, status=405)
+
+def get_block(request):
+	if request.method == 'POST':
+		try:
+			data = json.loads(request.body)
+			contract_address = data[0]
+			contract_abi = data[1]
+			tournament_id = data[2]
+
+			return JsonResponse({'message': 'Envoyé'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:

@@ -1,6 +1,6 @@
 			//---------- Canvas infos ----------------------------------------------------------------------
 
-			
+
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
 			//canvas.width = window.innerWidth * 3/4;
@@ -417,15 +417,18 @@
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
 								{
+									let tournamentMatches = [];
 									tournamentWinner = player2;
 									while (tempMatchId > 0)
 									{
 										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
+										tournamentMatches.push(tempMatchesInstances[totalPoints- tempMatchId]);
 										tempMatchId--;
 										matchId++;
 									}
 									tempMatchesInstances = [];
 									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
+									setBlock(tournamentMatches, tournamentId, tournamentWinner, matchId - 1 - (matchId - totalPoints));
 									tournamentId++;
 								}
 								index = 0;
@@ -494,15 +497,18 @@
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
 								{
+									let tournamentMatches = [];
 									tournamentWinner = player1;
 									while (tempMatchId > 0)
 									{
 										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
+										tournamentMatches.push(tempMatchesInstances[totalPoints- tempMatchId]);
 										tempMatchId--;
 										matchId++;
 									}
 									tempMatchesInstances = [];
 									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
+									setBlock(tournamentMatches, tournamentId, tournamentWinner, matchId - 1 - (matchId - totalPoints));
 									tournamentId++;
 								}
 								index = 0;
@@ -614,7 +620,7 @@
 
 			function getMousePos(canvas, evt) {
     				// Get the bounding rectangle of the canvas
-    				const rect = canvas.getBoundingClientRect();    
+    				const rect = canvas.getBoundingClientRect();
     				// Calculate mouse position within the canvas, accounting for scroll offset
     				const x = evt.clientX - rect.left;
 				//+ window.scrollX;
