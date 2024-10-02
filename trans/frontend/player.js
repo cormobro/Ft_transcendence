@@ -1,7 +1,9 @@
 class Player{
 
+	// CONSTRUCTOR
 	constructor(id, username){
 
+		// INSTANCE PROPERTIES
 		this.id = id;
 		this.username = username;
 		// this.matches = [];
@@ -13,7 +15,7 @@ class Player{
 	// 	for (let match of matches){
 	// 		if (match.player1 == this || match.player2 == this)
 	// 			this.matches.push(match);
-	// 	}	
+	// 	}
 	// }
 
 	// getPlayerTournaments(matches, player){
@@ -27,6 +29,8 @@ class Player{
 	// 	}
 	// }
 
+	// METHOD DEFINITIONS
+	// Get player's stats from all game mode
 	getGlobalStats(){
 
 		const playerMatches = [];
@@ -58,6 +62,7 @@ class Player{
 		return (stats);
 	}
 
+	// Get player's stats from every game mode
 	getModeStats(mode){
 
 		const playerMatches = [];
@@ -71,7 +76,10 @@ class Player{
 
 		for (let tournament of tournamentsInstances){
 			if (tournament.hasAttended(this) === true)
+			{
+				console.log(tournament);
 				playerTournaments.push(tournament);
+			}
 		}
 
 		let stats = {

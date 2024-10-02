@@ -20,10 +20,27 @@ from polls.views import home
 from polls.views import manage_request
 from polls.views import manage_42_api_step1
 from polls.views import manage_42_api_step2
-from polls.views import manage_connection
-from polls.views import create_acc
+from polls.views import create_account
 from polls.views import logout
 from polls.views import match_end
+from polls.views import log_in
+# from polls.views import tournament_end
+
+
+#urlpatterns = [
+#	path ('', manage_request, name='home'),
+#	path ('get/', manage_request, name='home'),
+#	path ('post/', manage_request, name='home'),
+#	path ('api_42/', manage_42_api_step1, name='home'),
+#	path ('api_code/', manage_42_api_step2, name='home'),
+#	path ('register/', create_account, name='home'),
+#	path ('login/', log_in, name='home'),
+#	path ('logout/', logout, name='home'),
+#	path ('post/match/', match_end, name='home'),
+	# path ('tournament_end/', tournament_end, name='home'),
+	# path ('get_user_info', give_user_info, name='home'),
+#    path('admin/', admin.site.urls),
+#]
 
 urlpatterns = [
 	path ('', manage_request, name='home'),
@@ -31,9 +48,11 @@ urlpatterns = [
 	path ('post/', manage_request, name='home'),
 	path ('api_42/', manage_42_api_step1, name='home'),
 	path ('api_code/', manage_42_api_step2, name='home'),
-	path ('new_connection/', manage_connection, name='home'),
-	path ('create_acc/', create_acc, name='home'),
+	path ('register/', create_account, name='home'),
+	path ('login/', log_in, name='home'),
 	path ('logout/', logout, name='home'),
-	path ('match_result/', match_end, name='home'),
+	path ('post/match/', match_end, name='home'),
+	# path ('tournament_end/', tournament_end, name='home'),
+	# path ('get_user_info', give_user_info, name='home'),
     path('admin/', admin.site.urls),
 ]

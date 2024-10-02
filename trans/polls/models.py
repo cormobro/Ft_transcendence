@@ -12,13 +12,13 @@ import uuid
 class Player(models.Model):
 	username = models.CharField(max_length=100, unique=True, blank=True)
 	password = models.CharField(max_length=120)
-	scores = ArrayField(models.IntegerField(), default=list, blank=True)
 	tournaments = models.ManyToManyField('Tournament', related_name='players', blank=True)
-	#matches = models.ManyToManyField('Matches', related_name='players')
-	# champ demandes d'amis
-	# champ amis
-	# champ link compte avec 42
-
+	logged_in = models.BooleanField(default=False)
+	linked_42_acc = models.CharField(max_length=30, unique=True, blank=True, null=True)
+	friends = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='friended_by')
+	matches = models.ManyToManyField('Match', related_name='players', blank=True)
+	# tournament_matches = models.ManyToManyField('Match', related_name='players', blank=True)
+	friends_request = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='request_by')
 
 	def set_password(self, raw_password):
 		self.password = make_password(raw_password)
@@ -30,9 +30,8 @@ class Player(models.Model):
 # Tournament class, once set is added to the DB 
 
 class Tournament(models.Model):
-	name = models.CharField(max_length=255)
 	winner = models.CharField(max_length=255, blank=False)
-	number_of_players = models.IntegerField()
+	matchs = models.ManyToManyField('Match', related_name='tournament', blank=True)
 	# stocker les matchs de manières à pouvoir trouver ceux du joueur X
 	# donc probablement une fonction qui ira chercher l'id du joueur dans les matchs
 	
@@ -44,6 +43,8 @@ class Match(models.Model):
 	player1 = models.CharField(max_length=255, blank=False)
 	player2 = models.CharField(max_length=255, default='Anonymous')
 	mode = models.CharField(max_length=255, blank=False)
-	result_player1 = models.CharField(max_length=255, blank=False)
+	winner = models.CharField(max_length=255, blank=False)
 	player1_points = models.IntegerField()
 	player2_points = models.IntegerField()
+	date = models.DateTimeField()
+	match_time = models.DecimalField(max_digits=10, decimal_places=3)

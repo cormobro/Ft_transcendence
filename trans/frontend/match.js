@@ -1,7 +1,9 @@
 class Match{
 
+	// CONSTRUCTOR
 	constructor(id, mode, date, matchTime, player1, player2, resultPlayer1, pointsWonByPlayer1, pointsWonByPlayer2){
 
+		// INSTANCE PROPERTIES
 		this.id = id;
 		this.mode = mode;
 		this.date = date;
@@ -13,6 +15,8 @@ class Match{
 		this.pointsWonByPlayer2 = pointsWonByPlayer2;
 	}
 
+	// METHOD DEFINITIONS
+	// Return true if a specific player played the match else return false
 	hasAttended(player){
 
 		if (player === this.player1 || player === this.player2)
@@ -20,8 +24,9 @@ class Match{
 		return (false);
 	}
 
+	// Get the match stats for a specific player
 	getPlayerStats(player){
-		
+
 		let stats = {
 			pointsWon : 0,
 			pointsLost : 0,
