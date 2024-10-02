@@ -1,6 +1,6 @@
 document.getElementById("nextMatchButton").addEventListener('click', function() {
 
-	var container = document.getElementById("collapseContent");
+	var container = document.getElementById("nextMatchOutput");
 
 	container.innerHTML = `
 		<h3 class ="text-center">${player1} (${leftScore}) - ${player2} (${rightScore})</h3>
@@ -9,7 +9,7 @@ document.getElementById("nextMatchButton").addEventListener('click', function() 
 
 document.getElementById("leaderboardButton").addEventListener('click', function() {
 
-	var container = document.getElementById("collapseContent");
+	var container = document.getElementById("leaderboardOutput");
 	container.innerHTML = null;
 
 	if (!playersInstances){

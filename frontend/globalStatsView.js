@@ -3,7 +3,7 @@ class GlobalStatsView{
 	constructor(player){
 
 		this.player = player;
-		this.container = document.getElementById("playerStats");
+		this.container = document.getElementById("playerStatsOutput");
 	}
 
 	render(){

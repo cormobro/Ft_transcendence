@@ -227,6 +227,7 @@ document.getElementById('/get/user').onclick = () => {
 		.then((response) => response.json())
 		.then((json) => console.log(json));
 }*/
+let buffer;
 
 async function backendPost(path, ...data)
 {
@@ -251,8 +252,8 @@ async function backendPost(path, ...data)
 			throw new Error(`Response status: ${response.status}`);
 		}
 
-		const json = await response.json();
-		console.log(json);
+		buffer = await response.json();
+		console.log(buffer);
 	} catch (error) {
 		console.error(error.message);
 	}

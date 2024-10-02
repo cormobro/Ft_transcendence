@@ -53,6 +53,7 @@ class PlayerController {
 
 	updateProfileView(){
 
-		this.profileView.renderPrivateView();
+		this.profileView.renderFriendsList();
+		this.profileView.uploadAvatar();
 	}
 }
