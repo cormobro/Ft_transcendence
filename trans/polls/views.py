@@ -6,8 +6,10 @@ from .models import Player, Tournament, Match
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password, check_password
 from datetime import datetime, timedelta
-from django.db import IntegrityError
-from django.db import connection
+from django.db import IntegrityError, connection, models
+from django.db.models import Count, Q, Sum, Case, When, F
+
+
 import requests
 import json
 import os
@@ -125,6 +127,7 @@ def create_account(request):
                 new_player = Player(username=username)
                 new_player.set_password(password)
                 new_player.logged_in = True
+                new_player.matches_won = 0
                 new_player.save()
                 message = "account created"
                 request.session['user_id'] = new_player.id
@@ -178,7 +181,7 @@ def logout(request):
 def tournament_end(request):
     if request.method == 'POST':
         try:
-            if (request.session.is_empty()):
+            if not request.session.get('user_id'):
                 return JsonResponse({'error': 'Unauthorized action'}, status=405)
             else:
                 data = json.loads(request.body)
@@ -210,8 +213,6 @@ def tournament_end(request):
                     if player1 == request.session['username']:
                         Player.objects.get(username=player1).matches.add(match)
                 tournament.save()
-                if winner == request.session['username']:
-                    Player.objects.get(username=winner).tournament_wins += 1
                 Player.objects.get(username=request.session['username']).tournaments.add(tournament)
                 return JsonResponse({'message': 'Enregistré'}, status=200)
         except IndexError as e:
@@ -231,7 +232,7 @@ def tournament_end(request):
 def match_end(request):
     if request.method == 'POST':
         try:
-            if (request.session.is_empty()):
+            if not request.session.get('user_id'):
                 return JsonResponse({'error': 'Unauthorized action'}, status=405)
             else:
                 data = json.loads(request.body)
@@ -258,20 +259,91 @@ def match_end(request):
                         )	
                 match.save()
                 Player.objects.get(username=request.session["username"]).matches.add(match)
-                return JsonResponse({'message': 'Match'}, status=200)
+                if winner == request.session['username']:
+                    player = Player.objects.get(username=request.session['username'])
+                    player.matches_won += 1
+                    player.save()
+
+                return JsonResponse({'message': winner + request.session['username']}, status=200)
         except IndexError as e:
             return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'invalid JSON'}, status=400)
     return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-#@csrf_protect
-#def get_best_players(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def get_best_players(request):
+    if request.method == 'POST':
+        try:
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'Unauthorized action'}, status=405)
+            players = Player.objects.annotate(
+                matches_won_count=Count('matches', filter=Q(matches__winner=models.F('username')))
+            ).order_by('-matches_won_count')[0:10]
+            players_data = [{'username': player.username, 'matches_won': player.matches_won_count} for player in players]
+            return JsonResponse({'message': players_data}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 #@csrf_protect
 #def get_global_stats(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+#    if request.method == 'POST':
+#        try:
+#            if not request.session.get('user_id'):
+#                return JsonResponse({'error': 'Unauthorized action'}, status=405)
+#            players = Player.objects.get(username=request.session.get['username']).matches.annotate
+#            players = Player.objects.annotate(
+#                matches_won_count=Count('matches', filter=Q(matches__winner=models.F('username')))
+#            ).order_by('-matches_won_count')[0:10]
+#            player_data = [{'username': player.username, 'matches_won': player.matches_won_count} for player in players]
+#            return JsonResponse({'message': player_data}, status=200)
+#        except IndexError as e:
+#            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+#        except json.JSONDecodeError:
+#            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#
+#    return JsonResponse({'error': 'Unauthorized action'}, status=405)
+
+
+@csrf_protect
+def get_global_stats(request):
+    if request.method == 'POST':
+        try:
+            # Check if user is logged in
+            if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
+                return JsonResponse({'error': 'User is not logged in'}, status=405)
+            data = json.loads(request.body)
+            player_username = data[0]
+            matches = Match.objects.filter(Q(player1=player_username))
+            wins = matches.filter(winner=player_username).count()
+            losses = matches.exclude(winner=player_username).count()
+            total_points_won = 0
+            total_points_lost = 0
+            for match in matches:
+                total_points_won += match.player1_points
+                total_points_lost += match.player2_points
+
+            player_data = {
+                'pointsWon': total_points_won,
+                'pointsLost': total_points_lost,
+                'pointsPlayed': total_points_won + total_points_lost,
+                'matchesWon': wins,
+                'matchesLost': losses,
+                'matchesPlayed': wins + losses
+            }
+            return JsonResponse({'message': player_data}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
+
+
 
 #@csrf_protect
 #def get_solo_stats(request):
@@ -305,8 +377,8 @@ def match_end(request):
 def get_match_stats(request):
     if request.method == 'POST':
         try:
-            if request.session.is_empty():
-                return JsonResponse({'error': 'User is not logged in'}, status=405)
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'Unauthorized action'}, status=405)
             else:
                 data = json.loads(request.body)
                 username = data[0]
@@ -314,10 +386,6 @@ def get_match_stats(request):
                     return JsonResponse({'error': 'Username argument is missing'}, status=200)
                 elif Player.objects.filter(username=username).exists():
                     player = Player.objects.filter(username=username)
-                    #response = player.matches.all()
-                    #matches = list(Match.objects.to_json().all())
-                    #matches = serializers.serialize('json', Match.objects.all())
-                    #return HttpResponse(matches, content_type='application/json')
                     return JsonResponse({'message': serializers.serialize('json', Match.objects.all())}, status=200)
                 else:
                     return JsonResponse({'error': 'Unassigned user account'}, status=200)
@@ -360,7 +428,7 @@ def is_user_signed_in(request):
 def get_requests(request):
     if request.method == 'POST':
         try:
-            if request.session.is_empty():
+            if not request.session.get('user_id'):
                 return JsonResponse({'error': 'Unauthorized action'}, status=405)
             elif request.session['username']:
                 username = request.session['username']
@@ -392,7 +460,7 @@ def get_requests(request):
 def get_friends_list(request):
     if request.method == 'POST':
         try:
-            if request.session.is_empty():
+            if not request.session.get('user_id'):
                 return JsonResponse({'error': 'Unauthorized action'}, status=405)
             elif request.session['username']:
                 username = request.session['username']

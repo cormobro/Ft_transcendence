@@ -14,7 +14,7 @@ class Player(models.Model):
     username = models.CharField(max_length=100, unique=True, blank=True)
     password = models.CharField(max_length=120)
     tournaments = models.ManyToManyField('Tournament', related_name='players', blank=True)
-    tournament_wins = models.IntegerField(default=0)
+    matches_won = models.IntegerField(default=0)
     logged_in = models.BooleanField(default=False)
     linked_42_acc = models.CharField(max_length=30, unique=True, blank=True, null=True)
     friends = models.ManyToManyField('Player', symmetrical=False, blank=True, related_name='friended_by')

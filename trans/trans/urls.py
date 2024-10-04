@@ -24,8 +24,8 @@ from polls.views import create_account
 from polls.views import logout
 from polls.views import match_end
 from polls.views import log_in
-#from polls.views import get_best_players
-#from polls.views import get_global_stats
+from polls.views import get_best_players
+from polls.views import get_global_stats
 #from polls.views import get_solo_stats
 #from polls.views import get_duo_stats
 #from polls.views import get_tournament_stats
@@ -79,8 +79,8 @@ urlpatterns = [
 	# path ('tournament_end/', tournament_end, name='home'),
 	# path ('get_user_info', give_user_info, name='home'),
     path ('admin/', admin.site.urls),
-    #path ('get/bestplayers/', get_best_players, name='home'),
-    #path ('get/globalstats/', get_global_stats, name='home'),
+    path ('get/bestplayers/', get_best_players, name='home'),
+    path ('get/globalstats/', get_global_stats, name='home'),
     #path ('get/solostats/', get_solo_stats, name='home'),
     #path ('get/duostats/', get_duo_stats, name='home'),
     #path ('get/tournamentstats/', get_tournament_stats, name='home'),

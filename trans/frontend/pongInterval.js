@@ -584,9 +584,12 @@
 				ctx.fillText(`${player2}: ${rightScore}`, 8, 40);
 			}
 
-			backendPost("get/friendrequests/");
-			backendPost("get/friendslist/");
-			backendPost("get/matchstats/", "felix");
+			//backendPost("get/friendrequests/");
+			//backendPost("get/friendslist/");
+			//backendPost("get/matchstats/", "felix");
+			backendPost("get/bestplayers/");
+			backendPost("get/globalstats/", "felix");
+			backendPost("get/globalstats/", "gg");
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
 
