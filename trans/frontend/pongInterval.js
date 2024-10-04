@@ -584,6 +584,10 @@
 				ctx.fillText(`${player2}: ${rightScore}`, 8, 40);
 			}
 
+			backendPost("get/friendrequests/");
+			backendPost("get/friendslist/");
+			backendPost("get/matchstats/", "felix");
+
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
 
 			document.addEventListener("keydown", keyDownHandler, false);

@@ -260,7 +260,6 @@ async function getUsers(path, username)
 
 async function backendPost(path, ...data)
 {
-	console.log("hello");
 	let _data = [];
 	let dataIndex = 0;
 	for (const arg of data)
