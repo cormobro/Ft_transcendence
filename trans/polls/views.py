@@ -519,29 +519,88 @@ def get_requests(request):
                 return JsonResponse({'error': 'Unauthorized action'}, status=405)
             elif request.session['username']:
                 username = request.session['username']
-                player = Player.objects.get(username=username)
-                return JsonResponse({'message': serializers.serialize('json', player.friends_request.all().values('username'))}, status=200)
+                players = Player.objects.get(username=username).friends_request.all()
+                response = []
+                for player in players:
+                    response.append(player.username)
+                player_data = {
+                    'requests': response
+                }
+                return JsonResponse({'message': player_data}, status=200)
             #else:
              #   return JsonResponse({'error': 'Unauthorized action'}, status=200)
         except IndexError as e:
             return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
-    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-#@csrf_protect
-#def post_accept_request(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def post_decline_request(request):
+    if request.method == 'POST':
+        try:
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'Unauthorized action'}, status=405)
+            elif request.session['username']:
+                data = json.loads(request.body)
+                targetUsername = data[0]
+                if not Player.objects.filter(username=targetUsername).exists():
+                    return JsonResponse({'error': 'The user you\'re looking for is not registered'}, status=200)
+                username = request.session['username']
+                player = Player.objects.get(username=username)
+                elif player.friends_request.filter(username=targetUsername).exists():
+                    player.friends_request.remove(player.friends_request.get(username=targetUsername))
+                    return JsonResponse({'message': 'You\'ve successfully declined the request'}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-#@csrf_protect
-#def post_decline_request(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def post_remove_friend(request):
+    if request.method == 'POST':
+        try:
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'Unauthorized action'}, status=405)
+            elif request.session['username']:
+                data = json.loads(request.body)
+                targetUsername = data[0]
+                if not Player.objects.filter(username=targetUsername).exists():
+                    return JsonResponse({'error': 'The user you\'re looking for is not registered'}, status=200)
+                username = request.session['username']
+                player = Player.objects.get(username=username)
+                elif player.friends.filter(username=targetUsername).exists():
+                    player.friends.remove(player.friends.get(username=targetUsername))
+                    return JsonResponse({'message': 'You\'ve successfully deleted this friend'}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-#@csrf_protect
-#def post_remove_friend(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
-
-#@csrf_protect
-#def post_add_friend(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def post_add_friend(request):
+    if request.method == 'POST':
+        try:
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'Unauthorized action'}, status=405)
+            elif request.session['username']:
+                data = json.loads(request.body)
+                targetUsername = data[0]
+                if not Player.objects.filter(username=targetUsername).exists():
+                    return JsonResponse({'error': 'The user you\'re looking for is not registered'}, status=200)
+                username = request.session['username']
+                player = Player.objects.get(username=username)
+                if username == targetUsername or player.friends.filter(username=targetUsername).exists():
+                    return JsonResponse({'error': 'This user is already you\'re friend'}, status=200)
+                elif player.friends_request.filter(username=targetUsername).exists():
+                    player.friends.add(Player.objects.get(username=targetUsername))
+                    player.friends_request.remove(player.friends_request.get(username=targetUsername))
+                    Player.objects.get(username=targetUsername).friends.add(player)
+                    return JsonResponse({'message': 'This user is now your friend'}, status=200)
+                else:
+                    if Player.objects.get(username=targetUsername).friends_request.filter(username=username).exists():
+                        return JsonResponse({'error': 'This user has already received your friend request'}, status=200)
+                    Player.objects.get(username=targetUsername).friends_request.add(player)
+                    return JsonResponse({'message': 'You\'ve sent this user a friend request'}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 @csrf_protect
 def get_friends_list(request):
@@ -551,12 +610,17 @@ def get_friends_list(request):
                 return JsonResponse({'error': 'Unauthorized action'}, status=405)
             elif request.session['username']:
                 username = request.session['username']
-                player = Player.objects.get(username=username)
-                return JsonResponse({'message': serializers.serialize('json', player.friends.all().values('username'))}, status=200)
+                players = Player.objects.get(username=username).friends.all()
+                response = []
+                for player in players:
+                    response.append(player.username)
+                player_data = {
+                    'friends': response
+                }
+                return JsonResponse({'message': player_data}, status=200)
         except IndexError as e:
             return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
-    return JsonResponse({'error': 'Unauthorized method'}, status=405)
-
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 #@csrf_protect
 #def post_42api(request):
 #    return JsonResponse({'error': 'Unauthorized method'}, status=405)
@@ -567,8 +631,4 @@ def get_friends_list(request):
 
 #@csrf_protect
 #def post_password(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
-
-#@csrf_protect
-#def get_block(request):
 #    return JsonResponse({'error': 'Unauthorized method'}, status=405)

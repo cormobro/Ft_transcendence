@@ -38,10 +38,9 @@ from polls.views import is_user_signed_in
 #from polls.views import get_avatar
 #from polls.views import post_avatar
 from polls.views import get_requests
-#from polls.views import post_accept_request
-#from polls.views import post_decline_request
-#from polls.views import post_remove_friend
-#from polls.views import post_add_friend
+from polls.views import post_decline_request
+from polls.views import post_remove_friend
+from polls.views import post_add_friend
 from polls.views import get_friends_list
 #from polls.views import post_42api
 #from polls.views import post_username
@@ -93,10 +92,9 @@ urlpatterns = [
     #path ('get/avatar/', get_avatar, name='home'),
     #path ('post/avatar/', post_avatar, name='home'),
     path ('get/friendrequests/', get_requests, name='home'),
-    #path ('post/acceptfriendrequest/', post_accept_request, name='home'),
-    #path ('post/declinefriendrequest/', post_decline_request, name='home'),
-    #path ('post/removefriend/', post_remove_friend, name='home'),
-    #path ('post/addfriend/', post_add_friend, name='home'),
+    path ('post/declinefriendrequest/', post_decline_request, name='home'),
+    path ('post/removefriend/', post_remove_friend, name='home'),
+    path ('post/addfriend/', post_add_friend, name='home'),
     path ('get/friendslist/', get_friends_list, name='home'),
     #path ('post/42api/', post_42api, name='home'),
     #path ('post/username/', post_username, name='home'),

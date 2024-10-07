@@ -584,16 +584,17 @@
 				ctx.fillText(`${player2}: ${rightScore}`, 8, 40);
 			}
 
-			//backendPost("get/friendrequests/");
-			//backendPost("get/friendslist/");
+			console.log("requests:", backendPost("get/friendrequests/"));
+			console.log("friends:", backendPost("get/friendslist/"));
 			//backendPost("get/matchstats/", "felix");
 			//backendPost("get/bestplayers/");
-			backendPost("get/globalstats/", "felix");
-			backendPost("get/globalstats/", "gg");
+			//backendPost("get/globalstats/", "felix");
+			//backendPost("get/globalstats/", "gg");
 			//backendPost("get/victories/", "felix");
 			//backendPost("get/defeats/", "felix");
-			backendPost("get/victoriesbymode/", "felix");
-			backendPost("get/pointsbymatch/", "felix");
+			//backendPost("get/victoriesbymode/", "felix");
+			//backendPost("get/pointsbymatch/", "felix");
+			backendPost("post/addfriend/", "gg");
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
 
