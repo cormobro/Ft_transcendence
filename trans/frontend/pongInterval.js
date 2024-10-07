@@ -587,9 +587,13 @@
 			//backendPost("get/friendrequests/");
 			//backendPost("get/friendslist/");
 			//backendPost("get/matchstats/", "felix");
-			backendPost("get/bestplayers/");
+			//backendPost("get/bestplayers/");
 			backendPost("get/globalstats/", "felix");
 			backendPost("get/globalstats/", "gg");
+			//backendPost("get/victories/", "felix");
+			//backendPost("get/defeats/", "felix");
+			backendPost("get/victoriesbymode/", "felix");
+			backendPost("get/pointsbymatch/", "felix");
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
 

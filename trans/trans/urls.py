@@ -29,10 +29,10 @@ from polls.views import get_global_stats
 #from polls.views import get_solo_stats
 #from polls.views import get_duo_stats
 #from polls.views import get_tournament_stats
-#from polls.views import get_victories
-#from polls.views import get_defeats
-#from polls.views import get_victories_mode
-#from polls.views import get_points_by_match
+from polls.views import get_victories
+from polls.views import get_defeats
+from polls.views import get_victories_mode
+from polls.views import get_points_by_match
 from polls.views import get_match_stats
 from polls.views import is_user_signed_in
 #from polls.views import get_avatar
@@ -84,10 +84,10 @@ urlpatterns = [
     #path ('get/solostats/', get_solo_stats, name='home'),
     #path ('get/duostats/', get_duo_stats, name='home'),
     #path ('get/tournamentstats/', get_tournament_stats, name='home'),
-    #path ('get/victories/', get_victories, name='home'),
-    #path ('get/defeats/', get_defeats, name='home'),
-    #path ('get/victoriesbymode/', get_victories_mode, name='home'),
-    #path ('get/pointsbymatch/', get_points_by_match, name='home'),
+    path ('get/victories/', get_victories, name='home'),
+    path ('get/defeats/', get_defeats, name='home'),
+    path ('get/victoriesbymode/', get_victories_mode, name='home'),
+    path ('get/pointsbymatch/', get_points_by_match, name='home'),
     path ('get/matchstats/', get_match_stats, name='home'),
     path ('get/isuserconnected/', is_user_signed_in, name='home'),
     #path ('get/avatar/', get_avatar, name='home'),

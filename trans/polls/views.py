@@ -192,7 +192,7 @@ def tournament_end(request):
                     player1 = match_info[0]
                     player2 = match_info[1]
                     mode = match_info[2]
-                    winner = match_info[3]
+                    _winner = match_info[3]
                     player1_points = match_info[4]
                     player2_points = match_info[5]
                     date = data[6]
@@ -202,7 +202,7 @@ def tournament_end(request):
                             player1=player1,
                             player2=player2,
                             mode=mode,
-                            winner=winner,
+                            winner=_winner,
                             player1_points=player1_points,
                             player2_points=player2_points,
                             date=date,
@@ -236,10 +236,12 @@ def match_end(request):
                 return JsonResponse({'error': 'Unauthorized action'}, status=405)
             else:
                 data = json.loads(request.body)
-                player1 = data[0]
+                player1 = request.session.get('username')
                 player2 = data[1]
                 mode = data[2]
                 winner = data[3]
+                if winner == "player 1":
+                    winner = player1
                 player1_points = data[4]
                 player2_points = data[5]
                 date = data[6]
@@ -317,9 +319,9 @@ def get_global_stats(request):
                 return JsonResponse({'error': 'User is not logged in'}, status=405)
             data = json.loads(request.body)
             player_username = data[0]
-            if not Player.objects.filter(username=player_username).exists()
+            if not Player.objects.filter(username=player_username).exists():
                 return JsonResponse({'error': 'User is not assigned'}, status=405)
-            getmatches = Match.objects.filter(Q(player1=player_username))
+            matches = Match.objects.filter(player1=player_username)
             wins = matches.filter(winner=player_username).count()
             losses = matches.exclude(winner=player_username).count()
             total_points_won = 0
@@ -365,9 +367,9 @@ def get_victories(request):
                 return JsonResponse({'error': 'User is not logged in'}, status=405)
             data = json.loads(request.body)
             player_username = data[0]
-            if not Player.objects.filter(username=player_username).exists()
+            if not Player.objects.filter(username=player_username).exists():
                 return JsonResponse({'error': 'User is not assigned'}, status=405)
-            matches = Match.objects.filter(Q(player1=player_username))
+            matches = Match.objects.filter(player1=player_username)
             wins = matches.filter(winner=player_username).count()
             player_data = {
                 'matchesWon': wins
@@ -389,9 +391,9 @@ def get_defeats(request):
                 return JsonResponse({'error': 'User is not logged in'}, status=405)
             data = json.loads(request.body)
             player_username = data[0]
-            if not Player.objects.filter(username=player_username).exists()
+            if not Player.objects.filter(username=player_username).exists():
                 return JsonResponse({'error': 'User is not assigned'}, status=405)
-            matches = Match.objects.filter(Q(player1=player_username))
+            matches = Match.objects.filter(player1=player_username)
             losses = matches.exclude(winner=player_username).count()
             player_data = {
                 'matchesLost': losses
@@ -404,13 +406,59 @@ def get_defeats(request):
 
     return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-#@csrf_protect
-#def get_victories_mode(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def get_victories_mode(request):
+    if request.method == 'POST':
+        try:
+            # Check if user is logged in
+            if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
+                return JsonResponse({'error': 'User is not logged in'}, status=405)
+            data = json.loads(request.body)
+            player_username = data[0]
+            if not Player.objects.filter(username=player_username).exists():
+                return JsonResponse({'error': 'User is not assigned'}, status=405)
+            matches = Match.objects.filter(player1=player_username)
+            soloWins = matches.filter(winner=player_username, mode="0").count()
+            duoWins = matches.filter(winner=player_username, mode="1").count()
+            tournamentWins = matches.filter(winner=player_username, mode="2").count()
+            player_data = {
+                'SoloMatchesWins': soloWins,
+                'DuoMatchesWins': duoWins,
+                'TournamentMatchesWins': tournamentWins
+            }
+            return JsonResponse({'message': player_data}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-#@csrf_protect
-#def get_points_by_match(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
+
+@csrf_protect
+def get_points_by_match(request):
+    if request.method == 'POST':
+        try:
+            # Check if user is logged in
+            if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
+                return JsonResponse({'error': 'User is not logged in'}, status=405)
+            data = json.loads(request.body)
+            player_username = data[0]
+            if not Player.objects.filter(username=player_username).exists():
+                return JsonResponse({'error': 'User is not assigned'}, status=405)
+            matches = Match.objects.filter(player1=player_username)
+            response = []
+            for match in matches:
+                response.append(match.player1_points)
+            player_data = {
+                'matches': response
+            }
+            return JsonResponse({'message': player_data}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 @csrf_protect
 def get_match_stats(request):
