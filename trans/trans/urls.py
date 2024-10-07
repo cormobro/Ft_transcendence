@@ -43,10 +43,10 @@ from polls.views import post_remove_friend
 from polls.views import post_add_friend
 from polls.views import get_friends_list
 #from polls.views import post_42api
-#from polls.views import post_username
-#from polls.views import post_password
+from polls.views import post_username
+from polls.views import post_password
 #from polls.views import get_block
-# from polls.views import tournament_end
+from polls.views import tournament_end
 
 
 #urlpatterns = [
@@ -75,7 +75,7 @@ urlpatterns = [
 	path ('login/', log_in, name='home'),
 	path ('logout/', logout, name='home'),
 	path ('post/match/', match_end, name='home'),
-	# path ('tournament_end/', tournament_end, name='home'),
+	path ('post/tournament/', tournament_end, name='home'),
 	# path ('get_user_info', give_user_info, name='home'),
     path ('admin/', admin.site.urls),
     path ('get/bestplayers/', get_best_players, name='home'),
@@ -97,7 +97,7 @@ urlpatterns = [
     path ('post/addfriend/', post_add_friend, name='home'),
     path ('get/friendslist/', get_friends_list, name='home'),
     #path ('post/42api/', post_42api, name='home'),
-    #path ('post/username/', post_username, name='home'),
-    #path ('post/password/', post_password, name='home'),
+    path ('post/username/', post_username, name='home'),
+    path ('post/password/', post_password, name='home'),
     #path ('get/block/', get_block, name='home'),
 ]

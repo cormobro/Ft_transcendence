@@ -186,17 +186,20 @@ def tournament_end(request):
             else:
                 data = json.loads(request.body)
                 winner = data[0]
-                matches_data = data[1:]
+                match_info = data[1]
                 tournament = Tournament(winner=winner)
-                for match_info in matches_data:
-                    player1 = match_info[0]
-                    player2 = match_info[1]
-                    mode = match_info[2]
-                    _winner = match_info[3]
-                    player1_points = match_info[4]
-                    player2_points = match_info[5]
-                    date = data[6]
-                    duration = data[7]
+                tournament.save()
+                index = 0;
+                while index < len(match_info):
+                    player1 = match_info[index][0]
+                    player2 = match_info[index][1]
+                    mode = match_info[index][2]
+                    _winner = match_info[index][3]
+                    player1_points = match_info[index][4]
+                    player2_points = match_info[index][5]
+                    date = match_info[index][6]
+                    duration = match_info[index][7]
+                    index += 1
 
                     match = Match(
                             player1=player1,
@@ -206,7 +209,7 @@ def tournament_end(request):
                             player1_points=player1_points,
                             player2_points=player2_points,
                             date=date,
-                            duration=duration
+                            match_time=duration
                             )
                     match.save()
                     tournament.matchs.add(match)
@@ -216,7 +219,7 @@ def tournament_end(request):
                 Player.objects.get(username=request.session['username']).tournaments.add(tournament)
                 return JsonResponse({'message': 'Enregistré'}, status=200)
         except IndexError as e:
-            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+            return JsonResponse({'error': 'Missing index: ' + str(e)}, status=400)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'invalid JSON'}, status=400)
 
@@ -546,7 +549,7 @@ def post_decline_request(request):
                     return JsonResponse({'error': 'The user you\'re looking for is not registered'}, status=200)
                 username = request.session['username']
                 player = Player.objects.get(username=username)
-                elif player.friends_request.filter(username=targetUsername).exists():
+                if player.friends_request.filter(username=targetUsername).exists():
                     player.friends_request.remove(player.friends_request.get(username=targetUsername))
                     return JsonResponse({'message': 'You\'ve successfully declined the request'}, status=200)
         except IndexError as e:
@@ -566,7 +569,7 @@ def post_remove_friend(request):
                     return JsonResponse({'error': 'The user you\'re looking for is not registered'}, status=200)
                 username = request.session['username']
                 player = Player.objects.get(username=username)
-                elif player.friends.filter(username=targetUsername).exists():
+                if player.friends.filter(username=targetUsername).exists():
                     player.friends.remove(player.friends.get(username=targetUsername))
                     return JsonResponse({'message': 'You\'ve successfully deleted this friend'}, status=200)
         except IndexError as e:
@@ -625,10 +628,39 @@ def get_friends_list(request):
 #def post_42api(request):
 #    return JsonResponse({'error': 'Unauthorized method'}, status=405)
 
-#@csrf_protect
-#def post_username(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def post_username(request):
+    if request.method == 'POST':
+        try:
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'Unauthorized action'}, status=405)
+            elif request.session['username']:
+                data = json.loads(request.body)
+                targetUsername = data[0]
+                if Player.objects.filter(username=targetUsername).exists():
+                    return JsonResponse({'error': 'This username is already used'}, status=405)
+                else:
+                    player = Player.objects.get(username=request.session['username'])
+                    player.username = targetUsername
+                    player.save()
+                    return JsonResponse({'message': 'You\'ve successfully changed your username'}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-#@csrf_protect
-#def post_password(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def post_password(request):
+    if request.method == 'POST':
+        try:
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'Unauthorized action'}, status=405)
+            elif request.session['username']:
+                data = json.loads(request.body)
+                newPassword = data[0]
+                player = Player.objects.get(username=request.session['username'])
+                player.set_password(newPassword)
+                player.save()
+                return JsonResponse({'message': 'You\'ve successfully changed your password'}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)

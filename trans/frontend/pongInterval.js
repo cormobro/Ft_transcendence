@@ -418,12 +418,17 @@
 								if (totalPoints === playersCount - 1)
 								{
 									tournamentWinner = player2;
+									let _matches = [];
+									let postIndex = 0;
 									while (tempMatchId > 0)
 									{
+										_matches[postIndex] = [player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, ((Date.now() - matchDebut) / 1000)];
+										postIndex++;
 										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
 										tempMatchId--;
 										matchId++;
 									}
+									backendPost("/post/tournament/", tournamentWinner, _matches);
 									tempMatchesInstances = [];
 									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
 									tournamentId++;
@@ -495,12 +500,17 @@
 								if (totalPoints === playersCount - 1)
 								{
 									tournamentWinner = player1;
+									let _matches = [];
+									let postIndex = 0;
 									while (tempMatchId > 0)
 									{
+										_matches[postIndex] = [player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, ((Date.now() - matchDebut) / 1000)];
+										postIndex++;
 										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
 										tempMatchId--;
 										matchId++;
 									}
+									backendPost("/post/tournament/", tournamentWinner, _matches);
 									tempMatchesInstances = [];
 									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
 									tournamentId++;
@@ -531,22 +541,7 @@
 							rightPaddle = (canvas.height - paddleHeight) / 2;
 							ballSpeed = canvas.width / 250;
 							interval = setInterval(draw, 8);
-						}
-					}
-				}
-				if (y + dy > canvas.height - ballRadius || y + dy < ballRadius)
-					dy = -dy;
-
-				if (leftPaddleDownPressed)
-				{
-					leftPaddle = Math.min(leftPaddle + 7, canvas.height - paddleHeight);
-				}
-				else if (leftPaddleUpPressed)
-				{
-					leftPaddle = Math.max(leftPaddle - 7, 0);
-				}
-
-				if (rightPaddleDownPressed)
+						sed)
 				{
 					rightPaddle = Math.min(rightPaddle + 7, canvas.height - paddleHeight);
 				}
