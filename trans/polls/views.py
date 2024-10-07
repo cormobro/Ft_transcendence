@@ -308,7 +308,6 @@ def get_best_players(request):
 #
 #    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-
 @csrf_protect
 def get_global_stats(request):
     if request.method == 'POST':
@@ -318,7 +317,9 @@ def get_global_stats(request):
                 return JsonResponse({'error': 'User is not logged in'}, status=405)
             data = json.loads(request.body)
             player_username = data[0]
-            matches = Match.objects.filter(Q(player1=player_username))
+            if not Player.objects.filter(username=player_username).exists()
+                return JsonResponse({'error': 'User is not assigned'}, status=405)
+            getmatches = Match.objects.filter(Q(player1=player_username))
             wins = matches.filter(winner=player_username).count()
             losses = matches.exclude(winner=player_username).count()
             total_points_won = 0
@@ -343,8 +344,6 @@ def get_global_stats(request):
 
     return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-
-
 #@csrf_protect
 #def get_solo_stats(request):
 #    return JsonResponse({'error': 'Unauthorized method'}, status=405)
@@ -357,13 +356,53 @@ def get_global_stats(request):
 #def get_tournament_stats(request):
 #    return JsonResponse({'error': 'Unauthorized method'}, status=405)
 
-#@csrf_protect
-#def get_victories(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+@csrf_protect
+def get_victories(request):
+    if request.method == 'POST':
+        try:
+            # Check if user is logged in
+            if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
+                return JsonResponse({'error': 'User is not logged in'}, status=405)
+            data = json.loads(request.body)
+            player_username = data[0]
+            if not Player.objects.filter(username=player_username).exists()
+                return JsonResponse({'error': 'User is not assigned'}, status=405)
+            matches = Match.objects.filter(Q(player1=player_username))
+            wins = matches.filter(winner=player_username).count()
+            player_data = {
+                'matchesWon': wins
+            }
+            return JsonResponse({'message': player_data}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-#@csrf_protect
-#def get_defeats(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
+
+@csrf_protect
+def get_defeats(request):
+    if request.method == 'POST':
+        try:
+            # Check if user is logged in
+            if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
+                return JsonResponse({'error': 'User is not logged in'}, status=405)
+            data = json.loads(request.body)
+            player_username = data[0]
+            if not Player.objects.filter(username=player_username).exists()
+                return JsonResponse({'error': 'User is not assigned'}, status=405)
+            matches = Match.objects.filter(Q(player1=player_username))
+            losses = matches.exclude(winner=player_username).count()
+            player_data = {
+                'matchesLost': losses
+            }
+            return JsonResponse({'message': player_data}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 #@csrf_protect
 #def get_victories_mode(request):
