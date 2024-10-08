@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from datetime import datetime, timedelta
 from django.db import IntegrityError, connection, models
 from django.db.models import Count, Q, Sum, Case, When, F
-
+from .forms import UploadFileForm
 
 import requests
 import json
@@ -151,6 +151,12 @@ def log_in(request):
             # return HttpResponse("1")
         elif Player.objects.filter(username=username).exists():
             player = Player.objects.get(username=username)
+            if request.session.get('user_id'):
+                loggedPlayer = Player.objects.get(id=request.session['user_id'])
+                loggedPlayer.logged_in = False
+                loggedPlayer.save()
+                del request.session['user_id']
+                del request.session['username']
             if check_password(password, player.password):
                 request.session['user_id'] = player.id
                 request.session['username'] = player.username
@@ -510,10 +516,6 @@ def is_user_signed_in(request):
 #def get_avatar(request):
 #    return JsonResponse({'error': 'Unauthorized method'}, status=405)
 
-#@csrf_protect
-#def post_avatar(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
-
 @csrf_protect
 def get_requests(request):
     if request.method == 'POST':
@@ -661,6 +663,42 @@ def post_password(request):
                 player.set_password(newPassword)
                 player.save()
                 return JsonResponse({'message': 'You\'ve successfully changed your password'}, status=200)
+        except IndexError as e:
+            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
+
+@csrf_protect
+def post_avatar(request):
+    if request.method == "POST":
+        if not request.session.get('user_id'):
+            return JsonResponse({'error': 'You\re not logged in'}, status=405)
+        #form = UploadFileForm(request.POST, request.FILES)
+        #if form.is_valid():
+        if handle_uploaded_file(request.FILES["file"], request.session['username']) == 1:
+            return JsonResponse({'message': 'Your avatar has successfully been uploaded'}, status=200)
+        else:
+            return JsonResponse({'error': 'Error while uploading avatar'}, status=400)
+        #else:
+         #   return JsonResponse({'error': request.FILES}, status=400)
+            #return JsonResponse({'error': 'There seems to be a problem uploading your avatar'}, status=400)
+    else:
+        return JsonResponse({'error': 'Unauthorized action'}, status=405)
+    return JsonResponse({'error': 'Unknown error'}, status=400)
+
+def handle_uploaded_file(file, path):
+    with open("media/vangogh.jpg", "wb+") as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    return (1)
+
+@csrf_protect
+def get_current_user(request):
+    if request.method == 'POST':
+        try:
+            if not request.session.get('user_id'):
+                return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+            elif request.session['username']:
+                return JsonResponse({'message': request.session['username']}, status=200)
         except IndexError as e:
             return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
     return JsonResponse({'error': 'Unauthorized action'}, status=405)

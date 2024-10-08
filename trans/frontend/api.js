@@ -293,14 +293,15 @@ async function backendPost(path, ...data)
 async function avatarPost(fileInput)
 {
 	const formData = new FormData();
+	const csrfToken= getCookie('csrftoken');
 
 	formData.append('file', fileInput.files[0]);
 	try {
-		const response = await fetch("/post/changeavatar", {
+		const response = await fetch("/post/avatar/", {
 			method: "POST",
 			body: formData,
 			headers: {
-				'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+				'X-CSRFToken': csrfToken
 			}
 		});
 

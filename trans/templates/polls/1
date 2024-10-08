@@ -149,10 +149,9 @@
 							<div class="d-flex justify-content-center">
 								<h2 class="text-dark mb-4">Profil</h2>
 								<div id="playerProfile">
-									<form action="/post/avatar/" method="post" enctype="multipart/form-data">
-										{% csrf_token %}
-										<label for="file">Select a file:</label>
-										<input type="file" id="file" name="file"><br><br>
+									<form action="/post/avatar/" method="post">
+										<label for="myfile">Select a file:</label>
+										<input type="file" id="myfile" name="myfile"><br><br>
 										<input type="submit">
 									</form>
 								</div>

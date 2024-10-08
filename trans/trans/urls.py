@@ -36,7 +36,7 @@ from polls.views import get_points_by_match
 from polls.views import get_match_stats
 from polls.views import is_user_signed_in
 #from polls.views import get_avatar
-#from polls.views import post_avatar
+from polls.views import post_avatar
 from polls.views import get_requests
 from polls.views import post_decline_request
 from polls.views import post_remove_friend
@@ -47,6 +47,7 @@ from polls.views import post_username
 from polls.views import post_password
 #from polls.views import get_block
 from polls.views import tournament_end
+from polls.views import get_current_user
 
 
 #urlpatterns = [
@@ -90,7 +91,7 @@ urlpatterns = [
     path ('get/matchstats/', get_match_stats, name='home'),
     path ('get/isuserconnected/', is_user_signed_in, name='home'),
     #path ('get/avatar/', get_avatar, name='home'),
-    #path ('post/avatar/', post_avatar, name='home'),
+    path ('post/avatar/', post_avatar, name='home'),
     path ('get/friendrequests/', get_requests, name='home'),
     path ('post/declinefriendrequest/', post_decline_request, name='home'),
     path ('post/removefriend/', post_remove_friend, name='home'),
@@ -100,4 +101,5 @@ urlpatterns = [
     path ('post/username/', post_username, name='home'),
     path ('post/password/', post_password, name='home'),
     #path ('get/block/', get_block, name='home'),
+    path ('get/currentuser/', get_current_user, name='home'),
 ]
