@@ -9,7 +9,6 @@
 			let navbarHeight = navbar.offsetHeight;
 			canvas.height = window.innerHeight - navbarHeight;
 			canvas.width = canvas.height * 3/2;
-			console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
 
 			//----------- Ball coordinates -----------------------------------------------------------------
 
@@ -58,18 +57,7 @@
 				{name:"Player 7", score:0, alive:true},
 				{name:"Player 8", score:0, alive:true}
 			];
-			let idIndex = 4;
-			let matchId = 0;
-			let tournamentId = 0;
 			let tempMatchId = 0;
-			let matchesInstances = [];
-			let tempMatchesInstances = [];
-			let tournamentsInstances = [];
-			let playersInstances = [];
-			playersInstances.push(new Player(0, "Player 1"));
-			playersInstances.push(new Player(1, "Easy"));
-			playersInstances.push(new Player(2, "Medium"));
-			playersInstances.push(new Player(3, "Hard"));
 
 			//---------- Menu related informations ---------------------------------------------------------
 
@@ -114,7 +102,6 @@
 				loopDirection = 0;
 				playersCount = 1;
 				tempMatchId = 0;
-				tempMatchesInstances = [];
 				players = [
 				{name:"Player 1", score:0, alive:true},
 				{name:"Player 2", score:0, alive:true},
@@ -152,22 +139,9 @@
 				{
 					players[z].score = 0;
 					players[z].alive = true;
-					console.log("Name: ", players[z].name, " Score: ", players[z].score, " alive: ", players[z].alive);
 				}
 				totalPoints = 0;
 				findNextMatch();
-			}
-
-			function findInstance(name)
-			{
-				let InstanceIndex = 0;
-				while (playersInstances[InstanceIndex])
-				{
-					if (playersInstances[InstanceIndex].username === name)
-						return (InstanceIndex);
-					InstanceIndex++;
-				}
-				return (-1);
 			}
 
 			function drawMenu()
@@ -396,23 +370,13 @@
 						rightScore++;
 						if (rightScore === 3)
 						{
-							let myMatchController = null;
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player2;
 							if (gameMode != 2)
-							{
-								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
 								backendPost("/post/match/", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
-								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
-								myMatchController.updateMatchStatsView();
-								matchId++;
-							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], false, leftScore, rightScore));
-								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
-								myMatchController.updateMatchStatsView();
 								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
@@ -424,14 +388,9 @@
 									{
 										_matches[postIndex] = [player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, ((Date.now() - matchDebut) / 1000)];
 										postIndex++;
-										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
 										tempMatchId--;
-										matchId++;
 									}
 									backendPost("/post/tournament/", tournamentWinner, _matches);
-									tempMatchesInstances = [];
-									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
-									tournamentId++;
 								}
 								index = 0;
 								while (index < playersCount - 1)
@@ -483,18 +442,9 @@
 							clearInterval(interval);
 							winner = player1;
 							if (gameMode != 2)
-							{
-								matchesInstances.push(new Match(matchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000, playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
 								backendPost("/post/match/", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
-								myMatchController = new MatchController(matchesInstances[matchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
-								myMatchController.updateMatchStatsView();
-								matchId++;
-							}
 							if (gameMode === 2)
 							{
-								tempMatchesInstances.push(new Match(matchId + tempMatchId, gameMode, matchDebut, (Date.now() - matchDebut) / 1000,  playersInstances[findInstance(player1)], playersInstances[findInstance(player2)], true, leftScore, rightScore));
-								myMatchController = new MatchController(tempMatchesInstances[tempMatchesInstances.length - 1], playersInstances[findInstance(player1)], playersInstances[findInstance(player2)]);
-								myMatchController.updateMatchStatsView();
 								tempMatchId++;
 								totalPoints++;
 								if (totalPoints === playersCount - 1)
@@ -506,14 +456,9 @@
 									{
 										_matches[postIndex] = [player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, ((Date.now() - matchDebut) / 1000)];
 										postIndex++;
-										matchesInstances.push(tempMatchesInstances[totalPoints- tempMatchId]);
 										tempMatchId--;
-										matchId++;
 									}
 									backendPost("/post/tournament/", tournamentWinner, _matches);
-									tempMatchesInstances = [];
-									tournamentsInstances.push(new Tournament(tournamentId, playersInstances[findInstance(tournamentWinner)], matchId - totalPoints, matchId - 1));
-									tournamentId++;
 								}
 								index = 0;
 								while (index < playersCount - 1)
@@ -541,7 +486,22 @@
 							rightPaddle = (canvas.height - paddleHeight) / 2;
 							ballSpeed = canvas.width / 250;
 							interval = setInterval(draw, 8);
-						sed)
+						}
+					}
+				}
+				if (y + dy > canvas.height - ballRadius || y + dy < ballRadius)
+					dy = -dy;
+
+				if (leftPaddleDownPressed)
+				{
+					leftPaddle = Math.min(leftPaddle + 7, canvas.height - paddleHeight);
+				}
+				else if (leftPaddleUpPressed)
+				{
+					leftPaddle = Math.max(leftPaddle - 7, 0);
+				}
+
+				if (rightPaddleDownPressed)
 				{
 					rightPaddle = Math.min(rightPaddle + 7, canvas.height - paddleHeight);
 				}

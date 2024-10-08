@@ -68,17 +68,7 @@ duoSubmitButton.addEventListener('click', function(e) {
 	hideAllContentDivs();
 	onClickDuo();
 	player1 = inputs[0].value;
-	if (findInstance(player1) === -1)
-	{
-		playersInstances.push(new Player(idIndex, player1));
-		idIndex++;
-	}
 	player2 = inputs[1].value;
-	if (findInstance(player2) === -1)
-	{
-		playersInstances.push(new Player(idIndex, player2));
-		idIndex++;
-	}
 	document.getElementsByClassName('content-game')[0].style.display='block';
 	window.location.href = "#myGame";
 });
@@ -111,14 +101,7 @@ tournamentSubmitButton.addEventListener('click', function(e) {
 	hideAllContentDivs();
 	onClickTournament();
 	for (var i = 0; i < inputs.length; i++)
-	{
 		players[i].name = inputs[i].value;
-		if (findInstance(players[i].name) === -1)
-		{
-			playersInstances.push(new Player(idIndex, players[i].name));
-			idIndex++;
-		}
-	}
 	playersCount = inputs.length;
 	findNextMatch();
 	document.getElementsByClassName('content-game')[0].style.display='block';
