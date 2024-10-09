@@ -5,13 +5,13 @@ document.addEventListener("DOMContentLoaded", async function() {
 	// Vérifier le résultat et modifier le bouton en conséquence
 	if (buffer.error === "You're not logged in") {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="nav-link" href="#login">Log in</a>
+			<a class="btn btn-outline-light btn-sm" href="#login">Log in</a>
 		`;
 	} else if (buffer.error) {
 		document.getElementById("logInButton").innerHTML = buffer.error;
 	} else {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="nav-link" href="#profile" onclick="displayProfilePage()">Profile</a>
+			<a class="btn btn-outline-light btn-sm" href="#profile" onclick="displayProfilePage()">Profile</a>
 		`;
 	}
 });
@@ -35,7 +35,7 @@ async function displayLeaderboard() {
 	else{
 		document.getElementById('informationOutput').innerText = null;
 	for (let i = 0; i < playersList.length && playersList; i++){
-		document.getElementById('informationOutput').innerText += `${i} - ${playersList[i].username} (${playersList[i].matches_won} ${playersList[i].matches_won < 1 ? "win" : "wins"})\n`;
+		document.getElementById('informationOutput').innerText += `${i} - ${playersList[i].username} (${playersList[i].matches_won} ${playersList[i].matches_won < 2 ? "win" : "wins"})\n`;
 	}
 	}
 }
@@ -66,7 +66,7 @@ function displayCurrentMatchStats(){
 var currInputPlayer;
 function searchAndDisplayPlayerStats(){
 
-	currInputPlayer = document.getElementById('searchInputPlayer');
+	currInputPlayer = document.getElementById('searchPlayerInput');
 	displayGlobalStats();
 }
 
@@ -78,7 +78,6 @@ async function displayGlobalStats() {
 		`;
 		return;
 	}
-	console.log(currInputPlayer.value);
 	await backendPost("/get/globalstats/", currInputPlayer.value);
 	if (buffer.error){
 		document.getElementById("playerStatsOutput").innerHTML = `
@@ -86,7 +85,6 @@ async function displayGlobalStats() {
 		`
 	}
 	else{
-	console.log(buffer.message);
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-dark">Global statistics of ${currInputPlayer.value}</h3>
 		<p class="text-dark">Points won : ${buffer.message.pointsWon}</p>
@@ -486,6 +484,12 @@ async function displayMatchStats(){
 
 function displayProfilePage(){
 
+	document.getElementById("searchProfileInput").value = '';
+	document.getElementById("newUsernameInput").value = '';
+	document.getElementById("newPasswordInput").value = '';
+	document.getElementById("addFriendOutput").innerHTML = null;
+	// document.getElementById("updateUsernameOutput").innerText = null;
+	// document.getElementById("updatePasswordOutput").innerText = null;
 	displayUsername();
 	// displayAvatar();
 	displayFriendsList();
@@ -495,6 +499,7 @@ async function displayUsername(){
 
 	var currentUser;
 	await backendPost("/get/currentuser/");
+	console.log("Current User: "+buffer.message);
 	if (buffer.error)
 		document.getElementById("usernameProfileOutput").innerText = buffer.error;
 	else
@@ -506,12 +511,12 @@ async function displayUsername(){
 	if (buffer.error)
 		document.getElementById("victoriesProfileOutput").innerText = buffer.error;
 	else
-		document.getElementById("victoriesProfileOutput").innerText = `${buffer.message.matchesWon} ${buffer.message.matchesWon < 1 ? " win" : " wins"}`;
+		document.getElementById("victoriesProfileOutput").innerText = `${buffer.message.matchesWon} ${buffer.message.matchesWon < 2 ? " win" : " wins"}`;
 	await backendPost("/get/defeats/", currentUser);
 	if (buffer.error)
 		document.getElementById("defeatsProfileOutput").innerText = buffer.error;
 	else
-		document.getElementById("defeatsProfileOutput").innerText = `${buffer.message.matchesLost} ${buffer.message.matchesLost < 1 ? " loss" : " losses"}`;
+		document.getElementById("defeatsProfileOutput").innerText = `${buffer.message.matchesLost} ${buffer.message.matchesLost < 2 ? " loss" : " losses"}`;
 }
 
 // function displayAvatar(){
@@ -534,13 +539,18 @@ async function displayUsername(){
 
 async function searchAndAddFriend(){
 
-	var input = document.getElementById('searchInputProfile');
+	var input = document.getElementById('searchProfileInput');
 	await backendPost("/post/addfriend/", input.value);
 	if (buffer.error){
-		document.getElementById("addFriendOutput").innerHTML = buffer.error;
+		document.getElementById("addFriendOutput").innerHTML = `
+			<p class="text-light">${buffer.error}</p>
+		`;
 	}
 	else{
-		document.getElementById("addFriendOutput").innerHTML = buffer.message;
+		document.getElementById("addFriendOutput").innerHTML = `
+			<p class="text-light">${buffer.message}</p>
+		`;
+		displayFriendsList();
 	}
 }
 
@@ -551,7 +561,7 @@ async function displayFriendsList() {
 	if (buffer.error){
 		document.getElementById("requestsList").innerHTML = `
 		<p class="text-light">${buffer.error}</p>
-		`
+		`;
 	}
 	else{
 		const requestsList = buffer.message.requests;
@@ -560,11 +570,10 @@ async function displayFriendsList() {
 		document.getElementById("requestsList").innerHTML += `
 			<li class="d-flex inline">
 				<h5>${requestsList[i]}</h5>
-				<button type="button" class="btn btn-outline-light ms-2"><i class="bi bi-check-circle" style="font-size: 20px"></i></button>
-				<button type="button" class="btn btn-outline-light ms-3"><i class="bi bi-slash-circle" style="font-size: 20px"></i></button>
+				<button type="button" class="btn btn-outline-light ms-2" onclick="acceptFriendRequest('${requestsList[i]}')"><i class="bi bi-check-circle" style="font-size: 20px"></i></button>
+				<button type="button" class="btn btn-outline-light ms-3" onclick="declineFriendRequest('${requestsList[i]}')"><i class="bi bi-slash-circle" style="font-size: 20px"></i></button>
 			</li>
 		`
-		//event listener to accept or decline invitation
 	}
 	}
 	//loop here to display friends list
@@ -572,58 +581,71 @@ async function displayFriendsList() {
 	if (buffer.error){
 		document.getElementById("friendsList").innerHTML = `
 		<p class="text-light">${buffer.error}</p>
-		`
+		`;
 	}
 	else{
-		console.log(buffer.message);
-		console.log(buffer.message.friends);
 		const friendsList = buffer.message.friends;
 		document.getElementById("friendsList").innerHTML = null;
 	for (let i = 0; i < friendsList.length; i++){
-		// backendPost("/get/isuserconnected/", friend);
-		// if (buffer === true){
-			//if friend is online display a 'green circle'
+		await backendPost("/get/isuserconnected/", friendsList[i]);
+		if (buffer.error){
 			document.getElementById("friendsList").innerHTML += `
-				<li class="d-flex inline">
-					<h5>${friendsList[i]}</h5>
-					<img src="img/icons8-online-24.png" alt="online" width="24" height="24"></img>
-					<button type="button" class="btn btn-outline-light ms-3"><i class="bi bi-trash3" style="font-size: 20px"></i></button>
-				</li>
-			`
-		// }
-		// else{
-		// 	//else display a 'red circle'
-		// 	document.getElementById("friendsList").innerHTML.innerHTML += `
-		// 		<li class="d-flex inline">
-		// 			<h5>${friend}</h5>
-		// 			<img src="img/icons8-offline-24.png" alt="offline" width="24" height="24"></img>
-		// 			<button type="button" class="btn btn-outline-light ms-3"><i class="bi bi-trash3" style="font-size: 20px"></i></button>
-		// 		</li>
-		// 	`
-		// }
+				<p class="text-light">${buffer.error}</p>
+			`;
+		}
+		else{
+			if (buffer.message === "True"){
+				//if friend is online display a 'green circle'
+				document.getElementById("friendsList").innerHTML += `
+					<li class="d-flex inline">
+						<h5>${friendsList[i]}</h5>
+						<img src="static/img/icons8-online-24.png" alt="online" width="24" height="24">
+						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 20px"></i></button>
+					</li>
+				`;
+			}
+			else{
+				//else display a 'red circle'
+				document.getElementById("friendsList").innerHTML += `
+					<li class="d-flex inline">
+						<h5>${friendsList[i]}</h5>
+						<img src="static/img/icons8-offline-24.png" alt="offline" width="24" height="24">
+						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 20px"></i></button>
+					</li>
+				`;
+			}
+		}
 	}
 	}
 }
 
-// function acceptFriendRequest(requestor){
+async function acceptFriendRequest(requestor){
 
-// 	backendPost("/post/acceptfriendrequest/", requestor);
-// 	displayFriendsList();
-// }
+	await backendPost("/post/addfriend/", requestor);
+	if (buffer.error)
+		alert(buffer.error);
+	else
+		displayFriendsList();
+}
 
-// function declineFriendRequest(requestor){
+async function declineFriendRequest(requestor){
 
-// 	backendPost("/post/declinefriendrequest/", requestor);
-// 	displayFriendsList();
-// }
+	await backendPost("/post/declinefriendrequest/", requestor);
+	if (buffer.error)
+		alert(buffer.error);
+	else
+		displayFriendsList();
+}
 
-// function removeFriend(friend){
+async function removeFriend(friend){
 
-// 	backendPost("/post/removefriend/", friend);
-// 	displayFriendsList();
-// }
+	await backendPost("/post/removefriend/", friend);
+	if (buffer.error)
+		alert(buffer.error);
+	else
+		displayFriendsList();
+}
 
-// Appeler la fonction await backendPost ici
 async function updateLogInButton(){
 
 	await backendPost("/get/currentuser/");
@@ -631,13 +653,13 @@ async function updateLogInButton(){
 	// Vérifier le résultat et modifier le bouton en conséquence
 	if (buffer.error === "You're not logged in") {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="nav-link" href="#login">Log in</a>
+			<a class="btn btn-outline-light btn-sm" href="#login">Log in</a>
 		`;
 	} else if (buffer.error) {
 		document.getElementById("logInButton").innerHTML = buffer.error;
 	} else {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="nav-link" href="#profile" onclick="displayProfilePage()">Profile</a>
+			<a class="btn btn-outline-light btn-sm" href="#profile" onclick="displayProfilePage()">Profile</a>
 		`;
 	}
 }
@@ -646,7 +668,7 @@ async function logInWith42(){
 
 	await backendPost("/api_42/");
 	if (buffer.error){
-		document.getElementById("logInOutput").innerText = buffer.error;
+		alert(buffer.error);
 	}
 	else{
 		window.location.href = "#home";
@@ -682,6 +704,7 @@ async function logIn(){
 	}
 	else{
 		window.location.href = "#home";
+		frm.reset();
 		// hideAllContentDivs();
 		// document.getElementsByClassName('content-profile')[0].style.display='block';
 	}
@@ -725,18 +748,19 @@ async function signUp(){
 	}
 	else{
 		window.location.href = "#home";
+		frm.reset();
 		// hideAllContentDivs();
 		// document.getElementsByClassName('content-profile')[0].style.display='block';
 	}
 	updateLogInButton();
 }
 
-function updateUsername(){
+async function updateUsername(){
 
 	var frm = document.querySelector('#updateUsernameForm');
-	var inputs = frm.querySelectorAll('input[type=text]');
+	var input = frm.querySelector('input[type=text]');
 
-	const value = inputs[1].value;
+	const value = input.value;
 	if (value.includes(" ")){
 		document.getElementById('updateUsernameOutput').innerText = 'Mauvaise saisie: "' + value + '" contient des espaces.';
 		return false;
@@ -745,16 +769,23 @@ function updateUsername(){
 		document.getElementById('updateUsernameOutput').innerText = 'Champ vide.';
 		return false;
 	}
-	// backendPost("/post/username/", value);
-	// document.getElementById("updateUsernameOutput").innerText = buffer;
+	await backendPost("/post/username/", value);
+	if (buffer.error){
+		document.getElementById("updateUsernameOutput").innerText = buffer.error;
+	}
+	else{
+		document.getElementById("updateUsernameOutput").innerText = buffer.message;
+		displayUsername();
+		frm.reset();
+	}
 }
 
-function updatePassword(){
+async function updatePassword(){
 
 	var frm = document.querySelector('#updatePasswordForm');
-	var inputs = frm.querySelectorAll('input[type=password]');
+	var input = frm.querySelector('input[type=password]');
 
-	const value = inputs[1].value;
+	const value = input.value;
 	if (value.includes(" ")){
 		document.getElementById('updatePasswordOutput').textContent = 'Mauvaise saisie: "' + value + '" contient des espaces.';
 		return false;
@@ -763,8 +794,14 @@ function updatePassword(){
 		document.getElementById('updatePasswordOutput').textContent = 'Champ vide.';
 		return false;
 	}
-	// backendPost("/post/password/", value);
-	// document.getElementById("updatePasswordOutput").innerText = buffer;
+	await backendPost("/post/password/", value);
+	if (buffer.error){
+		document.getElementById("updateUsernameOutput").innerText = buffer.error;
+	}
+	else{
+		document.getElementById("updatePasswordOutput").innerText = buffer.message;
+		frm.reset();
+	}
 }
 
 function addPlayerToForm(){
@@ -811,7 +848,7 @@ function removePlayerFromForm(){
 	divInputs[divInputs.length - 1].remove();
 }
 
-async function launchTournament(){
+async function checkInputsAndPlayTournament(){
 
 	var frm = document.querySelector('#tournamentForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
@@ -849,9 +886,10 @@ async function launchTournament(){
 	hideAllContentDivs();
 	document.getElementsByClassName('content-game')[0].style.display='block';
 	window.location.href = "#game";
+	frm.reset();
 }
 
-async function launchDuoMatch(){
+async function checkInputAndPlay(){
 
 	var frm = document.querySelector('#duoForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
@@ -886,6 +924,7 @@ async function launchDuoMatch(){
 	hideAllContentDivs();
 	document.getElementsByClassName('content-game')[0].style.display='block';
 	window.location.href = "#game";
+	frm.reset();
 }
 
 // window.addEventListener('popstate', function (e) {
@@ -929,6 +968,14 @@ window.addEventListener('hashchange', function (e) {
 				hideAllContentDivs();
 				page = 'content-' + currentFragment;
 				document.getElementsByClassName(page)[0].style.display='block';
+				if (currentFragment === "stats"){
+					document.getElementById("playerStatsOutput").innerHTML = null;
+					document.getElementById("searchPlayerInput").value = '';
+					currInputPlayer = '';
+				}
+				if (currentFragment === "blockchain"){
+					document.getElementById("tournamentIdInput").value = '';
+				}
 			// }
 			// previousFragment = currentFragment;
 			break;

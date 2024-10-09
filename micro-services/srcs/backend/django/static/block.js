@@ -17,7 +17,7 @@ function setBlock(tournamentMatches, tournamentId, tournamentWinner, matchesNumb
 
 async function getBlock(){
 
-	const tournamentId = document.getElementById("tournamentId").value;
+	const tournamentId = document.getElementById("tournamentIdInput").value;
 	nodeUrl = "http://ganache:7545";
 	await backendPost("/get/getblock/", nodeUrl, tournamentId);
 	if (buffer.scores !== undefined && buffer.winner !== undefined){

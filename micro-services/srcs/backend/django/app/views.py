@@ -761,6 +761,7 @@ def post_username(request):
 					player = Player.objects.get(username=request.session['username'])
 					player.username = targetUsername
 					player.save()
+					request.session['username'] = player.username
 					return JsonResponse({'message': 'You\'ve successfully changed your username'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)

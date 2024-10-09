@@ -394,6 +394,7 @@
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player2;
+							displayCurrentMatchStats();
 							if (gameMode != 2)
 								backendPost("/post/match/", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 							if (gameMode === 2)
@@ -458,6 +459,7 @@
 							ctx.clearRect(0, 0, canvas.width, canvas.height);
 							clearInterval(interval);
 							winner = player1;
+							displayCurrentMatchStats();
 							if (gameMode != 2)
 								backendPost("/post/match/", player1, player2, gameMode, winner, leftScore, rightScore, matchDebut, (Date.now() - matchDebut) / 1000);
 							if (gameMode === 2)
