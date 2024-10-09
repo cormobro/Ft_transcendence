@@ -34,7 +34,7 @@ def manage_42_api_step1(request):
 			f"&state={state}"
 			)
 
-	return redirect(auth_url)
+	return JsonResponse({'auth_url': auth_url})
 
 @csrf_protect
 def manage_42_api_step2(request):
@@ -76,7 +76,7 @@ def manage_42_api_step3(code, state, request):
 		# return HttpResponse(f"The token is {access_token}")
 		return use_access_token(access_token, request)
 	else:
-		return HttpResponse(response)
+		return HttpResponse(request_info)
 		#return HttpResponse(f"Error code : {response.status_code} and code was {code}")
 
 def use_access_token(access_token, request):
@@ -95,10 +95,9 @@ def use_access_token(access_token, request):
 		player.linked_42_acc = username_42
 		try:
 			player.save()
-			message = "Account linked succesfully"
+			return JsonResponse({'message': 'Account linked successfully'}, status=200)
 		except IntegrityError:
-			message = "This 42 acc is already linked to another player"
-		return render(request, 'app/index.html', {'message': message})
+			return JsonResponse({'message': 'This 42 acc is already linked to another player'}, status=200)
 	else:
 		request_info = f"""
 		Request Method: {response.request.method}
@@ -134,7 +133,7 @@ def create_account(request):
 				request.session['username'] = new_player.username
 				return JsonResponse({'message': 'Account created'}, status=200)
 		except IntegrityError:
-			return JsonResponse({'message': 'This username already exists'}, status=200)
+			return JsonResponse({'error': 'This username already exists'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
