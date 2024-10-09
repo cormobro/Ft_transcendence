@@ -664,18 +664,35 @@ async function updateLogInButton(){
 	}
 }
 
-async function logInWith42(){
+async function logInWith42() {
+	try {
+		const response = await fetch("/api_42/");
 
-	await backendPost("/api_42/");
-	if (buffer.error){
-		alert(buffer.error);
+		if (response.ok) {
+			const data = await response.json();
+			window.location.href = data.auth_url; // Redirection manuelle vers l'URL reçue
+		} else {
+			const buffer = await response.json();
+			document.getElementById("linkMessage").innerText = buffer.error || "Unknown error";
+		}
+	} catch (error) {
+		document.getElementById("linkMessage").innerText = "Network error: " + error.message;
 	}
-	else{
-		window.location.href = "#home";
-		// hideAllContentDivs();
-		// document.getElementsByClassName('content-profile')[0].style.display='block';
+}
+
+async function handleLinkResponse() {
+	try {
+		const response = await fetch("/api_code/"); // L'URL de retour après la redirection OAuth
+		if (response.ok) {
+			const data = await response.json();
+			document.getElementById("linkMessage").innerText = data.message;
+		} else {
+			const buffer = await response.json();
+			document.getElementById("linkMessage").innerText = buffer.error || "Error linking account";
+		}
+	} catch (error) {
+		document.getElementById("linkMessage").innerText = "Network error: " + error.message;
 	}
-	updateLogInButton();
 }
 
 async function logIn(){
