@@ -9,6 +9,7 @@ fclean:
 	@docker image rm -f $(shell docker images -qa)
 	@docker volume rm $(shell docker volume ls -q)
 	@docker network rm micro-services_app-network
+	rm -rf srcs/shared/build/contracts/TournamentScores.json
 
 prune:
 	@docker system prune

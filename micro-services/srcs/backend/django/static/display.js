@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function() {
 	// Appeler la fonction await backendPost ici
 	await backendPost("/get/currentuser/");
-	console.log(buffer.message);
 	// Vérifier le résultat et modifier le bouton en conséquence
 	if (buffer.error === "You're not logged in") {
 		document.getElementById("logInButton").innerHTML = `
@@ -14,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 			<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
 		`;
 	}
+	window.location.href="#home";
 });
 
 function displayNextMatch() {
@@ -43,23 +43,23 @@ async function displayLeaderboard() {
 function displayCurrentMatchStats(){
 
 	document.getElementById("matchStatsOutput").innerHTML = `
-		<h3 class="text-dark">Statistiques de la partie : ${player1} - ${player2}</h3>
-		<p class="text-dark">Points gagnés par ${player1} : ${leftScore}</p>
-		<p class="text-dark">Points gagnés par ${player2} : ${rightScore}</p>
-		<p class="text-dark">Points joués : ${leftScore + rightScore}</p>
-		<p class="text-dark">Victoire de : ${leftScore > rightScore ? player1 : player2}</p>
+		<h3 class="text-dark">Statistics of the match : ${player1} - ${player2}</h3>
+		<p class="text-dark">Points won by ${player1} : ${leftScore}</p>
+		<p class="text-dark">Points won by ${player2} : ${rightScore}</p>
+		<p class="text-dark">Points played : ${leftScore + rightScore}</p>
+		<p class="text-dark">Winner is : ${leftScore > rightScore ? player1 : player2}</p>
 	`;
 	document.getElementById("player1StatsOutput").innerHTML = `
-		<h3 class="text-dark">Statistiques de ${player1}</h3>
-		<p class="text-dark">Points gagnés : ${leftScore}</p>
-		<p class="text-dark">Points perdus : ${rightScore}</p>
-		<p class="text-dark">Précision : ${Math.round(leftScore/(rightScore + leftScore)*100)}%</p>
+		<h3 class="text-dark">Statistics of ${player1}</h3>
+		<p class="text-dark">Points won : ${leftScore}</p>
+		<p class="text-dark">Points lost : ${rightScore}</p>
+		<p class="text-dark">Accuracy : ${Math.round(leftScore/(rightScore + leftScore)*100)}%</p>
 	`;
 	document.getElementById("player2StatsOutput").innerHTML = `
-		<h3 class="text-dark">Statistiques de ${player2}</h3>
-		<p class="text-dark">Points gagnés : ${rightScore}</p>
-		<p class="text-dark">Points perdus : ${leftScore}</p>
-		<p class="text-dark">Précision : ${Math.round(rightScore/(rightScore + leftScore)*100)}%</p>
+		<h3 class="text-dark">Statistics of ${player2}</h3>
+		<p class="text-dark">Points won : ${rightScore}</p>
+		<p class="text-dark">Points lost : ${leftScore}</p>
+		<p class="text-dark">Accuracy : ${Math.round(rightScore/(rightScore + leftScore)*100)}%</p>
 	`;
 }
 
@@ -80,9 +80,10 @@ async function displayGlobalStats() {
 	}
 	await backendPost("/get/globalstats/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -107,9 +108,10 @@ async function displaySoloStats(){
 	}
 	await backendPost("/get/solostats/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -134,9 +136,10 @@ async function displayDuoStats(){
 	}
 	await backendPost("/get/duostats/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -161,9 +164,10 @@ async function displayTournamentStats(){
 	}
 	await backendPost("/get/tournamentstats/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -191,9 +195,10 @@ async function displayVictoriesAndDefeatsGraph(){
 	}
 	await backendPost("/get/victories/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 		return;
 	}
 	const victories = buffer.message.matchesWon;
@@ -227,7 +232,7 @@ async function displayVictoriesAndDefeatsGraph(){
 
 	const chartOptions = {
 		canvas: canvas,
-		seriesName: "Results distribution",
+		seriesName: "Number of victories and defeats",
 		padding: 40,
 		data: {
 			"Victories": victories,
@@ -241,7 +246,7 @@ async function displayVictoriesAndDefeatsGraph(){
 
 	// const titleOptions = {
 	// 	canvas: canvas,
-	// 	seriesName: "Results distribution",
+	// 	seriesName: "Number of victories and defeats",
 	// 	align: "center",
 	// 	fill: "dark",
 	// 	font: {
@@ -278,9 +283,10 @@ async function displayVictoriesByModeGraph(){
 	}
 	await backendPost("/get/victoriesbymode/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 		return;
 	}
 	const soloWins = buffer.message.SoloMatchesWins;
@@ -310,7 +316,7 @@ async function displayVictoriesByModeGraph(){
 		tournamentWins / 3);
 	const barChartOptions = {
 		canvas: canvas,
-		seriesName:"Répartition des victoires par mode de jeux",
+		seriesName:"Victories by game mode",
 		padding: 20,
 		gridScale: gridScaleValue,
 		gridColor:"#0X33E31",
@@ -327,7 +333,7 @@ async function displayVictoriesByModeGraph(){
 
 	// const titleOptions = {
 	// 	canvas: canvas,
-	// 	seriesName: "Répartition des victoires par mode de jeux",
+	// 	seriesName: "Victories by game mode",
 	// 	align: "center",
 	// 	fill: "dark",
 	// 	font: {
@@ -365,19 +371,31 @@ async function displayPointsByMatchGraph(){
 	}
 	await backendPost("/get/pointsbymatch/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 		return;
 	}
 	const pointsOverTime = buffer.message.matches;
 	if (pointsOverTime.length === 0){
 		document.getElementById("playerStatsOutput").innerHTML = `
 			<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
-			<p class="text-dark">No matches or no wins found</p>
+			<p class="text-dark">No matches found</p>
 		`;
+		return;
 	}
-	else{
+	for (let i = 0; i < pointsOverTime.length; i++){
+		if (pointsOverTime[i] > 0)
+			break;
+		else if (i === pointsOverTime.length - 1){
+			document.getElementById("playerStatsOutput").innerHTML = `
+				<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
+				<p class="text-dark">No points won</p>
+			`;
+			return;
+		}
+	}
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-dark">Graphic stats of ${currInputPlayer.value}</h3>
 		<div class="d-flex align-item-center">
@@ -402,7 +420,7 @@ async function displayPointsByMatchGraph(){
 
 	const plotChartOptions = {
 		canvas: canvas,
-			seriesName:"Points gagnés au cours des parties",
+			seriesName:"Points won over time",
 			padding:20,
 			gridScale:gridScaleValue,
 			gridColor:"black",
@@ -417,7 +435,7 @@ async function displayPointsByMatchGraph(){
 
 	// const titleOptions = {
 	// 	canvas: canvas,
-	// 	seriesName: "Points gagnés au cours des parties",
+	// 	seriesName: "Points won over time",
 	// 	align: "center",
 	// 	fill: "dark",
 	// 	font: {
@@ -439,7 +457,6 @@ async function displayPointsByMatchGraph(){
 
 	var myPlotChartLegend = new Legend(legendOptions);
 	myPlotChartLegend.drawLegend();
-	}
 }
 
 async function displayMatchStats(){
@@ -453,9 +470,10 @@ async function displayMatchStats(){
 
 	await backendPost("/get/matchstats/", currInputPlayer.value);
 	if (buffer.error){
-		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
-		`
+		alert(buffer.error);
+		// document.getElementById("playerStatsOutput").innerHTML = `
+		// <p class="text-dark">${buffer.error}</p>
+		// `;
 		return;
 	}
 	const matches = JSON.parse(buffer.message);
@@ -484,6 +502,7 @@ async function displayMatchStats(){
 
 function displayProfilePage(){
 
+
 	document.getElementById("searchProfileInput").value = '';
 	document.getElementById("newUsernameInput").value = '';
 	document.getElementById("newPasswordInput").value = '';
@@ -499,7 +518,6 @@ async function displayUsername(){
 
 	var currentUser;
 	await backendPost("/get/currentuser/");
-	console.log("Current User: "+buffer.message);
 	if (buffer.error)
 		document.getElementById("usernameProfileOutput").innerText = buffer.error;
 	else
@@ -707,11 +725,11 @@ async function logIn(){
 	for (var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('logInOutput').innerText = 'Mauvaise saisie: "' + value + '" contient des espaces.';
+			document.getElementById('logInOutput').innerText = 'Wrong entry: "' + value + '" contains spaces.';
 			return false;
 		}
 		else if (value === ''){
-			document.getElementById('logInOutput').innerText = 'Champ vide.';
+			document.getElementById('logInOutput').innerText = 'Empty field.';
 			return false;
 		}
 	}
@@ -751,11 +769,11 @@ async function signUp(){
 	for (var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('signUpOutput').innerText = 'Mauvaise saisie: "' + value + '" contient des espaces.';
+			document.getElementById('signUpOutput').innerText = 'Wrong entry: "' + value + '" contains spaces.';
 			return false;
 		}
 		else if (value === ''){
-			document.getElementById('signUpOutput').innerText = 'Champ vide.';
+			document.getElementById('signUpOutput').innerText = 'Empty field.';
 			return false;
 		}
 	}
@@ -779,11 +797,11 @@ async function updateUsername(){
 
 	const value = input.value;
 	if (value.includes(" ")){
-		document.getElementById('updateUsernameOutput').innerText = 'Mauvaise saisie: "' + value + '" contient des espaces.';
+		document.getElementById('updateUsernameOutput').innerText = 'Wrong entry: "' + value + '" contains spaces.';
 		return false;
 	}
 	else if (value === ''){
-		document.getElementById('updateUsernameOutput').innerText = 'Champ vide.';
+		document.getElementById('updateUsernameOutput').innerText = 'Empty field.';
 		return false;
 	}
 	await backendPost("/post/username/", value);
@@ -804,11 +822,11 @@ async function updatePassword(){
 
 	const value = input.value;
 	if (value.includes(" ")){
-		document.getElementById('updatePasswordOutput').textContent = 'Mauvaise saisie: "' + value + '" contient des espaces.';
+		document.getElementById('updatePasswordOutput').textContent = 'Wrong entry: "' + value + '" contains spaces.';
 		return false;
 	}
 	else if (value === ''){
-		document.getElementById('updatePasswordOutput').textContent = 'Champ vide.';
+		document.getElementById('updatePasswordOutput').textContent = 'Empty field.';
 		return false;
 	}
 	await backendPost("/post/password/", value);
@@ -875,15 +893,15 @@ async function checkInputsAndPlayTournament(){
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('tournamentOutputText').innerText = 'Mauvaise saisie: "' + value + '" contient des espaces.';
+			document.getElementById('tournamentOutputText').innerText = 'Wrong entry: "' + value + '" contains spaces.';
 			return false;
 		}
 		else if (classArr.includes(value)){
-			document.getElementById('tournamentOutputText').innerText = 'Mauvaise saisie: "' + value + '" est doublon.';
+			document.getElementById('tournamentOutputText').innerText = 'Wrong entry: "' + value + '" is duplicated.';
 			return false;
 		}
 		if (value === ''){
-			document.getElementById('tournamentOutputText').innerText = 'Veuillez remplir tous les champs.';
+			document.getElementById('tournamentOutputText').innerText = 'Please fill in all the fields.';
 			return false;
 		}
 		classArr.push(value);
@@ -916,15 +934,15 @@ async function checkInputAndPlay(){
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('duoOutputText').innerText = 'Mauvaise saisie: "' + value + '" contient des espaces.';
+			document.getElementById('duoOutputText').innerText = 'Wrong entry: "' + value + '" contains spaces.';
 			return false;
 		}
 		else if (classArr.includes(value)){
-			document.getElementById('duoOutputText').innerText = 'Mauvaise saisie: "' + value + '" est doublon.';
+			document.getElementById('duoOutputText').innerText = 'Wrong entry: "' + value + '" is duplicated.';
 			return false;
 		}
 		if (value === ''){
-			document.getElementById('duoOutputText').innerText = 'Veuillez remplir tous les champs.';
+			document.getElementById('duoOutputText').innerText = 'Please fill in all the fields.';
 			return false;
 		}
 		classArr.push(value);
@@ -1005,7 +1023,18 @@ window.addEventListener('hashchange', function (e) {
 				}
 			// }
 			// previousFragment = currentFragment;
+				if (currentFragment === "game")
+					window.location.href = "#game";
+				else
+					scroll();
 			break;
 		}
 	}
 });
+
+function scroll() {
+	window.scrollTo({
+		top: 0,
+		behavior: 'smooth'
+	});
+}

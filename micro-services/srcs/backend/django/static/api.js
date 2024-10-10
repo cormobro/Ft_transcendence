@@ -271,7 +271,6 @@ async function backendPost(path, ...data)
 	}
 	try {
 		const csrfToken = getCookie('csrftoken');
-		console.log("Send fetch request");
 		response = await fetch(path, {
 			method: "POST",
 			body: JSON.stringify(_data),
