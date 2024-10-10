@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from datetime import datetime, timedelta
 from django.db import IntegrityError, connection, models
 from django.db.models import Count, Q, Sum, Case, When, F
-from .forms import UploadFileForm
+from .forms import AvatarForm
 
 import requests
 import json
@@ -512,9 +512,6 @@ def is_user_signed_in(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'invalid JSON'}, status=400)
     return JsonResponse({'error': 'Unauthorized method'}, status=405)
-#@csrf_protect
-#def get_avatar(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
 
 @csrf_protect
 def get_requests(request):
@@ -671,25 +668,38 @@ def post_password(request):
 def post_avatar(request):
     if request.method == "POST":
         if not request.session.get('user_id'):
-            return JsonResponse({'error': 'You\re not logged in'}, status=405)
-        #form = UploadFileForm(request.POST, request.FILES)
-        #if form.is_valid():
-        if handle_uploaded_file(request.FILES["file"], request.session['username']) == 1:
-            return JsonResponse({'message': 'Your avatar has successfully been uploaded'}, status=200)
+            #return HttpResponse("You're not logged in")
+            return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+        player = Player.objects.get(username=request.session['username'])
+        form = AvatarForm(request.POST, request.FILES, instance=player)
+        #form = Player.objects.get(username=request.session['username']).avatar_img.AvatarForm(request.POST, request.FILES)
+        #form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            #return HttpResponse("Avatar has been uploaded")
+            return JsonResponse({'message': 'Avatar has been uploaded successfully'}, status=200)
         else:
-            return JsonResponse({'error': 'Error while uploading avatar'}, status=400)
-        #else:
-         #   return JsonResponse({'error': request.FILES}, status=400)
-            #return JsonResponse({'error': 'There seems to be a problem uploading your avatar'}, status=400)
-    else:
-        return JsonResponse({'error': 'Unauthorized action'}, status=405)
-    return JsonResponse({'error': 'Unknown error'}, status=400)
+            # Handle form errors
+            errors = form.errors.as_json()  # Convert form errors to JSON format
+            return JsonResponse({'error': 'Invalid form data', 'details': errors}, status=400)
+    #return HttpResponse("Unauthorized action")
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-def handle_uploaded_file(file, path):
-    with open("media/vangogh.jpg", "wb+") as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-    return (1)
+@csrf_protect
+def get_avatar(request):
+
+    if request.method == 'POST':
+        if not request.session['user_id']:
+            return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+        # getting all the objects of hotel.
+        avatars = Avatar.objects.all()
+        return HttpResponse(avatars)
+        #return render((request, 'display_hotel_images.html', {'hotel_images': avatars}))
+    return JsonResponse({'error': 'Unauthorized action'}, status=405)
+#def handle_uploaded_file(file, path):
+#    with open("media/vangogh.jpg", "wb+") as destination:
+#        for chunk in file.chunks():
+#            destination.write(chunk)
 
 @csrf_protect
 def get_current_user(request):

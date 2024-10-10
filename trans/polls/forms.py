@@ -1,6 +1,9 @@
 from django import forms
+from .models import Player
 
 
-class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
-    file = forms.FileField()
+class AvatarForm(forms.ModelForm):
+
+    class Meta:
+        model = Player
+        fields = ['avatar_img']

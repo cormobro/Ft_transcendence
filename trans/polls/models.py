@@ -21,6 +21,7 @@ class Player(models.Model):
     matches = models.ManyToManyField('Match', related_name='players', blank=True)
     # tournament_matches = models.ManyToManyField('Match', related_name='players', blank=True)
     friends_request = models.ManyToManyField('Player', symmetrical=False, blank=True, related_name='request_by')
+    avatar_img = models.ImageField(upload_to='images/', blank=True, null=True)
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)

@@ -550,6 +550,7 @@
 			//backendPost("get/victoriesbymode/", "felix");
 			//backendPost("get/pointsbymatch/", "felix");
 			backendPost("post/addfriend/", "gg");
+			backendPost("get/avatar/");
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
 

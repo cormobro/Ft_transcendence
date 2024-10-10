@@ -6,3 +6,4 @@ python-dotenv==1.0.1
 sqlparse==0.5.1
 typing-extensions==4.12.2
 requests==2.31.0
+pillow==10.4.0
