@@ -21,10 +21,10 @@
 						</a>
 					</div>
 					<div class="col-4">
-						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-expanded="false" id="navbarToggler">
 							<span class="navbar-toggler-icon"></span>
 						</button>
-						<div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavDropdown">
+						<div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
 							<ul class="navbar-nav">
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle active" href="#solo" id="navbarNavDropdownMenuLink" role="button" data-bs-toggle="dropdown">
@@ -52,7 +52,7 @@
 						</div>
 					</div>
 					<div class="col-4">
-						<div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavDropdown">
+						<div class="collapse navbar-collapse justify-content-end" id="logInContainer">
 							<li class="nav-item" id="logInButton">
 							</li>
 						</div>
@@ -248,7 +248,9 @@
 								</div>
 						</div>
 						<div class="d-flex justify-content-center" id="game">
+							<p class="text-light">Up</p>
 							<canvas style="margin-top:56px;" class="bg-light" id="myCanvas"></canvas>
+							<p class="text-light">Down</p>
 						</div>
 						<div class="container">
 							<div class="row">

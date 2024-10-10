@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", async function() {
 	// Appeler la fonction await backendPost ici
 	await backendPost("/get/currentuser/");
-
+	console.log(buffer.message);
 	// Vérifier le résultat et modifier le bouton en conséquence
 	if (buffer.error === "You're not logged in") {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="btn btn-outline-light btn-sm" href="#login">Log in</a>
+			<a class="btn btn-outline-light" href="#login">Log in</a>
 		`;
 	} else if (buffer.error) {
-		document.getElementById("logInButton").innerHTML = buffer.error;
+		alert(buffer.error);
 	} else {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="btn btn-outline-light btn-sm" href="#profile" onclick="displayProfilePage()">Profile</a>
+			<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
 		`;
 	}
 });
@@ -653,13 +653,13 @@ async function updateLogInButton(){
 	// Vérifier le résultat et modifier le bouton en conséquence
 	if (buffer.error === "You're not logged in") {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="btn btn-outline-light btn-sm" href="#login">Log in</a>
+			<a class="btn btn-outline-light" href="#login">Log in</a>
 		`;
 	} else if (buffer.error) {
 		document.getElementById("logInButton").innerHTML = buffer.error;
 	} else {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="btn btn-outline-light btn-sm" href="#profile" onclick="displayProfilePage()">Profile</a>
+			<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
 		`;
 	}
 }
@@ -992,6 +992,16 @@ window.addEventListener('hashchange', function (e) {
 				}
 				if (currentFragment === "blockchain"){
 					document.getElementById("tournamentIdInput").value = '';
+				}
+				if (currentFragment === "duo"){
+					var frm = document.getElementById("duoForm");
+					frm.reset();
+					// document.getElementById("duoOutputText").value = '';
+				}
+				if (currentFragment === "tournament"){
+					var frm = document.getElementById("tournamentForm");
+					frm.reset();
+					// document.getElementById("tournamentOutputText").value = '';
 				}
 			// }
 			// previousFragment = currentFragment;

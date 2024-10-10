@@ -854,6 +854,7 @@ def set_block(request):
 			return JsonResponse({'error': 'invalid JSON'}, status=400)
 	return JsonResponse({'error': 'Unauthorized methdod'}, status=405)
 
+@csrf_protect
 def get_block(request):
 	if request.method == 'POST':
 		try:
