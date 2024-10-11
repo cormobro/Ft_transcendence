@@ -35,6 +35,8 @@ def manage_42_api_step1(request):
 			)
 
 	return JsonResponse({'auth_url': auth_url})
+	#return redirect(auth_url)
+
 
 @csrf_protect
 def manage_42_api_step2(request):
@@ -95,7 +97,8 @@ def use_access_token(access_token, request):
 		player.linked_42_acc = username_42
 		try:
 			player.save()
-			return JsonResponse({'message': 'Account linked successfully'}, status=200)
+			return HttpResponse("Account linked")
+			#return JsonResponse({'message': 'Account linked successfully'}, status=200)
 		except IntegrityError:
 			return JsonResponse({'message': 'This 42 acc is already linked to another player'}, status=200)
 	else:
