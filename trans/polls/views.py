@@ -685,8 +685,17 @@ def post_avatar(request):
     #return HttpResponse("Unauthorized action")
     return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
-@csrf_protect
 def get_avatar(request):
+    if request.method == 'POST':
+        if not request.session['user_id']:
+            return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+        avatar_url = Player.objects.get(username=request.session['username']).avatar_img.url
+        return JsonResponse({'avatar_url': avatar_url}, status=200)
+    return JsonResponse({'error': 'unauthorized action'}, status=405)
+        #return render(request, 'profile.html', {'player': player})
+
+@csrf_protect
+def get_avatar2(request):
 
     if request.method == 'POST':
         if not request.session['user_id']:
