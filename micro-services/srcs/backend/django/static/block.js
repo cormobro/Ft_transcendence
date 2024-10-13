@@ -18,15 +18,39 @@ function setBlock(tournamentMatches, tournamentId, tournamentWinner, matchesNumb
 async function getBlock(){
 
 	const tournamentId = document.getElementById("tournamentIdInput").value;
+	if (tournamentId < 0){
+		document.getElementById('blockchainOutput').innerHTML = `
+			<p>Negative value not allowed.</p>
+		`;
+		return;
+	}
 	nodeUrl = "http://ganache:7545";
 	await backendPost("/get/getblock/", nodeUrl, tournamentId);
-	if (buffer.scores !== undefined && buffer.winner !== undefined){
-		generateCubeHTML();
-		// document.getElementById('matchesOutput').innerText = buffer.scores;
-		// document.getElementById('winnerOutput').innerText = buffer.winner;
+	if (buffer.error){
+		let startIndex = buffer.error.search("message");
+		if (startIndex !== -1){
+			let valueStartIndex = buffer.error.indexOf("'", startIndex + 8);
+			let valueEndIndex = buffer.error.indexOf("'", valueStartIndex + 1);
+			if (valueStartIndex !== -1 && valueEndIndex !== -1) {
+				const message = buffer.error.substring(valueStartIndex + 1, valueEndIndex);
+				document.getElementById('blockchainOutput').innerHTML = `
+					<p>${message}</p>
+				`;
+			}
+			else {
+				document.getElementById('blockchainOutput').innerHTML = `
+					<p>The value of the message could not be extracted.</p>
+				`;
+			}
+		}
+		else {
+			document.getElementById('blockchainOutput').innerHTML = `
+				<p>${buffer.error}</p>
+			`;
+		}
 	}
 	else{
-		document.getElementById('blockchainOutput').innerText = "Error while executing transaction";
+		generateCubeHTML();
 	}
 }
 

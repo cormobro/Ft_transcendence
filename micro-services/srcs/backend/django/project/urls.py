@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from app.views import home
 from app.views import manage_request
 from app.views import manage_42_api_step1
@@ -35,8 +37,8 @@ from app.views import get_victories_mode
 from app.views import get_points_by_match
 from app.views import get_match_stats
 from app.views import is_user_signed_in
-#from app.views import get_avatar
-#from app.views import post_avatar
+from app.views import get_avatar
+from app.views import post_avatar
 from app.views import get_requests
 from app.views import post_decline_request
 from app.views import post_remove_friend
@@ -92,8 +94,8 @@ urlpatterns = [
 	path ('get/pointsbymatch/', get_points_by_match, name='home'),
 	path ('get/matchstats/', get_match_stats, name='home'),
 	path ('get/isuserconnected/', is_user_signed_in, name='home'),
-	#path ('get/avatar/', get_avatar, name='home'),
-	#path ('post/avatar/', post_avatar, name='home'),
+	path ('get/avatar/', get_avatar, name='home'),
+	path ('post/avatar/', post_avatar, name='home'),
 	path ('get/friendrequests/', get_requests, name='home'),
 	path ('post/declinefriendrequest/', post_decline_request, name='home'),
 	path ('post/removefriend/', post_remove_friend, name='home'),
@@ -106,3 +108,6 @@ urlpatterns = [
 	path('get/getblock/', get_block, name='home'),
 	path ('get/currentuser/', get_current_user, name='home')
 ]
+
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

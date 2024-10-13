@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from django.db import IntegrityError, connection, models
 from django.db.models import Count, Q, Sum, Case, When, F
 from web3 import Web3
+from .forms import AvatarForm
 
 import requests
 import json
@@ -844,10 +845,10 @@ def set_block(request):
 			if receipt.status == 1:
 				print("Transaction receipt: ", receipt)
 			else:
-				print("La transaction a échoué.")
+				print("The transaction failed.")
 			return JsonResponse({'message': 'Enregistré'}, status=200)
 		except Exception as e:
-			return JsonResponse({'error': f'Erreur lors de l\'exécution de la transaction: {str(e)}'}, status=400)
+			return JsonResponse({'error': f'Error during transaction execution: {str(e)}'}, status=400)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
@@ -892,12 +893,55 @@ def get_block(request):
 			print("Tournament winner: ", winner)
 			return JsonResponse({'scores': scores, 'winner': winner}, status=200)
 		except Exception as e:
-			return JsonResponse({'error': f'Erreur lors de l\'exécution de la transaction: {str(e)}'}, status=400)
+			return JsonResponse({'error': f'Error during transaction execution: {str(e)}'}, status=400)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
 			return JsonResponse({'error': 'invalid JSON'}, status=400)
 	return JsonResponse({'error': 'Unauthorized methdod'}, status=405)
+
+@csrf_protect
+def post_avatar(request):
+	if request.method == "POST":
+		if not request.session.get('user_id'):
+			#return HttpResponse("You're not logged in")
+			return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+		player = Player.objects.get(username=request.session['username'])
+		form = AvatarForm(request.POST, request.FILES, instance=player)
+		#form = Player.objects.get(username=request.session['username']).avatar_img.AvatarForm(request.POST, request.FILES)
+		#form = AvatarForm(request.POST, request.FILES)
+		if form.is_valid():
+			form.save()
+			#return HttpResponse("Avatar has been uploaded")
+			return JsonResponse({'message': 'Avatar has been uploaded successfully'}, status=200)
+		else:
+			# Handle form errors
+			errors = form.errors.as_json()  # Convert form errors to JSON format
+			return JsonResponse({'error': 'Invalid form data', 'details': errors}, status=400)
+	#return HttpResponse("Unauthorized action")
+	return JsonResponse({'error': 'Unauthorized action'}, status=405)
+
+@csrf_protect
+def get_avatar(request):
+	if request.method == 'POST':
+		if not request.session['user_id']:
+			return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+		avatar_url = Player.objects.get(username=request.session['username']).avatar_img.url
+		return JsonResponse({'avatar_url': avatar_url}, status=200)
+	return JsonResponse({'error': 'unauthorized action'}, status=405)
+		#return render(request, 'profile.html', {'player': player})
+
+@csrf_protect
+def get_avatar2(request):
+
+	if request.method == 'POST':
+		if not request.session['user_id']:
+			return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+		# getting all the objects of hotel.
+		avatars = Avatar.objects.all()
+		return HttpResponse(avatars)
+		#return render((request, 'display_hotel_images.html', {'hotel_images': avatars}))
+	return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 @csrf_protect
 def get_current_user(request):

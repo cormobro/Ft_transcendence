@@ -317,21 +317,26 @@ async function avatarPost(fileInput)
 	}
 }
 
-async function avatarGet()
+async function getAvatar()
 {
 	try {
-		const response = await fetch("/get/avatar", {
-			method: "GET",
+		const csrfToken = getCookie('csrftoken');
+		const response = await fetch("/get/avatar/", {
+			method: "POST",
+			body: "",
 			headers: {
-				'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+				'X-CSRFToken': csrfToken
 			}
 		});
 
 		if (!response.ok) {
 			throw new Error(`Response status: ${response.status}`);
 		}
-
-		//WRITE WHAT TO DO WITH IMAGE
+		const data = await response.json();
+		if (data.avatar_url)
+			document.getElementById('avatar').src = data.avatar_url;
+		else
+			console.error('Error: Avatar URL not found');
 	} catch (error) {
 		console.error(error.message);
 	}

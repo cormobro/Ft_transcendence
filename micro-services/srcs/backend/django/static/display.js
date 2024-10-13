@@ -43,23 +43,23 @@ async function displayLeaderboard() {
 function displayCurrentMatchStats(){
 
 	document.getElementById("matchStatsOutput").innerHTML = `
-		<h3 class="text-dark">Statistics of the match : ${player1} - ${player2}</h3>
-		<p class="text-dark">Points won by ${player1} : ${leftScore}</p>
-		<p class="text-dark">Points won by ${player2} : ${rightScore}</p>
-		<p class="text-dark">Points played : ${leftScore + rightScore}</p>
-		<p class="text-dark">Winner is : ${leftScore > rightScore ? player1 : player2}</p>
+		<h3 class="text-light">Statistics of the match : ${player1} - ${player2}</h3>
+		<p class="text-light">Points won by ${player1} : ${leftScore}</p>
+		<p class="text-light">Points won by ${player2} : ${rightScore}</p>
+		<p class="text-light">Points played : ${leftScore + rightScore}</p>
+		<p class="text-light">Winner is : ${leftScore > rightScore ? player1 : player2}</p>
 	`;
 	document.getElementById("player1StatsOutput").innerHTML = `
-		<h3 class="text-dark">Statistics of ${player1}</h3>
-		<p class="text-dark">Points won : ${leftScore}</p>
-		<p class="text-dark">Points lost : ${rightScore}</p>
-		<p class="text-dark">Accuracy : ${Math.round(leftScore/(rightScore + leftScore)*100)}%</p>
+		<h3 class="text-light">Statistics of ${player1}</h3>
+		<p class="text-light">Points won : ${leftScore}</p>
+		<p class="text-light">Points lost : ${rightScore}</p>
+		<p class="text-light">Accuracy : ${Math.round(leftScore/(rightScore + leftScore)*100)}%</p>
 	`;
 	document.getElementById("player2StatsOutput").innerHTML = `
-		<h3 class="text-dark">Statistics of ${player2}</h3>
-		<p class="text-dark">Points won : ${rightScore}</p>
-		<p class="text-dark">Points lost : ${leftScore}</p>
-		<p class="text-dark">Accuracy : ${Math.round(rightScore/(rightScore + leftScore)*100)}%</p>
+		<h3 class="text-light">Statistics of ${player2}</h3>
+		<p class="text-light">Points won : ${rightScore}</p>
+		<p class="text-light">Points lost : ${leftScore}</p>
+		<p class="text-light">Accuracy : ${Math.round(rightScore/(rightScore + leftScore)*100)}%</p>
 	`;
 }
 
@@ -74,7 +74,7 @@ async function displayGlobalStats() {
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
@@ -82,18 +82,18 @@ async function displayGlobalStats() {
 	if (buffer.error){
 		alert(buffer.error);
 		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
+		// <p class="text-light">${buffer.error}</p>
 		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-dark">Global statistics of ${currInputPlayer.value}</h3>
-		<p class="text-dark">Points won : ${buffer.message.pointsWon}</p>
-		<p class="text-dark">Points lost : ${buffer.message.pointsLost}</p>
-		<p class="text-dark">Points played : ${buffer.message.pointsPlayed}</p>
-		<p class="text-dark">Matches won : ${buffer.message.matchesWon}</p>
-		<p class="text-dark">Matches lost : ${buffer.message.matchesLost}</p>
-		<p class="text-dark">Matches played : ${buffer.message.matchesPlayed}</p>
+		<h3 class="text-light">Global statistics of ${currInputPlayer.value}</h3>
+		<p class="text-light">Points won : ${buffer.message.pointsWon}</p>
+		<p class="text-light">Points lost : ${buffer.message.pointsLost}</p>
+		<p class="text-light">Points played : ${buffer.message.pointsPlayed}</p>
+		<p class="text-light">Matches won : ${buffer.message.matchesWon}</p>
+		<p class="text-light">Matches lost : ${buffer.message.matchesLost}</p>
+		<p class="text-light">Matches played : ${buffer.message.matchesPlayed}</p>
 	`;
 	}
 }
@@ -102,7 +102,7 @@ async function displaySoloStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
@@ -110,18 +110,18 @@ async function displaySoloStats(){
 	if (buffer.error){
 		alert(buffer.error);
 		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
+		// <p class="text-light">${buffer.error}</p>
 		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-dark">Solo statistics of ${currInputPlayer.value}</h3>
-		<p class="text-dark">Points won : ${buffer.message.pointsWon}</p>
-		<p class="text-dark">Points lost : ${buffer.message.pointsLost}</p>
-		<p class="text-dark">Points played : ${buffer.message.pointsPlayed}</p>
-		<p class="text-dark">Matches won : ${buffer.message.matchesWon}</p>
-		<p class="text-dark">Matches lost : ${buffer.message.matchesLost}</p>
-		<p class="text-dark">Matches played : ${buffer.message.matchesPlayed}</p>
+		<h3 class="text-light">Solo statistics of ${currInputPlayer.value}</h3>
+		<p class="text-light">Points won : ${buffer.message.pointsWon}</p>
+		<p class="text-light">Points lost : ${buffer.message.pointsLost}</p>
+		<p class="text-light">Points played : ${buffer.message.pointsPlayed}</p>
+		<p class="text-light">Matches won : ${buffer.message.matchesWon}</p>
+		<p class="text-light">Matches lost : ${buffer.message.matchesLost}</p>
+		<p class="text-light">Matches played : ${buffer.message.matchesPlayed}</p>
 	`;
 	}
 }
@@ -130,7 +130,7 @@ async function displayDuoStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
@@ -138,18 +138,18 @@ async function displayDuoStats(){
 	if (buffer.error){
 		alert(buffer.error);
 		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
+		// <p class="text-light">${buffer.error}</p>
 		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-dark">Duo statistics of ${currInputPlayer.value}</h3>
-		<p class="text-dark">Points won : ${buffer.message.pointsWon}</p>
-		<p class="text-dark">Points lost : ${buffer.message.pointsLost}</p>
-		<p class="text-dark">Points played : ${buffer.message.pointsPlayed}</p>
-		<p class="text-dark">Matches won : ${buffer.message.matchesWon}</p>
-		<p class="text-dark">Matches lost : ${buffer.message.matchesLost}</p>
-		<p class="text-dark">Matches played : ${buffer.message.matchesPlayed}</p>
+		<h3 class="text-light">Duo statistics of ${currInputPlayer.value}</h3>
+		<p class="text-light">Points won : ${buffer.message.pointsWon}</p>
+		<p class="text-light">Points lost : ${buffer.message.pointsLost}</p>
+		<p class="text-light">Points played : ${buffer.message.pointsPlayed}</p>
+		<p class="text-light">Matches won : ${buffer.message.matchesWon}</p>
+		<p class="text-light">Matches lost : ${buffer.message.matchesLost}</p>
+		<p class="text-light">Matches played : ${buffer.message.matchesPlayed}</p>
 	`;
 	}
 }
@@ -158,7 +158,7 @@ async function displayTournamentStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
@@ -166,21 +166,21 @@ async function displayTournamentStats(){
 	if (buffer.error){
 		alert(buffer.error);
 		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
+		// <p class="text-light">${buffer.error}</p>
 		// `;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-dark">Tournament statistics of ${currInputPlayer.value}</h3>
-		<p class="text-dark">Points won : ${buffer.message.pointsWon}</p>
-		<p class="text-dark">Points lost : ${buffer.message.pointsLost}</p>
-		<p class="text-dark">Points played : ${buffer.message.pointsPlayed}</p>
-		<p class="text-dark">Matches won : ${buffer.message.matchesWon}</p>
-		<p class="text-dark">Matches lost : ${buffer.message.matchesLost}</p>
-		<p class="text-dark">Matches played : ${buffer.message.matchesPlayed}</p>
-		<p class="text-dark">Tournament won : ${buffer.message.tournamentsWon}</p>
-		<p class="text-dark">Tournament lost : ${buffer.message.tournamentsLost}</p>
-		<p class="text-dark">Tournament played : ${buffer.message.tournamentsPlayed}</p>
+		<h3 class="text-light">Tournament statistics of ${currInputPlayer.value}</h3>
+		<p class="text-light">Points won : ${buffer.message.pointsWon}</p>
+		<p class="text-light">Points lost : ${buffer.message.pointsLost}</p>
+		<p class="text-light">Points played : ${buffer.message.pointsPlayed}</p>
+		<p class="text-light">Matches won : ${buffer.message.matchesWon}</p>
+		<p class="text-light">Matches lost : ${buffer.message.matchesLost}</p>
+		<p class="text-light">Matches played : ${buffer.message.matchesPlayed}</p>
+		<p class="text-light">Tournament won : ${buffer.message.tournamentsWon}</p>
+		<p class="text-light">Tournament lost : ${buffer.message.tournamentsLost}</p>
+		<p class="text-light">Tournament played : ${buffer.message.tournamentsPlayed}</p>
 	`;
 	}
 }
@@ -189,23 +189,20 @@ async function displayVictoriesAndDefeatsGraph(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
 	await backendPost("/get/victories/", currInputPlayer.value);
 	if (buffer.error){
 		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
-		// `;
 		return;
 	}
 	const victories = buffer.message.matchesWon;
 	await backendPost("/get/defeats/", currInputPlayer.value);
 	if (buffer.error){
 		document.getElementById("playerStatsOutput").innerHTML = `
-		<p class="text-dark">${buffer.error}</p>
+		<p class="text-light">${buffer.error}</p>
 		`
 		return;
 	}
@@ -213,16 +210,16 @@ async function displayVictoriesAndDefeatsGraph(){
 
 	if (victories === 0 && defeats === 0){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
-			<p class="text-dark">No matches found</p>
+			<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of victories and defeats</h3>
+			<p class="text-light">No matches found</p>
 		`;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
+		<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of victories and defeats</h3>
 		<div class="d-flex align-item-center">
-		<canvas class="bg-light" id="myPlayerChart"></canvas>
-		<div class="text-dark" for="myPlayerChartLegend"></div>
+		<canvas class="bg-dark" id="myPlayerChart"></canvas>
+		<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -238,26 +235,11 @@ async function displayVictoriesAndDefeatsGraph(){
 			"Victories": victories,
 			"Defeats": defeats
 		},
-		colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
+		colors: ["#80DEEA", "#FFE082"]
 	};
 
 	var myPiechart = new PieChart(chartOptions);
 	myPiechart.draw();
-
-	// const titleOptions = {
-	// 	canvas: canvas,
-	// 	seriesName: "Number of victories and defeats",
-	// 	align: "center",
-	// 	fill: "dark",
-	// 	font: {
-	// 		weight: "bold",
-	// 		size: "18px",
-	// 		family: "system-ui"
-	// 	}
-	// };
-
-	// var myPieChartTitle = new Title(titleOptions);
-	// myPieChartTitle.drawTitle();
 
 	const legendOptions = {
 		canvas: canvas,
@@ -266,7 +248,7 @@ async function displayVictoriesAndDefeatsGraph(){
 			"Victories": victories,
 			"Defeats": defeats
 		},
-		colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
+		colors: ["#80DEEA", "#FFE082"]
 	};
 	var myPieChartLegend = new Legend(legendOptions);
 	myPieChartLegend.drawLegend();
@@ -277,16 +259,13 @@ async function displayVictoriesByModeGraph(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
 	await backendPost("/get/victoriesbymode/", currInputPlayer.value);
 	if (buffer.error){
 		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
-		// `;
 		return;
 	}
 	const soloWins = buffer.message.SoloMatchesWins;
@@ -294,16 +273,16 @@ async function displayVictoriesByModeGraph(){
 	const tournamentWins = buffer.message.TournamentMatchesWins;
 	if (soloWins === 0 && duoWins === 0 && tournamentWins === 0){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
-			<p class="text-dark">No matches or no wins found</p>
+			<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of victories by game mode</h3>
+			<p class="text-light">No matches or no wins found</p>
 		`;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
+		<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} :  Number of victories by game mode</h3>
 		<div class="d-flex align-item-center">
-		<canvas class="bg-light" id="myPlayerChart"></canvas>
-		<div class="text-dark" for="myPlayerChartLegend"></div>
+		<canvas class="bg-dark" id="myPlayerChart"></canvas>
+		<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -311,40 +290,25 @@ async function displayVictoriesByModeGraph(){
 	canvas.width = 500;
 	canvas.height = 500;
 
-	var gridScaleValue = Math.ceil(soloWins +
-		duoWins +
-		tournamentWins / 3);
+	// var gridScaleValue = Math.ceil(soloWins +
+	// 	duoWins +
+	// 	tournamentWins / 3);
 	const barChartOptions = {
 		canvas: canvas,
-		seriesName:"Victories by game mode",
+		seriesName:" Number of victories by game mode",
 		padding: 20,
-		gridScale: gridScaleValue,
-		gridColor:"#0X33E31",
+		// gridScale: gridScaleValue,
+		// gridColor:"#0X33E31",
 		data: {
 			"Solo": soloWins,
 			"Duo": duoWins,
 			"Tournoi": tournamentWins,
 		},
-		colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
+		colors: ["#80DEEA", "#FFE082", "#FFAB91"]
 	};
 
 	var myBarChart = new BarChart(barChartOptions);
 	myBarChart.draw();
-
-	// const titleOptions = {
-	// 	canvas: canvas,
-	// 	seriesName: "Victories by game mode",
-	// 	align: "center",
-	// 	fill: "dark",
-	// 	font: {
-	// 		weight: "bold",
-	// 		size: "18px",
-	// 		family: "system-ui"
-	// 	}
-	// };
-
-	// var myBarChartTitle = new Title(titleOptions);
-	// myBarChartTitle.drawTitle();
 
 	const legendOptions = {
 		canvas: canvas,
@@ -354,7 +318,7 @@ async function displayVictoriesByModeGraph(){
 			"Duo": duoWins,
 			"Tournoi": tournamentWins,
 		},
-		colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
+		colors: ["#80DEEA", "#FFE082", "#FFAB91"]
 	};
 	var myBarChartLegend = new Legend(legendOptions);
 	myBarChartLegend.drawLegend();
@@ -365,23 +329,20 @@ async function displayPointsByMatchGraph(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
 	await backendPost("/get/pointsbymatch/", currInputPlayer.value);
 	if (buffer.error){
 		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
-		// `;
 		return;
 	}
 	const pointsOverTime = buffer.message.matches;
 	if (pointsOverTime.length === 0){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
-			<p class="text-dark">No matches found</p>
+			<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of points per match</h3>
+			<p class="text-light">No matches found</p>
 		`;
 		return;
 	}
@@ -390,17 +351,17 @@ async function displayPointsByMatchGraph(){
 			break;
 		else if (i === pointsOverTime.length - 1){
 			document.getElementById("playerStatsOutput").innerHTML = `
-				<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
-				<p class="text-dark">No points won</p>
+				<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of points per match</h3>
+				<p class="text-light">No points won</p>
 			`;
 			return;
 		}
 	}
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-dark">Graphic stats of ${currInputPlayer.value}</h3>
+		<h3 class="text-light">Graphic stats of ${currInputPlayer.value} : Number of points per match</h3>
 		<div class="d-flex align-item-center">
-		<canvas class="bg-light" id="myPlayerChart"></canvas>
-		<div class="text-dark" for="myPlayerChartLegend"></div>
+		<canvas class="bg-dark" id="myPlayerChart"></canvas>
+		<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -408,22 +369,15 @@ async function displayPointsByMatchGraph(){
 	canvas.width = 500;
 	canvas.height = 500;
 
-	var n = 0;
 	var mapping = {};
-	var gridScaleValue;
 	for (let i = 0; i < pointsOverTime.length; i++) {
 		mapping["Match " + i] = pointsOverTime[i];
-		gridScaleValue += pointsOverTime[i];
-		n++;
 	}
-	gridScaleValue = Math.ceil(gridScaleValue / n);
 
 	const plotChartOptions = {
 		canvas: canvas,
-			seriesName:"Points won over time",
+			seriesName:"Number of points per match",
 			padding:20,
-			gridScale:gridScaleValue,
-			gridColor:"black",
 			lineGridWidth:1,
 			linePlotWidth:5,
 			data: mapping,
@@ -432,21 +386,6 @@ async function displayPointsByMatchGraph(){
 
 	var myPlotChart = new PlotChart(plotChartOptions);
 	myPlotChart.draw();
-
-	// const titleOptions = {
-	// 	canvas: canvas,
-	// 	seriesName: "Points won over time",
-	// 	align: "center",
-	// 	fill: "dark",
-	// 	font: {
-	// 		weight: "bold",
-	// 		size: "18px",
-	// 		family: "system-ui"
-	// 	}
-	// };
-
-	// var myPlotChartTitle = new Title(titleOptions);
-	// myPlotChartTitle.drawTitle();
 
 	const legendOptions = {
 		canvas: canvas,
@@ -463,7 +402,7 @@ async function displayMatchStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-dark">No players selected.</p>
+			<p class="text-light">No players selected.</p>
 		`;
 		return;
 	}
@@ -471,30 +410,27 @@ async function displayMatchStats(){
 	await backendPost("/get/matchstats/", currInputPlayer.value);
 	if (buffer.error){
 		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-dark">${buffer.error}</p>
-		// `;
 		return;
 	}
 	const matches = JSON.parse(buffer.message);
 	if (matches.length === 0){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
-			<p class="text-dark">No matches found</p>
+			<h3 class="text-light">Match history of ${currInputPlayer.value}</h3>
+			<p class="text-light">No matches found</p>
 		`;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
-			<h3 class="text-dark">Graphic statistics of ${currInputPlayer.value}</h3>
+			<h3 class="text-light">Match history of ${currInputPlayer.value}</h3>
 		`;
 	console.log(matches);
 	for (let i = 0; i < matches.length; i++){
 		document.getElementById("playerStatsOutput").innerHTML += `
-			<h5 class="text-dark">Match ${i}</h5>
-			<p class="text-dark">${matches[i].fields.player1} (${matches[i].fields.player1_points}) - ${matches[i].fields.player2} (${matches[i].fields.player2_points})</p>
-			<p class="text-dark">Mode : ${matches[i].fields.mode}</p>
-			<p class="text-dark">Date : ${matches[i].fields.date}</p>
-			<p class="text-dark">Match time :  ${matches[i].fields.match_time}</p>
+			<h5 class="text-light">Match ${i}</h5>
+			<p class="text-light">${matches[i].fields.player1} (${matches[i].fields.player1_points}) - ${matches[i].fields.player2} (${matches[i].fields.player2_points})</p>
+			<p class="text-light">Mode : ${matches[i].fields.mode == 0 ? 'Solo' : matches[i].fields.mode == 1 ? 'Duo' : 'Tournament'}</p>
+			<p class="text-light">Date : ${matches[i].fields.date}</p>
+			<p class="text-light">Match time :  ${Math.ceil(matches[i].fields.match_time)} secondes</p>
 		`;
 	}
 	}
@@ -507,9 +443,10 @@ function displayProfilePage(){
 	document.getElementById("newUsernameInput").value = '';
 	document.getElementById("newPasswordInput").value = '';
 	document.getElementById("addFriendOutput").innerHTML = null;
-	// document.getElementById("updateUsernameOutput").innerText = null;
-	// document.getElementById("updatePasswordOutput").innerText = null;
+	document.getElementById("updateUsernameOutput").innerText = null;
+	document.getElementById("updatePasswordOutput").innerText = null;
 	displayUsername();
+	getAvatar();
 	// displayAvatar();
 	displayFriendsList();
 }

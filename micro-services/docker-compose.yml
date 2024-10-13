@@ -24,10 +24,12 @@ services:
       - .env
     volumes:
       - ./srcs/shared/build:/code/build
+      - shared-volumes:/code/openssl
     networks:
       - app-network
     depends_on:
       - database
+      - openssl
 
   ganache:
     build:
@@ -50,6 +52,19 @@ services:
       - app-network
     depends_on:
       - ganache
+
+  openssl:
+    build:
+      context: srcs/backend/openssl
+      dockerfile: Dockerfile
+    container_name: openssl
+    volumes:
+      - shared-volumes:/ssl/openssl
+    networks:
+      - app-network
+
+volumes:
+  shared-volumes:
 
 networks:
   app-network:

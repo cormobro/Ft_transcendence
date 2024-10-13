@@ -53,11 +53,12 @@ class Legend{
 		legend.append(ul);
 		for (let ctg of Object.keys(this.options.data)) {
 			let li = document.createElement("li");
+			li.classList.add("text-light");
 			li.style.listStyle = "none";
 			li.style.borderLeft =
 				"20px solid " + this.colors[pIndex % this.colors.length];
 			li.style.padding = "5px";
-			li.textContent = ctg;
+			li.textContent = `${ctg}: ${this.options.data[ctg]}`;
 			ul.append(li);
 			pIndex++;
 		}
@@ -67,16 +68,6 @@ class Legend{
 /*------------------------------########## PIE CHART ##########------------------------------*/
 
 // helper JS functions
-function drawArc(ctx, centerX, centerY, radius, startAngle, endAngle, color){ // toutes les variables pour tracer l'arc de cercle avec x et y les coordonnées du centre et radius la coordonnée x de la fin de la ligne
-
-	ctx.save();
-	ctx.strokeStyle = color;
-	ctx.beginPath();
-	ctx.arc(centerX, centerY, radius, startAngle, endAngle); // ajoute un arc de cercle au tracé, en le centrant aux positions (x, y) et avec un rayon r qui démarre à angleDépart et qui finit à angleFin, dans la direction de sensAntiHoraire
-	ctx.stroke();
-	ctx.restore();
-}
-
 function drawPieSlice(ctx, centerX, centerY, radius, startAngle, endAngle, fillColor, strokeColor) { // toutes les variables pour remplir la part de tarte avec fillColor et strokeColor respectivement la couleur du remplissage et du périmètre
 
 	ctx.save();
@@ -87,7 +78,6 @@ function drawPieSlice(ctx, centerX, centerY, radius, startAngle, endAngle, fillC
 	ctx.arc(centerX, centerY, radius, startAngle, endAngle, strokeColor);
 	ctx.closePath(); // provoque le retour du stylo au point de départ du sous-traçé courant
 	ctx.fill(); // remplit le chemin courant ou donné avec la couleur de fond en cours
-	// ctx.stroke();
 	ctx.restore();
 }
 
@@ -100,7 +90,6 @@ class PieChart { // appel d'une classe pour créer des objets
 		this.canvas = options.canvas;
 		this.ctx = this.canvas.getContext("2d");
 		this.colors = options.colors; // récupère les options de couleurs
-		this.titleOptions = options.titleOptions; // récupère les options de titre
 		this.totalValue = [...Object.values(this.options.data)].reduce((a, b) => a + b, 0);
 		this.radius = Math.min(this.canvas.width / 2, this.canvas.height / 2) - options.padding; // détermine le rayon du graphique
 	}
@@ -126,26 +115,26 @@ class PieChart { // appel d'une classe pour créer des objets
 		}
 	}
 
-	drawLabels() {
+	// drawLabels() {
 
-		var colorIndex = 0;
-		var startAngle = -Math.PI / 2; // commencer le tracé à partir du haut du cercle
-		for (var categ in this.options.data) {
-			var val = this.options.data[categ];
-			var sliceAngle = (2 * Math.PI * val) / this.totalValue;
-			var labelX =
-			this.canvas.width / 2 +
-			(this.radius / 2) * Math.cos(startAngle + sliceAngle / 2);
-			var labelY =
-			this.canvas.height / 2 +
-			(this.radius / 2) * Math.sin(startAngle + sliceAngle / 2);
-			var labelText = Math.round((100 * val) / this.totalValue); // calcule le pourcentage que représente la valeur actuelle val par rapport à la somme totale des valeurs du graphique. Il est arrondi à l'entier le plus proche
-			this.ctx.fillStyle = "black"; // couleur de police
-			this.ctx.font = "32px Khand"; // taille et style de police
-			this.ctx.fillText(labelText + "%", labelX, labelY); // écrit un texte donné à la position (x, y) donnée
-			startAngle += sliceAngle;
-		}
-	}
+	// 	var colorIndex = 0;
+	// 	var startAngle = -Math.PI / 2; // commencer le tracé à partir du haut du cercle
+	// 	for (var categ in this.options.data) {
+	// 		var val = this.options.data[categ];
+	// 		var sliceAngle = (2 * Math.PI * val) / this.totalValue;
+	// 		var labelX =
+	// 		this.canvas.width / 2 +
+	// 		(this.radius / 2) * Math.cos(startAngle + sliceAngle / 2);
+	// 		var labelY =
+	// 		this.canvas.height / 2 +
+	// 		(this.radius / 2) * Math.sin(startAngle + sliceAngle / 2);
+	// 		var labelText = Math.round((100 * val) / this.totalValue); // calcule le pourcentage que représente la valeur actuelle val par rapport à la somme totale des valeurs du graphique. Il est arrondi à l'entier le plus proche
+	// 		this.ctx.fillStyle = "black"; // couleur de police
+	// 		this.ctx.font = "32px Khand"; // taille et style de police
+	// 		this.ctx.fillText(labelText + "%", labelX, labelY); // écrit un texte donné à la position (x, y) donnée
+	// 		startAngle += sliceAngle;
+	// 	}
+	// }
 
 	draw(){
 
@@ -185,7 +174,7 @@ class BarChart {
 		this.canvas = options.canvas;
 		this.ctx = this.canvas.getContext("2d");
 		this.colors = options.colors;
-		this.titleOptions = options.titleOptions;
+		// this.titleOptions = options.titleOptions;
 		this.maxValue = Math.max(...Object.values(this.options.data));
 	}
 

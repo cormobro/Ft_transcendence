@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 	rm -rf /var/lib/apt/lists/*
 
 # Installation web3
-RUN pip install web3
+# RUN pip install web3
 
 RUN pip install -r requirements.txt
 
