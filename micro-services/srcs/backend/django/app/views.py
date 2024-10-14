@@ -35,7 +35,9 @@ def manage_42_api_step1(request):
 			f"&state={state}"
 			)
 
-	return JsonResponse({'auth_url': auth_url})
+	# return JsonResponse({'auth_url': auth_url})
+	return redirect(auth_url)
+
 
 @csrf_protect
 def manage_42_api_step2(request):
@@ -96,9 +98,9 @@ def use_access_token(access_token, request):
 		player.linked_42_acc = username_42
 		try:
 			player.save()
-			return JsonResponse({'message': 'Account linked successfully'}, status=200)
+			return simple_response("Account linked successfully")
 		except IntegrityError:
-			return JsonResponse({'message': 'This 42 acc is already linked to another player'}, status=200)
+			return simple_response("This 42 account is already linked to another player")
 	else:
 		request_info = f"""
 		Request Method: {response.request.method}
@@ -106,7 +108,52 @@ def use_access_token(access_token, request):
 		Request Headers: {response.request.headers}
 		Request Body: {response.request.body}
 		"""
-		return HttpResponse(f"ERROR code is {response.status_code}. The request was {request_info}")
+	return simple_response(f"ERROR code: {response.status_code}. The request was {request_info}")
+
+
+
+def simple_response(message):
+    html_content = f"""
+    <html>
+    <head>
+        <title>Response</title>
+        <style>
+            body {{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                font-family: Arial, sans-serif;
+                background-color: #212529;
+                color: white;
+            }}
+            .message-container {{
+                text-align: center;
+            }}
+            button {{
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: #212529;
+                color: white;
+                border: 2px solid white;
+                border-radius: 5px;
+                cursor: pointer;
+            }}
+            button:hover {{
+                background-color: white;
+                color: #212529;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="message-container">
+            <h2>{message}</h2>
+            <button onclick="window.close()">Close Window</button>
+        </div>
+    </body>
+    </html>
+    """
+    return HttpResponse(html_content)
 
 
 @csrf_protect
@@ -759,6 +806,18 @@ def post_username(request):
 					return JsonResponse({'error': 'This username is already used'}, status=405)
 				else:
 					player = Player.objects.get(username=request.session['username'])
+					old_username = player.username
+					matches = player.matches.all()
+					for match in matches:
+						if match.player1 == old_username:
+							match.player1 = targetUsername
+							match.save()
+						if match.player2 == old_username:
+							match.player2 = targetUsername
+							match.save()
+						if match.winner == old_username:
+							match.winner = targetUsername
+							match.save()
 					player.username = targetUsername
 					player.save()
 					request.session['username'] = player.username

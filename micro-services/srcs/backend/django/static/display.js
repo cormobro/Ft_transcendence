@@ -619,35 +619,70 @@ async function updateLogInButton(){
 	}
 }
 
-async function logInWith42() {
-	try {
-		const response = await fetch("/api_42/");
+// async function logInWith42() {
+// 	try {
+// 		// Effectuer le premier appel à l'API
+// 		let responseStep1 = await fetch('/api_42/', {
+// 			method: 'GET',
+// 		});
+// 				if (!responseStep1.ok) {
+// 			throw new Error('Erreur lors de l\'appel à api_42');
+// 		}
+// 	}
+// 	catch (error)
+// 	{
+// 		console.error(error.message)
+// 	}
+// }
 
-		if (response.ok) {
-			const data = await response.json();
-			window.location.href = data.auth_url; // Redirection manuelle vers l'URL reçue
-		} else {
-			const buffer = await response.json();
-			document.getElementById("linkMessage").innerText = buffer.error || "Unknown error";
-		}
-	} catch (error) {
-		document.getElementById("linkMessage").innerText = "Network error: " + error.message;
-	}
-}
+// async function logInWith42() {
+// 	try {
+// 		// Effectuer le premier appel à l'API
+// 		let responseStep1 = await fetch('/api_42/', {
+// 			method: 'GET',
+// 		});
+// 				if (!responseStep1.ok) {
+// 			throw new Error('Erreur lors de l\'appel à api_42');
+// 		}
+// 				// Récupérer l'URL renvoyée par la fonction step_1
+// 		let dataStep1 = await responseStep1.json();
+// 		let auth_url = dataStep1.auth_url;  // Assume que l'URL est dans ce champ
+// 				// Effectuer le deuxième appel à l'API avec l'URL reçue
+// 		let responseStep2 = await fetch(auth_url, {
+// 			method: 'GET',
+// 		});
+// 			if (!responseStep2.ok) {
+// 				throw new Error('Erreur lors de l\'appel à api_code');
+// 		}
 
-async function handleLinkResponse() {
-	try {
-		const response = await fetch("/api_code/"); // L'URL de retour après la redirection OAuth
-		if (response.ok) {
-			const data = await response.json();
-			document.getElementById("linkMessage").innerText = data.message;
-		} else {
-			const buffer = await response.json();
-			document.getElementById("linkMessage").innerText = buffer.error || "Error linking account";
-		}
-	} catch (error) {
-		document.getElementById("linkMessage").innerText = "Network error: " + error.message;
-	}
+// 		// Récupérer le message final
+// 		let dataStep2 = await responseStep2.json();
+// 			// Afficher le message dans l'élément TML
+// 		document.getElementById('linkMessage').textContent = dataStep2.message;
+// 		} catch (error) {
+// 			console.error('Une erreur est survenue :', error);
+// 			document.getElementById('linkMessage').textContent = 'Une erreur est survenue lors du lien du compte.';
+// 		}
+// 	}
+
+function logInWith42() {
+    // Créer l'URL d'authentification
+    const authUrl = '/api_42/';
+
+    // Ouvrir la fenêtre pop-up
+    const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
+
+    // Écouter les messages du pop-up
+    window.addEventListener('message', function(event) {
+        if (event.origin !== window.location.origin) {
+            return; // Ignorer les messages d'autres origines
+        }
+
+        // Vérifier si le message contient des informations sur l'authentification
+        if (event.data && event.data.message) {
+            document.getElementById('linkMessage').textContent = event.data.message;
+        }
+    });
 }
 
 async function logIn(){
