@@ -805,6 +805,18 @@ def post_username(request):
 					return JsonResponse({'error': 'This username is already used'}, status=405)
 				else:
 					player = Player.objects.get(username=request.session['username'])
+					old_username = player.username
+					matches = player.matches.all()
+					for match in matches:
+						if match.player1 == old_username:
+							match.player1 = targetUsername
+							match.save()
+						if match.player2 == old_username:
+							match.player2 = targetUsername
+							match.save()
+						if match.winner == old_username:
+							match.winner = targetUsername
+							match.save()
 					player.username = targetUsername
 					player.save()
 					request.session['username'] = player.username
