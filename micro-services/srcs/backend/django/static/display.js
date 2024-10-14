@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 	// Appeler la fonction await backendPost ici
 	await backendPost("/get/currentuser/");
 	// Vérifier le résultat et modifier le bouton en conséquence
-	if (buffer.error === "You're not logged in") {
+	if (buffer.error === "User is not logged in") {
 		document.getElementById("logInButton").innerHTML = `
 			<a class="btn btn-outline-light" href="#login">Log in</a>
 		`;
@@ -217,20 +217,27 @@ async function displayVictoriesAndDefeatsGraph(){
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of victories and defeats</h3>
-		<div class="d-flex align-item-center">
-		<canvas class="bg-dark" id="myPlayerChart"></canvas>
-		<div class="text-light" for="myPlayerChartLegend"></div>
+		<div class="row d-flex align-item-center">
+			<canvas class="bg-dark" id="myPlayerChart"></canvas>
+		</div>
+		<div class="row d-flex align-item-center">
+			<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
 	const canvas = document.getElementById('myPlayerChart');
-	canvas.width = 500;
-	canvas.height = 500;
+	const parentWidth = canvas.parentElement.clientWidth;
+	// if (parentWidth < 500)
+	// 	parentWidth = parentWidth * 1/2;
+	// else
+	// 	parentWidth = parentWidth * 1/4;
+	canvas.width = parentWidth;
+	canvas.height = parentWidth;
 
 	const chartOptions = {
 		canvas: canvas,
 		seriesName: "Number of victories and defeats",
-		padding: 40,
+		padding: 20,
 		data: {
 			"Victories": victories,
 			"Defeats": defeats
@@ -280,15 +287,22 @@ async function displayVictoriesByModeGraph(){
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} :  Number of victories by game mode</h3>
-		<div class="d-flex align-item-center">
-		<canvas class="bg-dark" id="myPlayerChart"></canvas>
-		<div class="text-light" for="myPlayerChartLegend"></div>
+		<div class="row d-flex align-item-center">
+			<canvas class="bg-dark" id="myPlayerChart"></canvas>
+		</div>
+		<div class="row d-flex align-item-center">
+			<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
 	const canvas = document.getElementById('myPlayerChart');
-	canvas.width = 500;
-	canvas.height = 500;
+	const parentWidth = canvas.parentElement.clientWidth;
+	// if (parentWidth < 500)
+	// 	parentWidth = parentWidth * 1/4;
+	// else
+	// 	parentWidth = parentWidth * 1/2;
+	canvas.width = parentWidth;
+	canvas.height = parentWidth;
 
 	// var gridScaleValue = Math.ceil(soloWins +
 	// 	duoWins +
@@ -359,15 +373,26 @@ async function displayPointsByMatchGraph(){
 	}
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-light">Graphic stats of ${currInputPlayer.value} : Number of points per match</h3>
-		<div class="d-flex align-item-center">
-		<canvas class="bg-dark" id="myPlayerChart"></canvas>
-		<div class="text-light" for="myPlayerChartLegend"></div>
+		<div class="row d-flex align-item-center">
+			<canvas class="bg-dark" id="myPlayerChart"></canvas>
+		</div>
+		<div class="row d-flex align-item-center">
+			<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
 	const canvas = document.getElementById('myPlayerChart');
-	canvas.width = 500;
-	canvas.height = 500;
+	const parentWidth = canvas.parentElement.clientWidth;
+	// if (parentWidth < 500){
+	// 	parentWidth = parentWidth * 1/4;
+	// 	linePlotWidth = 2;
+	// }
+	// else{
+	// 	parentWidth = parentWidth * 1/2;
+	// 	linePlotWidth = 2;
+	// }
+	canvas.width = parentWidth;
+	canvas.height = parentWidth;
 
 	var mapping = {};
 	for (let i = 0; i < pointsOverTime.length; i++) {
@@ -378,8 +403,7 @@ async function displayPointsByMatchGraph(){
 		canvas: canvas,
 			seriesName:"Number of points per match",
 			padding:20,
-			lineGridWidth:1,
-			linePlotWidth:5,
+			linePlotWidth:2,
 			data: mapping,
 			colors: ["#80DEEA", "#FFE082", "#FFAB91", "#CE93D8"]
 	};
@@ -497,9 +521,10 @@ async function searchAndAddFriend(){
 	var input = document.getElementById('searchProfileInput');
 	await backendPost("/post/addfriend/", input.value);
 	if (buffer.error){
-		document.getElementById("addFriendOutput").innerHTML = `
-			<p class="text-light">${buffer.error}</p>
-		`;
+		document.getElementById("addFriendOutput").innerText = buffer.error;
+		// document.getElementById("addFriendOutput").innerHTML = `
+		// 	<p class="text-light">${buffer.error}</p>
+		// `;
 	}
 	else{
 		document.getElementById("addFriendOutput").innerHTML = `
@@ -606,7 +631,7 @@ async function updateLogInButton(){
 	await backendPost("/get/currentuser/");
 
 	// Vérifier le résultat et modifier le bouton en conséquence
-	if (buffer.error === "You're not logged in") {
+	if (buffer.error === "User is not logged in") {
 		document.getElementById("logInButton").innerHTML = `
 			<a class="btn btn-outline-light" href="#login">Log in</a>
 		`;
@@ -803,7 +828,7 @@ async function updatePassword(){
 	}
 	await backendPost("/post/password/", value);
 	if (buffer.error){
-		document.getElementById("updateUsernameOutput").innerText = buffer.error;
+		document.getElementById("updatePasswordOutput").innerText = buffer.error;
 	}
 	else{
 		document.getElementById("updatePasswordOutput").innerText = buffer.message;
@@ -825,7 +850,7 @@ function addPlayerToForm(){
 	const newLabel = document.createElement('label');
 	newLabel.setAttribute('for', 'player' + (playersNumber + 1));
 	newLabel.classList.add('form-label');
-	newLabel.textContent = 'Surnom *';
+	newLabel.textContent = 'Alias *';
 
 	// Créer le nouvel input
 	const newInput = document.createElement('input');
@@ -893,7 +918,6 @@ async function checkInputsAndPlayTournament(){
 	hideAllContentDivs();
 	document.getElementsByClassName('content-game')[0].style.display='block';
 	window.location.href = "#game";
-	frm.reset();
 }
 
 async function checkInputAndPlay(){
@@ -931,7 +955,6 @@ async function checkInputAndPlay(){
 	hideAllContentDivs();
 	document.getElementsByClassName('content-game')[0].style.display='block';
 	window.location.href = "#game";
-	frm.reset();
 }
 
 // window.addEventListener('popstate', function (e) {
@@ -986,12 +1009,12 @@ window.addEventListener('hashchange', function (e) {
 				if (currentFragment === "duo"){
 					var frm = document.getElementById("duoForm");
 					frm.reset();
-					// document.getElementById("duoOutputText").value = '';
+					document.getElementById("duoOutputText").innerText = null;
 				}
 				if (currentFragment === "tournament"){
 					var frm = document.getElementById("tournamentForm");
 					frm.reset();
-					// document.getElementById("tournamentOutputText").value = '';
+					document.getElementById("tournamentOutputText").innerText = null;
 				}
 			// }
 			// previousFragment = currentFragment;

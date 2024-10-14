@@ -221,7 +221,7 @@ def logout(request):
 	if request.method == 'POST':
 
 		if not request.session.get('user_id'):
-			return JsonResponse({'error': 'User is not logged in'}, status=405)
+			return JsonResponse({'error': 'User is not logged in'}, status=200)
 		user_id = request.session.get('user_id')
 		player = Player.objects.get(id=user_id)
 		player.logged_in = False
@@ -236,7 +236,7 @@ def tournament_end(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'Unauthorized action'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			else:
 				data = json.loads(request.body)
 				winner = data[0]
@@ -290,7 +290,7 @@ def match_end(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'Unauthorized action'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			else:
 				data = json.loads(request.body)
 				player1 = request.session.get('username')
@@ -335,7 +335,7 @@ def get_best_players(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			players = Player.objects.annotate(
 				matches_won_count=Count('matches', filter=Q(matches__winner=models.F('username')))
 			).order_by('-matches_won_count')[0:10]
@@ -373,11 +373,11 @@ def get_global_stats(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username))
 			wins = matches.filter(winner=player_username).count()
 			losses = matches.exclude(winner=player_username).count()
@@ -413,11 +413,11 @@ def get_solo_stats(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username), mode="0")
 			wins = matches.filter(winner=player_username).count()
 			losses = matches.exclude(winner=player_username).count()
@@ -447,11 +447,11 @@ def get_duo_stats(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username), mode="1")
 			wins = matches.filter(winner=player_username).count()
 			losses = matches.exclude(winner=player_username).count()
@@ -481,11 +481,11 @@ def get_tournament_stats(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username), mode="2")
 			matches_won = matches.filter(winner=player_username).count()
 			matches_lost = matches.exclude(winner=player_username).count()
@@ -526,11 +526,11 @@ def get_victories(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username))
 			wins = matches.filter(winner=player_username).count()
 			player_data = {
@@ -550,11 +550,11 @@ def get_defeats(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username))
 			losses = matches.exclude(winner=player_username).count()
 			player_data = {
@@ -574,11 +574,11 @@ def get_victories_mode(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username))
 			soloWins = matches.filter(winner=player_username, mode="0").count()
 			duoWins = matches.filter(winner=player_username, mode="1").count()
@@ -602,11 +602,11 @@ def get_points_by_match(request):
 		try:
 			# Check if user is logged in
 			if not request.session.get('user_id'):  # Assuming 'user_id' is used to track logged-in users
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			data = json.loads(request.body)
 			player_username = data[0]
 			if not Player.objects.filter(username=player_username).exists():
-				return JsonResponse({'error': 'User is not assigned'}, status=405)
+				return JsonResponse({'error': 'User is not assigned'}, status=200)
 			matches = Match.objects.filter(Q(player1=player_username) | Q(player2=player_username))
 			response = []
 			previous_value = 0
@@ -633,7 +633,7 @@ def get_match_stats(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			else:
 				data = json.loads(request.body)
 				username = data[0]
@@ -684,7 +684,7 @@ def get_requests(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				username = request.session['username']
 				players = Player.objects.get(username=username).friends_request.all()
@@ -706,7 +706,7 @@ def post_decline_request(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'Unauthorized action'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				data = json.loads(request.body)
 				targetUsername = data[0]
@@ -726,7 +726,7 @@ def post_remove_friend(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'Unauthorized action'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				data = json.loads(request.body)
 				targetUsername = data[0]
@@ -746,16 +746,16 @@ def post_add_friend(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'Unauthorized action'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				data = json.loads(request.body)
 				targetUsername = data[0]
 				if not Player.objects.filter(username=targetUsername).exists():
-					return JsonResponse({'error': 'The user you\'re looking for is not registered'}, status=405)
+					return JsonResponse({'error': 'The user you\'re looking for is not registered'}, status=200)
 				username = request.session['username']
 				player = Player.objects.get(username=username)
 				if username == targetUsername or player.friends.filter(username=targetUsername).exists():
-					return JsonResponse({'error': 'This user is already you\'re friend'}, status=405)
+					return JsonResponse({'error': 'This user is already you\'re friend'}, status=200)
 				elif player.friends_request.filter(username=targetUsername).exists():
 					player.friends.add(Player.objects.get(username=targetUsername))
 					player.friends_request.remove(player.friends_request.get(username=targetUsername))
@@ -763,7 +763,7 @@ def post_add_friend(request):
 					return JsonResponse({'message': 'This user is now your friend'}, status=200)
 				else:
 					if Player.objects.get(username=targetUsername).friends_request.filter(username=username).exists():
-						return JsonResponse({'error': 'This user has already received your friend request'}, status=405)
+						return JsonResponse({'error': 'This user has already received your friend request'}, status=200)
 					Player.objects.get(username=targetUsername).friends_request.add(player)
 					return JsonResponse({'message': 'You\'ve sent this user a friend request'}, status=200)
 		except IndexError as e:
@@ -775,7 +775,7 @@ def get_friends_list(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'User is not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				username = request.session['username']
 				players = Player.objects.get(username=username).friends.all()
@@ -798,12 +798,12 @@ def post_username(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'Unauthorized action'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				data = json.loads(request.body)
 				targetUsername = data[0]
 				if Player.objects.filter(username=targetUsername).exists():
-					return JsonResponse({'error': 'This username is already used'}, status=405)
+					return JsonResponse({'error': 'This username is already used'}, status=200)
 				else:
 					player = Player.objects.get(username=request.session['username'])
 					old_username = player.username
@@ -831,7 +831,7 @@ def post_password(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'Unauthorized action'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				data = json.loads(request.body)
 				newPassword = data[0]
@@ -875,7 +875,7 @@ def set_block(request):
 				print("Connection Successful")
 			else:
 				print("Connection Failed")
-				return JsonResponse({'error': 'Connection to blockchain failed'}, status=500)
+				return JsonResponse({'error': 'Connection to blockchain failed'}, status=200)
 			# Connect to a random account
 			web3.eth.defaultAccount = web3.eth.accounts[0]
 			compiled_contract_path = '/code/build/contracts/TournamentScores.json'
@@ -907,7 +907,7 @@ def set_block(request):
 				print("The transaction failed.")
 			return JsonResponse({'message': 'Enregistré'}, status=200)
 		except Exception as e:
-			return JsonResponse({'error': f'Error during transaction execution: {str(e)}'}, status=400)
+			return JsonResponse({'error': f'Error during transaction execution: {str(e)}'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
@@ -930,7 +930,7 @@ def get_block(request):
 				print("Connection Successful")
 			else:
 				print("Connection Failed")
-				return JsonResponse({'error': 'Connection to blockchain failed'}, status=500)
+				return JsonResponse({'error': 'Connection to blockchain failed'}, status=200)
 			# Connect to a random account
 			web3.eth.defaultAccount = web3.eth.accounts[0]
 			compiled_contract_path = '/code/build/contracts/TournamentScores.json'
@@ -952,7 +952,7 @@ def get_block(request):
 			print("Tournament winner: ", winner)
 			return JsonResponse({'scores': scores, 'winner': winner}, status=200)
 		except Exception as e:
-			return JsonResponse({'error': f'Error during transaction execution: {str(e)}'}, status=400)
+			return JsonResponse({'error': f'Error during transaction execution: {str(e)}'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
@@ -964,7 +964,7 @@ def post_avatar(request):
 	if request.method == "POST":
 		if not request.session.get('user_id'):
 			#return HttpResponse("You're not logged in")
-			return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+			return JsonResponse({'error': 'User is not logged in'}, status=200)
 		player = Player.objects.get(username=request.session['username'])
 		form = AvatarForm(request.POST, request.FILES, instance=player)
 		#form = Player.objects.get(username=request.session['username']).avatar_img.AvatarForm(request.POST, request.FILES)
@@ -976,7 +976,7 @@ def post_avatar(request):
 		else:
 			# Handle form errors
 			errors = form.errors.as_json()  # Convert form errors to JSON format
-			return JsonResponse({'error': 'Invalid form data', 'details': errors}, status=400)
+			return JsonResponse({'error': 'Invalid form data', 'details': errors}, status=200)
 	#return HttpResponse("Unauthorized action")
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
@@ -984,10 +984,10 @@ def post_avatar(request):
 def get_avatar(request):
 	if request.method == 'POST':
 		if not request.session['user_id']:
-			return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+			return JsonResponse({'error': 'User is not logged in'}, status=200)
 		avatar_url = Player.objects.get(username=request.session['username']).avatar_img.url
 		return JsonResponse({'avatar_url': avatar_url}, status=200)
-	return JsonResponse({'error': 'unauthorized action'}, status=405)
+	return JsonResponse({'error': 'Unauthorized action'}, status=405)
 		#return render(request, 'profile.html', {'player': player})
 
 @csrf_protect
@@ -995,7 +995,7 @@ def get_avatar2(request):
 
 	if request.method == 'POST':
 		if not request.session['user_id']:
-			return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+			return JsonResponse({'error': 'User is not logged in'}, status=200)
 		# getting all the objects of hotel.
 		avatars = Avatar.objects.all()
 		return HttpResponse(avatars)
@@ -1007,7 +1007,7 @@ def get_current_user(request):
 	if request.method == 'POST':
 		try:
 			if not request.session.get('user_id'):
-				return JsonResponse({'error': 'You\'re not logged in'}, status=405)
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
 			elif request.session['username']:
 				return JsonResponse({'message': request.session['username']}, status=200)
 		except IndexError as e:
