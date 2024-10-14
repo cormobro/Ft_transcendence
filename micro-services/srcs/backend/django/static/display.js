@@ -10,8 +10,17 @@ document.addEventListener("DOMContentLoaded", async function() {
 		alert(buffer.error);
 	} else {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
+			<div class="dropdown">
+				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false" href="#profile" onclick="displayProfilePage()"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40" height="40" id="avatarProfile"></a>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfileButton">
+					<li><a class="dropdown-item" href="#profile">Profile</a></li>
+					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 20px; color: red;"></i></a></li>
+				</ul>
+			</div>
 		`;
+		// document.getElementById("logInButton").innerHTML = `
+		// 	<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
+		// `;
 	}
 	window.location.href="#home";
 });
@@ -639,8 +648,17 @@ async function updateLogInButton(){
 		document.getElementById("logInButton").innerHTML = buffer.error;
 	} else {
 		document.getElementById("logInButton").innerHTML = `
-			<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
+			<div class="dropdown">
+				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false" href="#profile" onclick="displayProfilePage()"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40" height="40" id="avatarProfile"></a>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfileButton">
+					<li><a class="dropdown-item" href="#profile">Profile</a></li>
+					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 20px; color: red;"></i></a></li>
+				</ul>
+			</div>
 		`;
+		// document.getElementById("logInButton").innerHTML = `
+		// 	<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
+		// `;
 	}
 }
 
