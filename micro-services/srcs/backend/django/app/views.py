@@ -23,7 +23,7 @@ def home(request):
 def manage_42_api_step1(request):
 
 	client_id = os.getenv('API_CLIENT_ID')
-	redirect_uri = 'http://localhost:8000/api_code'
+	redirect_uri = 'https://localhost:8000/api_code'
 	state = os.getenv('API_PROTECTION_STRING')
 	scope = "public"
 	auth_url = (
@@ -53,7 +53,7 @@ def manage_42_api_step2(request):
 def manage_42_api_step3(code, state, request):
 	client_id = os.getenv('API_CLIENT_ID')
 	client_secret = os.getenv('API_CLIENT_SECRET')
-	redirect_uri = 'http://localhost:8000/api_code'
+	redirect_uri = 'https://localhost:8000/api_code'
 	grant_type = "authorization_code"
 
 	data = {
@@ -101,14 +101,8 @@ def use_access_token(access_token, request):
 			return simple_response("Account linked successfully")
 		except IntegrityError:
 			return simple_response("This 42 account is already linked to another player")
-	else:
-		request_info = f"""
-		Request Method: {response.request.method}
-		Request URL: {response.request.url}
-		Request Headers: {response.request.headers}
-		Request Body: {response.request.body}
-		"""
-	return simple_response(f"ERROR code: {response.status_code}. The request was {request_info}")
+
+	return simple_response("Api error")
 
 
 
@@ -206,6 +200,8 @@ def log_in(request):
 					player.logged_in = True
 					player.save()
 					return JsonResponse({'message': 'User logged in'}, status=200)
+				else:
+					return JsonResponse({'error': 'Wrong password'}, status=200)
 			else:
 				return JsonResponse({'error': 'User not registered'}, status=200)
 
@@ -221,7 +217,7 @@ def logout(request):
 	if request.method == 'POST':
 
 		if not request.session.get('user_id'):
-			return JsonResponse({'error': 'User is not logged in'}, status=405)
+			return JsonResponse({'error': 'User is not logged in'}, status=200)
 		user_id = request.session.get('user_id')
 		player = Player.objects.get(id=user_id)
 		player.logged_in = False
