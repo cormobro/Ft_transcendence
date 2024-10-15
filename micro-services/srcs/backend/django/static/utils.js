@@ -12,7 +12,7 @@ document.getElementById("duoModeButton").addEventListener('click', async functio
 
 	await backendPost("/get/currentuser/");
 	if (buffer.error)
-		alert(buffer.error);
+		document.getElementById("duoButtonOutputText").innerText = buffer.error;
 	else
 		window.location.href = "#duo";
 });
@@ -21,7 +21,13 @@ document.getElementById("tournamentModeButton").addEventListener('click', async 
 
 	await backendPost("/get/currentuser/");
 	if (buffer.error)
-		alert(buffer.error);
+		document.getElementById("tournamentButtonOutputText").innerText = buffer.error;
 	else
 		window.location.href = "#tournament";
+});
+
+document.getElementById('avatar_img').addEventListener('change', function() {
+
+	var fileName = this.files[0].name;
+	document.getElementById('fileName').textContent = fileName;
 });

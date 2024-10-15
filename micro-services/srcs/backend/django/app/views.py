@@ -104,8 +104,6 @@ def use_access_token(access_token, request):
 
 	return simple_response("Api error")
 
-
-
 def simple_response(message):
     html_content = f"""
     <html>
@@ -117,8 +115,8 @@ def simple_response(message):
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
-                font-family: Arial, sans-serif;
-                background-color: #212529;
+                font-family: 'Audiowide', sans-serif !important;
+                background-color: black;
                 color: white;
             }}
             .message-container {{
@@ -127,7 +125,7 @@ def simple_response(message):
             button {{
                 margin-top: 20px;
                 padding: 10px 20px;
-                background-color: #212529;
+                background-color: black;
                 color: white;
                 border: 2px solid white;
                 border-radius: 5px;
@@ -135,7 +133,7 @@ def simple_response(message):
             }}
             button:hover {{
                 background-color: white;
-                color: #212529;
+                color: black;
             }}
         </style>
     </head>

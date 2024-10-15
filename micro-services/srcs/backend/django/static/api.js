@@ -333,8 +333,10 @@ async function getAvatar()
 			throw new Error(`Response status: ${response.status}`);
 		}
 		const data = await response.json();
-		if (data.avatar_url)
+		if (data.avatar_url){
 			document.getElementById('avatar').src = data.avatar_url;
+			document.getElementById('avatarProfile').src = data.avatar_url;
+		}
 		else
 			console.error('Error: Avatar URL not found');
 	} catch (error) {

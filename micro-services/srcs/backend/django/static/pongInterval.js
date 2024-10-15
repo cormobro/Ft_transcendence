@@ -3,12 +3,26 @@
 
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
-			//canvas.width = window.innerWidth * 3/4;
-			//canvas.height = canvas.width * 2/3;
 			const navbar = document.querySelector('nav.navbar');
-			let navbarHeight = navbar.offsetHeight;
-			canvas.height = window.innerHeight - navbarHeight;
-			canvas.width = canvas.height * 3/2;
+			// let navbarHeight = navbar.offsetHeight;
+			// canvas.height = window.innerHeight - navbarHeight;
+			// canvas.width = canvas.height * 3/2;
+
+			handleWindowSize();
+			function handleWindowSize(){
+				const navbarHeight = navbar.offsetHeight;
+				const currentWidth = window.innerWidth;
+				const currentHeight = window.innerHeight;
+
+				if (currentWidth < currentHeight){
+					canvas.width = window.innerWidth - (window.innerWidth / 20);
+					canvas.height = (canvas.width * 2/3) - navbarHeight;
+				}
+				else{
+					canvas.height = window.innerHeight - navbarHeight;
+					canvas.width = canvas.height * 3/2;
+				}
+			}
 
 			//----------- Ball coordinates -----------------------------------------------------------------
 
@@ -164,56 +178,71 @@
 
 			function drawStartSoloMenu()
 			{
-				drawStartSoloMenuBox();
-				if (boxHover === true)
-					drawStartSoloMenuBoxHover();
-				drawStartSoloMenuText();
+				drawStartSoloMenuBox(boxHover);
+				// if (boxHover === true)
+				// 	drawStartSoloMenuBoxHover();
+				drawStartSoloMenuText(boxHover);
 			}
 
-			function drawStartSoloMenuBox()
+			function drawStartSoloMenuBox(boxHover)
 			{
-				ctx.fillStyle = "#0095DD";
+				// ctx.fillStyle = "#0095DD";
+				if (boxHover === false){
+					ctx.fillStyle = "rgb(255 255 255 / 0%)";
+					ctx.lineWidth = 3;
+					ctx.strokeStyle = 'red';
+					ctx.stroke();
+				}
+				else
+					ctx.fillStyle = 'red';
 				ctx.beginPath();
-				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
+				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 5);
 				ctx.fill();
-				ctx.shadowBlur = 0;
+				// ctx.shadowBlur = 0;
 			}
 
-			function drawStartSoloMenuBoxHover()
-			{
-				ctx.fillStyle = "#0095DD";
-				ctx.beginPath();
-				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
-				ctx.shadowColor = "#FFFFFF";
-				ctx.shadowBlur = 50;
-				ctx.fill();
-			}
+			// function drawStartSoloMenuBoxHover()
+			// {
+			// 	// ctx.fillStyle = "#0095DD";
+			// 	ctx.fillStyle = 'white';
+			// 	ctx.beginPath();
+			// 	ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
+			// 	// ctx.shadowColor = "#FFFFFF";
+			// 	// ctx.shadowBlur = 20;
+			// 	ctx.fill();
+			// }
 
-			function drawStartSoloMenuText()
+			function drawStartSoloMenuText(boxHover)
 			{
-				ctx.font = canvas.height/6 + "px Arial";
-				ctx.fillStyle = "#ffffff";
+				ctx.font = canvas.height/8 + "px Audiowide";
+				// ctx.fillStyle = "#ffffff";
+				if (boxHover === false)
+					ctx.fillStyle = 'red';
+				else
+					ctx.fillStyle = 'black';
 				ctx.textAlign="center";
 				ctx.textBaseline = "middle";
+				// ctx.fillText(`PLAY`, canvas.width / 2, (canvas.height / 2));
 				ctx.fillText(`PLAY`, canvas.width / 2, (canvas.height / 2));
 			}
 
 			function drawMenuScore()
 			{
-				ctx.font = canvas.height/10 + "px Arial";
-				ctx.fillStyle = "#000000";
+				ctx.font = canvas.height/10 + "px Audiowide";
+				// ctx.fillStyle = "#000000";
+				ctx.fillStyle = 'red';
 				ctx.textAlign="center";
 				ctx.textBaseline = "middle";
 				if (tournamentWinner === 0)
 				{
 					if ((gameMode == 2 && winner == players[0].name) || (gameMode == 1 && winner == player1))
-						ctx.fillText(`${alias} has won lol!`, canvas.width / 2, canvas.height / 6);
+						ctx.fillText(`${alias} has won !`, canvas.width / 2, canvas.height / 6);
 					else
-						ctx.fillText(`${winner} has won lol!`, canvas.width / 2, canvas.height / 6);
+						ctx.fillText(`${winner} has won !`, canvas.width / 2, canvas.height / 6);
 				}
 				else
 				{
-					ctx.font = canvas.height/15 + "px Arial";
+					ctx.font = canvas.height/15 + "px Audiowide";
 					if ((gameMode == 2 && tournamentWinner == players[0].name) || (gameMode == 1 && tournamentWinner == player1))
 						ctx.fillText(`${alias} has won the tournament !`, canvas.width / 2, canvas.height / 6);
 					else
@@ -221,18 +250,10 @@
 				}
 			}
 
-			/*function drawAnnouncementMenu()
-			{
-				ctx.font = canvas.height/10 + "px Arial";
-				ctx.fillStyle = "#000000";
-				ctx.textAlign = "center";
-				ctx.textBaseline = "middle";
-				ctx.fillText(`Next match ${player1} VS ${player2}`, canvas.width / 2, 5 * canvas.height / 6);
-			}*/
-
 			function drawAnnouncementMenu() {
-				ctx.font = canvas.height / 12 + "px Arial";
-				ctx.fillStyle = "#000000";
+				ctx.font = canvas.height / 12 + "px Audiowide";
+				// ctx.fillStyle = "#000000";
+				ctx.fillStyle = 'red';
 				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
 				ctx.fillText("Next match", canvas.width / 2, 4.5 * canvas.height / 6);
@@ -302,7 +323,8 @@
 			{
 				ctx.beginPath();
 				ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-				ctx.fillStyle = "#0095DD";
+				// ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = 'red';
 				ctx.fill();
 				ctx.closePath();
 			}
@@ -530,7 +552,8 @@
 			{
 				ctx.beginPath();
 				ctx.rect(0, leftPaddle, paddleWidth, paddleHeight);
-				ctx.fillStyle = "#0095DD";
+				// ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = 'red';
 				ctx.fill();
 				ctx.closePath();
 			}
@@ -539,25 +562,37 @@
 			{
 				ctx.beginPath();
 				ctx.rect(canvas.width - paddleWidth, rightPaddle, paddleWidth, paddleHeight);
-				ctx.fillStyle = "#0095DD";
+				// ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = 'red';
 				ctx.fill();
 				ctx.closePath();
 			}
 
 			function drawScore()
 			{
-				ctx.font = "16px Arial";
-				ctx.fillStyle = "#0095DD";
+				// ctx.font = "16px Audiowide";
+				ctx.font = canvas.height/20 + "px Audiowide";
+				// ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = 'white';
 				ctx.textAlign = "left";
-				ctx.textBaseline = "left";
+				// ctx.textBaseline = "left";
+				ctx.textBaseline = "top";
 				if ((gameMode == 1) || (gameMode == 2 && player1 == players[0].name))
-					ctx.fillText(`${alias}: ${leftScore}`, 8, 20);
+					ctx.fillText(`${alias}: ${leftScore}`, canvas.width / 100, 5.5 * canvas.height / 80);
 				else
-					ctx.fillText(`${player1}: ${leftScore}`, 8, 20);
+					ctx.fillText(`${player1}: ${leftScore}`, canvas.width / 100, 5.5 * canvas.height / 80);
 				if (gameMode == 2 && player2 == players[0].name)
-					ctx.fillText(`${alias}: ${rightScore}`, 8, 40);
+					ctx.fillText(`${alias}: ${rightScore}`, canvas.width / 100, 5.5 * canvas.height / 300);
 				else
-					ctx.fillText(`${player2}: ${rightScore}`, 8, 40);
+					ctx.fillText(`${player2}: ${rightScore}`, canvas.width / 100, 5.5 * canvas.height / 300);
+				// if ((gameMode == 1) || (gameMode == 2 && player1 == players[0].name))
+				// 	ctx.fillText(`${alias}: ${leftScore}`, 8, 20);
+				// else
+				// 	ctx.fillText(`${player1}: ${leftScore}`, 8, 20);
+				// if (gameMode == 2 && player2 == players[0].name)
+				// 	ctx.fillText(`${alias}: ${rightScore}`, 8, 40);
+				// else
+				// 	ctx.fillText(`${player2}: ${rightScore}`, 8, 40);
 			}
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
@@ -567,13 +602,24 @@
 			document.addEventListener("mousemove", mouseMoveHandler, false);
 			document.addEventListener("click", mouseClickHandler, false);
 			document.addEventListener("mousemove", function(e) {
-    				const mousePos = getMousePos(canvas, e);
+					const mousePos = getMousePos(canvas, e);
 			});
+
+			let initialWidth = window.innerWidth;
+			let initialHeight = window.innerHeight;
+
 			window.addEventListener( 'resize', onWindowResize, false );
 			function onWindowResize() {
+
+				let newWidth = window.innerWidth;
+				let newHeight = window.innerHeight;
 				navbarHeight = navbar.offsetHeight;
-				canvas.height = window.innerHeight - navbarHeight;
-				canvas.width = canvas.height * 3/2;
+				if (initialHeight > newHeight || initialHeight < newHeight || initialWidth > newWidth || initialWidth < newWidth){
+					handleWindowSize();
+					resetGame();
+				}
+				initialWidth = newWidth;
+				initialHeight = newHeight;
 				paddleHeight = canvas.height / 4.5;
 			}
 
@@ -589,14 +635,14 @@
 			}
 
 			function getMousePos(canvas, evt) {
-    				// Get the bounding rectangle of the canvas
-    				const rect = canvas.getBoundingClientRect();
-    				// Calculate mouse position within the canvas, accounting for scroll offset
-    				const x = evt.clientX - rect.left;
+					// Get the bounding rectangle of the canvas
+					const rect = canvas.getBoundingClientRect();
+					// Calculate mouse position within the canvas, accounting for scroll offset
+					const x = evt.clientX - rect.left;
 				//+ window.scrollX;
-    				const y = evt.clientY - rect.top;
+					const y = evt.clientY - rect.top;
 				//+ window.scrollY;
-    				return { x: x, y: y };
+					return { x: x, y: y };
 			}
 
 			/*function mouseMoveHandler(e)
@@ -635,7 +681,7 @@
 				const relativeX = mousePos.x;
 				const relativeY = mousePos.y;
 				if (relativeX > canvas.width / 3 && relativeX < 2 * canvas.width / 3 && relativeY > canvas.height / 3 && relativeY < 2 * canvas.height / 3) {
-        				boxHover = true;
+						boxHover = true;
 				}
 				else
 				{

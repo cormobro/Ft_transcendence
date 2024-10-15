@@ -62,19 +62,19 @@ function generateCubeHTML(){
 	console.log(buffer.scores.length);
 	for (let i = 0; i < buffer.scores.length; i++){
 		document.getElementById('blockchainOutput').innerHTML += `
-				<div class="bg-dark text-white border p-3">
+				<div class="text-white border p-3">
 					<p>Match ${i}: ${buffer.scores[i].join(', ')}</p>
 				</div>
 		`;
 	}
 	document.getElementById('blockchainOutput').innerHTML += `
-			<div class="bg-dark text-white border p-3">
+			<div class="text-white border p-3">
 				<p>Winner: ${buffer.winner}</p>
 			</div>
-			<div class= "bg-dark text-white border p-3">
+			<div class= "text-white border p-3">
 				<p>Blockchain Cube</p>
 			</div>
-			<div class= "bg-dark text-white border p-3">
+			<div class= "text-white border p-3">
 				<p>End of Data</p>
 			</div>
 		</div>

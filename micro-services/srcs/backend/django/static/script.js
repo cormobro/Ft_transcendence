@@ -1,20 +1,23 @@
 document.addEventListener("DOMContentLoaded", async function() {
-	// Appeler la fonction await backendPost ici
+
 	await backendPost("/get/currentuser/");
-	// Vérifier le résultat et modifier le bouton en conséquence
+	// Check the result and modify the button accordingly
 	if (buffer.error === "User is not logged in") {
 		document.getElementById("logInButton").innerHTML = `
 			<a class="btn btn-outline-light" href="#login">Log in</a>
 		`;
-	} else if (buffer.error) {
+	}
+	else if (buffer.error) {
 		alert(buffer.error);
-	} else {
+	}
+	else {
+		getAvatar();
 		document.getElementById("logInButton").innerHTML = `
 			<div class="dropdown">
-				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false" href="#profile" onclick="displayProfilePage()"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40" height="40" id="avatarProfile"></a>
+				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40rem" height="40rem" id="avatarProfile"></a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfileButton">
-					<li><a class="dropdown-item" href="#profile">Profile</a></li>
-					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 20px; color: red;"></i></a></li>
+					<li><a class="dropdown-item" href="#profile" onclick="displayProfilePage()">Profile</a></li>
+					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 1.5rem; color: red;"></i></a></li>
 				</ul>
 			</div>
 		`;
@@ -89,10 +92,9 @@ async function displayGlobalStats() {
 	}
 	await backendPost("/get/globalstats/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-light">${buffer.error}</p>
-		// `;
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -117,10 +119,9 @@ async function displaySoloStats(){
 	}
 	await backendPost("/get/solostats/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-light">${buffer.error}</p>
-		// `;
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -145,10 +146,9 @@ async function displayDuoStats(){
 	}
 	await backendPost("/get/duostats/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-light">${buffer.error}</p>
-		// `;
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -173,10 +173,9 @@ async function displayTournamentStats(){
 	}
 	await backendPost("/get/tournamentstats/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
-		// document.getElementById("playerStatsOutput").innerHTML = `
-		// <p class="text-light">${buffer.error}</p>
-		// `;
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 	}
 	else{
 	document.getElementById("playerStatsOutput").innerHTML = `
@@ -196,6 +195,7 @@ async function displayTournamentStats(){
 
 async function displayVictoriesAndDefeatsGraph(){
 
+	// Create a PieChart and Legend instance to display a graph and its legend
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
 			<p class="text-light">No players selected.</p>
@@ -204,7 +204,9 @@ async function displayVictoriesAndDefeatsGraph(){
 	}
 	await backendPost("/get/victories/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 		return;
 	}
 	const victories = buffer.message.matchesWon;
@@ -227,7 +229,7 @@ async function displayVictoriesAndDefeatsGraph(){
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of victories and defeats</h3>
 		<div class="row d-flex align-item-center">
-			<canvas class="bg-dark" id="myPlayerChart"></canvas>
+			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
 			<div class="text-light" for="myPlayerChartLegend"></div>
@@ -236,10 +238,7 @@ async function displayVictoriesAndDefeatsGraph(){
 
 	const canvas = document.getElementById('myPlayerChart');
 	const parentWidth = canvas.parentElement.clientWidth;
-	// if (parentWidth < 500)
-	// 	parentWidth = parentWidth * 1/2;
-	// else
-	// 	parentWidth = parentWidth * 1/4;
+
 	canvas.width = parentWidth;
 	canvas.height = parentWidth;
 
@@ -273,6 +272,7 @@ async function displayVictoriesAndDefeatsGraph(){
 
 async function displayVictoriesByModeGraph(){
 
+	// Create a BarChart and Legend instance to display a graph and its legend
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
 			<p class="text-light">No players selected.</p>
@@ -281,7 +281,9 @@ async function displayVictoriesByModeGraph(){
 	}
 	await backendPost("/get/victoriesbymode/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 		return;
 	}
 	const soloWins = buffer.message.SoloMatchesWins;
@@ -297,7 +299,7 @@ async function displayVictoriesByModeGraph(){
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} :  Number of victories by game mode</h3>
 		<div class="row d-flex align-item-center">
-			<canvas class="bg-dark" id="myPlayerChart"></canvas>
+			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
 			<div class="text-light" for="myPlayerChartLegend"></div>
@@ -306,22 +308,14 @@ async function displayVictoriesByModeGraph(){
 
 	const canvas = document.getElementById('myPlayerChart');
 	const parentWidth = canvas.parentElement.clientWidth;
-	// if (parentWidth < 500)
-	// 	parentWidth = parentWidth * 1/4;
-	// else
-	// 	parentWidth = parentWidth * 1/2;
+
 	canvas.width = parentWidth;
 	canvas.height = parentWidth;
 
-	// var gridScaleValue = Math.ceil(soloWins +
-	// 	duoWins +
-	// 	tournamentWins / 3);
 	const barChartOptions = {
 		canvas: canvas,
 		seriesName:" Number of victories by game mode",
 		padding: 20,
-		// gridScale: gridScaleValue,
-		// gridColor:"#0X33E31",
 		data: {
 			"Solo": soloWins,
 			"Duo": duoWins,
@@ -350,6 +344,7 @@ async function displayVictoriesByModeGraph(){
 
 async function displayPointsByMatchGraph(){
 
+	// Create a PlotChart and Legend instance to display a graph and its legend
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
 			<p class="text-light">No players selected.</p>
@@ -358,7 +353,9 @@ async function displayPointsByMatchGraph(){
 	}
 	await backendPost("/get/pointsbymatch/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 		return;
 	}
 	const pointsOverTime = buffer.message.matches;
@@ -383,7 +380,7 @@ async function displayPointsByMatchGraph(){
 	document.getElementById("playerStatsOutput").innerHTML = `
 		<h3 class="text-light">Graphic stats of ${currInputPlayer.value} : Number of points per match</h3>
 		<div class="row d-flex align-item-center">
-			<canvas class="bg-dark" id="myPlayerChart"></canvas>
+			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
 			<div class="text-light" for="myPlayerChartLegend"></div>
@@ -392,14 +389,7 @@ async function displayPointsByMatchGraph(){
 
 	const canvas = document.getElementById('myPlayerChart');
 	const parentWidth = canvas.parentElement.clientWidth;
-	// if (parentWidth < 500){
-	// 	parentWidth = parentWidth * 1/4;
-	// 	linePlotWidth = 2;
-	// }
-	// else{
-	// 	parentWidth = parentWidth * 1/2;
-	// 	linePlotWidth = 2;
-	// }
+
 	canvas.width = parentWidth;
 	canvas.height = parentWidth;
 
@@ -442,7 +432,9 @@ async function displayMatchStats(){
 
 	await backendPost("/get/matchstats/", currInputPlayer.value);
 	if (buffer.error){
-		alert(buffer.error);
+		document.getElementById("playerStatsOutput").innerHTML = `
+		<p class="text-light">${buffer.error}</p>
+		`;
 		return;
 	}
 	const matches = JSON.parse(buffer.message);
@@ -456,7 +448,6 @@ async function displayMatchStats(){
 	document.getElementById("playerStatsOutput").innerHTML = `
 			<h3 class="text-light">Match history of ${currInputPlayer.value}</h3>
 		`;
-	console.log(matches);
 	for (let i = 0; i < matches.length; i++){
 		document.getElementById("playerStatsOutput").innerHTML += `
 			<h5 class="text-light">Match ${i}</h5>
@@ -469,32 +460,28 @@ async function displayMatchStats(){
 	}
 }
 
-function displayProfilePage(){
+async function displayProfilePage(){
 
-
-	document.getElementById("searchProfileInput").value = '';
-	document.getElementById("newUsernameInput").value = '';
-	document.getElementById("newPasswordInput").value = '';
-	document.getElementById("addFriendOutput").innerHTML = null;
-	document.getElementById("updateUsernameOutput").innerText = null;
-	document.getElementById("updatePasswordOutput").innerText = null;
-	displayUsername();
-	getAvatar();
-	// displayAvatar();
-	displayFriendsList();
+	await backendPost("/get/currentuser/");
+	if (buffer.error){
+		alert(buffer.error);
+	}
+	else{
+		const currentUser = buffer.message;
+		displayUsername(currentUser);
+		getAvatar();
+		displayFriendsList();
+	}
 }
 
-async function displayUsername(){
+document.getElementById("avatarForm").addEventListener('submit', function(){
 
-	var currentUser;
-	await backendPost("/get/currentuser/");
-	if (buffer.error)
-		document.getElementById("usernameProfileOutput").innerText = buffer.error;
-	else
-	{
-		currentUser = buffer.message;
-		document.getElementById("usernameProfileOutput").innerText = currentUser;
-	}
+	getAvatar();
+});
+
+async function displayUsername(currentUser){
+
+	document.getElementById("usernameProfileOutput").innerText = currentUser;
 	await backendPost("/get/victories/", currentUser);
 	if (buffer.error)
 		document.getElementById("victoriesProfileOutput").innerText = buffer.error;
@@ -507,45 +494,22 @@ async function displayUsername(){
 		document.getElementById("defeatsProfileOutput").innerText = `${buffer.message.matchesLost} ${buffer.message.matchesLost < 2 ? " loss" : " losses"}`;
 }
 
-// function displayAvatar(){
-
-// 	backendPost("/get/avatar/");
-
-// 	const avatarPicture = document.querySelector(".image img");
-// 	avatarPicture.src = URL.createObjectURL(buffer);
-// }
-
-// function uploadAndDisplayAvatar(){
-
-// 	const userFile = document.getElementById("filePath");
-
-// 	userFile.onchange = function() {
-// 		backendPost("/post/changeavatar/", userFile.files[0]);
-// 		displayAvatar();
-// 	}
-// }
-
 async function searchAndAddFriend(){
 
 	var input = document.getElementById('searchProfileInput');
 	await backendPost("/post/addfriend/", input.value);
 	if (buffer.error){
 		document.getElementById("addFriendOutput").innerText = buffer.error;
-		// document.getElementById("addFriendOutput").innerHTML = `
-		// 	<p class="text-light">${buffer.error}</p>
-		// `;
 	}
 	else{
-		document.getElementById("addFriendOutput").innerHTML = `
-			<p class="text-light">${buffer.message}</p>
-		`;
+		document.getElementById("addFriendOutput").innerText = buffer.message;
 		displayFriendsList();
 	}
 }
 
 async function displayFriendsList() {
 
-	//loop here to display friend requests
+	// Loop here to display friend requests
 	await backendPost("/get/friendrequests/");
 	if (buffer.error){
 		document.getElementById("requestsList").innerHTML = `
@@ -559,13 +523,13 @@ async function displayFriendsList() {
 		document.getElementById("requestsList").innerHTML += `
 			<li class="d-flex inline">
 				<h5>${requestsList[i]}</h5>
-				<button type="button" class="btn btn-outline-light ms-2" onclick="acceptFriendRequest('${requestsList[i]}')"><i class="bi bi-check-circle" style="font-size: 20px"></i></button>
-				<button type="button" class="btn btn-outline-light ms-3" onclick="declineFriendRequest('${requestsList[i]}')"><i class="bi bi-slash-circle" style="font-size: 20px"></i></button>
+				<button type="button" class="btn btn-outline-light ms-2" onclick="acceptFriendRequest('${requestsList[i]}')"><i class="bi bi-check-circle" style="font-size: 1.5rem"></i></button>
+				<button type="button" class="btn btn-outline-light ms-3" onclick="declineFriendRequest('${requestsList[i]}')"><i class="bi bi-slash-circle" style="font-size: 1.5rem"></i></button>
 			</li>
 		`
 	}
 	}
-	//loop here to display friends list
+	// Loop here to display friends list
 	await backendPost("/get/friendslist/")
 	if (buffer.error){
 		document.getElementById("friendsList").innerHTML = `
@@ -584,22 +548,22 @@ async function displayFriendsList() {
 		}
 		else{
 			if (buffer.message === "True"){
-				//if friend is online display a 'green circle'
+				// If friend is online display a 'green circle'
 				document.getElementById("friendsList").innerHTML += `
 					<li class="d-flex inline">
 						<h5>${friendsList[i]}</h5>
 						<img src="static/img/icons8-online-24.png" alt="online" width="24" height="24">
-						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 20px"></i></button>
+						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 1.5rem"></i></button>
 					</li>
 				`;
 			}
 			else{
-				//else display a 'red circle'
+				// Else display a 'red circle'
 				document.getElementById("friendsList").innerHTML += `
 					<li class="d-flex inline">
 						<h5>${friendsList[i]}</h5>
 						<img src="static/img/icons8-offline-24.png" alt="offline" width="24" height="24">
-						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 20px"></i></button>
+						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 1.5rem"></i></button>
 					</li>
 				`;
 			}
@@ -612,7 +576,7 @@ async function acceptFriendRequest(requestor){
 
 	await backendPost("/post/addfriend/", requestor);
 	if (buffer.error)
-		alert(buffer.error);
+		document.getElementById("friendsListOutput").innerText = buffer.error;
 	else
 		displayFriendsList();
 }
@@ -621,7 +585,7 @@ async function declineFriendRequest(requestor){
 
 	await backendPost("/post/declinefriendrequest/", requestor);
 	if (buffer.error)
-		alert(buffer.error);
+		document.getElementById("friendsListOutput").innerText = buffer.error;
 	else
 		displayFriendsList();
 }
@@ -630,7 +594,7 @@ async function removeFriend(friend){
 
 	await backendPost("/post/removefriend/", friend);
 	if (buffer.error)
-		alert(buffer.error);
+		document.getElementById("friendsListOutput").innerText = buffer.error;
 	else
 		displayFriendsList();
 }
@@ -639,7 +603,7 @@ async function updateLogInButton(){
 
 	await backendPost("/get/currentuser/");
 
-	// Vérifier le résultat et modifier le bouton en conséquence
+	// Check the result and modify the button accordingly
 	if (buffer.error === "User is not logged in") {
 		document.getElementById("logInButton").innerHTML = `
 			<a class="btn btn-outline-light" href="#login">Log in</a>
@@ -647,12 +611,13 @@ async function updateLogInButton(){
 	} else if (buffer.error) {
 		document.getElementById("logInButton").innerHTML = buffer.error;
 	} else {
+		getAvatar();
 		document.getElementById("logInButton").innerHTML = `
 			<div class="dropdown">
-				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false" href="#profile" onclick="displayProfilePage()"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40" height="40" id="avatarProfile"></a>
+				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40rem" height="40rem" id="avatarProfile"></a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfileButton">
-					<li><a class="dropdown-item" href="#profile">Profile</a></li>
-					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 20px; color: red;"></i></a></li>
+					<li><a class="dropdown-item" href="#profile" onclick="displayProfilePage()">Profile</a></li>
+					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 1.5rem; color: red;"></i></a></li>
 				</ul>
 			</div>
 		`;
@@ -709,23 +674,23 @@ async function updateLogInButton(){
 // 	}
 
 function logInWith42() {
-    // Créer l'URL d'authentification
-    const authUrl = '/api_42/';
+	// Créer l'URL d'authentification
+	const authUrl = '/api_42/';
 
-    // Ouvrir la fenêtre pop-up
-    const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
+	// Ouvrir la fenêtre pop-up
+	const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
 
-    // Écouter les messages du pop-up
-    window.addEventListener('message', function(event) {
-        if (event.origin !== window.location.origin) {
-            return; // Ignorer les messages d'autres origines
-        }
+	// Écouter les messages du pop-up
+	window.addEventListener('message', function(event) {
+		if (event.origin !== window.location.origin) {
+			return; // Ignorer les messages d'autres origines
+		}
 
-        // Vérifier si le message contient des informations sur l'authentification
-        if (event.data && event.data.message) {
-            document.getElementById('linkMessage').textContent = event.data.message;
-        }
-    });
+		// Vérifier si le message contient des informations sur l'authentification
+		if (event.data && event.data.message) {
+			document.getElementById('linkMessage').textContent = event.data.message;
+		}
+	});
 }
 
 async function logIn(){
@@ -755,8 +720,6 @@ async function logIn(){
 	else{
 		window.location.href = "#home";
 		frm.reset();
-		// hideAllContentDivs();
-		// document.getElementsByClassName('content-profile')[0].style.display='block';
 	}
 	updateLogInButton();
 }
@@ -799,8 +762,6 @@ async function signUp(){
 	else{
 		window.location.href = "#home";
 		frm.reset();
-		// hideAllContentDivs();
-		// document.getElementsByClassName('content-profile')[0].style.display='block';
 	}
 	updateLogInButton();
 }
@@ -825,7 +786,7 @@ async function updateUsername(){
 	}
 	else{
 		document.getElementById("updateUsernameOutput").innerText = buffer.message;
-		displayUsername();
+		displayUsername(document.getElementById("newUsernameInput").value);
 		frm.reset();
 	}
 }
@@ -856,34 +817,35 @@ async function updatePassword(){
 
 function addPlayerToForm(){
 
-	// Compter le nombre actuel de champs d'input
+	// Count the current number of input fields
 	const playersNumber = document.querySelectorAll('#tournamentInputs #playerInputs .col-12').length;
 
 	if (playersNumber == 8)
 		return;
-	// Créer un nouvel élément div pour le champ input
+	// Create a new div element for the input field
 	const newInputDiv = document.createElement('div');
 	newInputDiv.classList.add('col-12');
+	newInputDiv.classList.add('mt-2');
 
 	const newLabel = document.createElement('label');
 	newLabel.setAttribute('for', 'player' + (playersNumber + 1));
 	newLabel.classList.add('form-label');
 	newLabel.textContent = 'Alias *';
 
-	// Créer le nouvel input
+	// Create new input
 	const newInput = document.createElement('input');
 	newInput.type = 'text';
 	newInput.classList.add('form-control');
 	newInput.name = 'player' + (playersNumber + 1);
-	// newInput.id = 'player' + (playersNumber + 1);
+	newInput.placeholder = 'Alias';
 	newInput.maxLength = '15';
 	newInput.required = ' ';
 
-	// Ajouter le label et l'input au div
+	// Add the label and input to the div
 	newInputDiv.appendChild(newLabel);
 	newInputDiv.appendChild(newInput);
 
-	// Ajouter le nouveau div au conteneur de champs
+	// Add the new div to the field container
 	document.querySelector('#tournamentInputs #playerInputs').appendChild(newInputDiv);
 }
 
@@ -902,8 +864,7 @@ async function checkInputsAndPlayTournament(){
 
 	var frm = document.querySelector('#tournamentForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
-	// e.preventDefault();
-	// e.stopPropagation();
+
 	var classArr = [];
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
@@ -942,8 +903,7 @@ async function checkInputAndPlay(){
 
 	var frm = document.querySelector('#duoForm');
 	var inputs = frm.querySelectorAll('input[type=text]');
-	// e.preventDefault();
-	// e.stopPropagation();
+
 	var classArr = [];
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
@@ -975,67 +935,25 @@ async function checkInputAndPlay(){
 	window.location.href = "#game";
 }
 
-// window.addEventListener('popstate', function (e) {
-
-// 	// console.log("History changed")
-// });
-
-// window.addEventListener('hashchange', function (e) {
-
-// 	// console.log("Hash changed");
-// });
-
-// var previousFragment = window.location.hash.substring(1);
-// var state = false;
-window.addEventListener('hashchange', function (e) {
+window.addEventListener('hashchange', async function (e) {
 
 	var currentFragment = window.location.hash.substring(1);
-	// console.log("Current: "+currentFragment);
-	// console.log("Previous: "+previousFragment);
 	var fragmentsArray = ["home", "game", "duo", "tournament", "stats", "profile", "blockchain", "login", "signup"];
 
 	for (let fragment of fragmentsArray){
 		if (currentFragment === fragment){
-			// if (currentFragment !== "game")
-			// 	state = false;
-			// else if (currentFragment === "game" && state === false){
-			// 	history.back();
-			// 	currentFragment = window.location.hash.substring(1);
-			// }
-			// if (currentFragment === "game"){
-			// 	hideAllContentDivs();
-			// 	page = 'content-home';
-			// 	document.getElementsByClassName(page)[0].style.display='block';
-			// }
-			// else{
-				// while (currentFragment === "game"){
-				// 	history.go(-1);
-				// 	currentFragment = window.location.hash.substring(1);
-				// 	console.log("Fragment in while loop: "+currentFragment);
-				// }
+				await backendPost("/get/currentuser/");
+				if (buffer.error === "User is not logged in") {
+					document.getElementById("logInButton").innerHTML = `
+						<a class="btn btn-outline-light" href="#login">Log in</a>
+					`;
+				}
+				else if (buffer.error)
+					alert(buffer.error);
+				cleanPage(currentFragment);
 				hideAllContentDivs();
 				page = 'content-' + currentFragment;
 				document.getElementsByClassName(page)[0].style.display='block';
-				if (currentFragment === "stats"){
-					document.getElementById("playerStatsOutput").innerHTML = null;
-					document.getElementById("searchPlayerInput").value = '';
-					currInputPlayer = '';
-				}
-				if (currentFragment === "blockchain"){
-					document.getElementById("tournamentIdInput").value = '';
-				}
-				if (currentFragment === "duo"){
-					var frm = document.getElementById("duoForm");
-					frm.reset();
-					document.getElementById("duoOutputText").innerText = null;
-				}
-				if (currentFragment === "tournament"){
-					var frm = document.getElementById("tournamentForm");
-					frm.reset();
-					document.getElementById("tournamentOutputText").innerText = null;
-				}
-			// }
-			// previousFragment = currentFragment;
 				if (currentFragment === "game")
 					window.location.href = "#game";
 				else
@@ -1050,4 +968,47 @@ function scroll() {
 		top: 0,
 		behavior: 'smooth'
 	});
+}
+
+function cleanPage(currentFragment){
+
+	if (currentFragment === "login"){
+		document.getElementById("logInForm").reset();
+	}
+	if (currentFragment === "signup"){
+		document.getElementById("signUpForm").reset();
+	}
+	if (currentFragment === "home"){
+		document.getElementById("duoButtonOutputText").innerText = null;
+		document.getElementById("tournamentButtonOutputText").innerText = null;
+	}
+	if (currentFragment === "stats"){
+		document.getElementById("playerStatsOutput").innerHTML = null;
+		document.getElementById("searchPlayerInput").value = '';
+		currInputPlayer = '';
+	}
+	if (currentFragment === "profile"){
+		document.getElementById("avatarForm").reset();
+		document.getElementById("searchProfileInput").value = '';
+		document.getElementById("updateUsernameForm").reset();
+		document.getElementById("updatePasswordForm").reset();
+		document.getElementById("addFriendOutput").innerText = null;
+		document.getElementById("friendsListOutput").innerText = null;
+		document.getElementById("updateUsernameOutput").innerText = null;
+		document.getElementById("updatePasswordOutput").innerText = null;
+	}
+	if (currentFragment === "blockchain"){
+		document.getElementById("tournamentIdInput").value = '';
+		document.getElementById("blockchainOutput").innerHTML = null;
+	}
+	if (currentFragment === "duo"){
+		var frm = document.getElementById("duoForm");
+		frm.reset();
+		document.getElementById("duoOutputText").innerText = null;
+	}
+	if (currentFragment === "tournament"){
+		var frm = document.getElementById("tournamentForm");
+		frm.reset();
+		document.getElementById("tournamentOutputText").innerText = null;
+	}
 }
