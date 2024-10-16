@@ -21,9 +21,6 @@ document.addEventListener("DOMContentLoaded", async function() {
 				</ul>
 			</div>
 		`;
-		// document.getElementById("logInButton").innerHTML = `
-		// 	<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
-		// `;
 	}
 	window.location.href="#home";
 });
@@ -42,7 +39,7 @@ async function displayLeaderboard() {
 	}
 	const playersList = buffer.message
 	if (playersList.length === 0){
-		document.getElementById('informationOutput').innerText = "No players found.";
+		document.getElementById('informationOutput').innerText = "No players found";
 	}
 	else{
 		document.getElementById('informationOutput').innerText = null;
@@ -86,7 +83,7 @@ async function displayGlobalStats() {
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -113,7 +110,7 @@ async function displaySoloStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -140,7 +137,7 @@ async function displayDuoStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -167,7 +164,7 @@ async function displayTournamentStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -198,7 +195,7 @@ async function displayVictoriesAndDefeatsGraph(){
 	// Create a PieChart and Legend instance to display a graph and its legend
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -275,7 +272,7 @@ async function displayVictoriesByModeGraph(){
 	// Create a BarChart and Legend instance to display a graph and its legend
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -347,7 +344,7 @@ async function displayPointsByMatchGraph(){
 	// Create a PlotChart and Legend instance to display a graph and its legend
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -425,7 +422,7 @@ async function displayMatchStats(){
 
 	if (!currInputPlayer){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<p class="text-light">No players selected.</p>
+			<p class="text-light">No players selected</p>
 		`;
 		return;
 	}
@@ -521,7 +518,7 @@ async function displayFriendsList() {
 		document.getElementById("requestsList").innerHTML = null;
 	for (let i = 0; i < requestsList.length; i++){
 		document.getElementById("requestsList").innerHTML += `
-			<li class="d-flex inline">
+			<li class="d-flex inline align-items-center">
 				<h5>${requestsList[i]}</h5>
 				<button type="button" class="btn btn-outline-light ms-2" onclick="acceptFriendRequest('${requestsList[i]}')"><i class="bi bi-check-circle" style="font-size: 1.5rem"></i></button>
 				<button type="button" class="btn btn-outline-light ms-3" onclick="declineFriendRequest('${requestsList[i]}')"><i class="bi bi-slash-circle" style="font-size: 1.5rem"></i></button>
@@ -550,9 +547,9 @@ async function displayFriendsList() {
 			if (buffer.message === "True"){
 				// If friend is online display a 'green circle'
 				document.getElementById("friendsList").innerHTML += `
-					<li class="d-flex inline">
+					<li class="d-flex inline align-items-center">
 						<h5>${friendsList[i]}</h5>
-						<img src="static/img/icons8-online-24.png" alt="online" width="24" height="24">
+						<img class="ms-2" src="static/img/icons8-online-24.png" alt="online" width="24" height="24">
 						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 1.5rem"></i></button>
 					</li>
 				`;
@@ -560,9 +557,9 @@ async function displayFriendsList() {
 			else{
 				// Else display a 'red circle'
 				document.getElementById("friendsList").innerHTML += `
-					<li class="d-flex inline">
+					<li class="d-flex inline align-items-center">
 						<h5>${friendsList[i]}</h5>
-						<img src="static/img/icons8-offline-24.png" alt="offline" width="24" height="24">
+						<img class="ms-2" src="static/img/icons8-offline-24.png" alt="offline" width="24" height="24">
 						<button type="button" class="btn btn-outline-light ms-3" onclick="removeFriend('${friendsList[i]}')"><i class="bi bi-trash" style="font-size: 1.5rem"></i></button>
 					</li>
 				`;
@@ -621,9 +618,6 @@ async function updateLogInButton(){
 				</ul>
 			</div>
 		`;
-		// document.getElementById("logInButton").innerHTML = `
-		// 	<a class="btn btn-outline-light" href="#profile" onclick="displayProfilePage()">Profile</a>
-		// `;
 	}
 }
 
@@ -674,19 +668,19 @@ async function updateLogInButton(){
 // 	}
 
 function logInWith42() {
-	// Créer l'URL d'authentification
+	// Create authentication URL
 	const authUrl = '/api_42/';
 
-	// Ouvrir la fenêtre pop-up
+	// Open pop-up window
 	const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
 
-	// Écouter les messages du pop-up
+	// Listen to pop-up messages
 	window.addEventListener('message', function(event) {
 		if (event.origin !== window.location.origin) {
-			return; // Ignorer les messages d'autres origines
+			return; // Ignore messages from other origins
 		}
 
-		// Vérifier si le message contient des informations sur l'authentification
+		// Check if the message contains authentication information
 		if (event.data && event.data.message) {
 			document.getElementById('linkMessage').textContent = event.data.message;
 		}
@@ -705,11 +699,11 @@ async function logIn(){
 	for (var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('logInOutput').innerText = 'Wrong entry: "' + value + '" contains spaces.';
+			document.getElementById('logInOutput').innerText = 'Wrong entry: "' + value + '" contains spaces';
 			return false;
 		}
 		else if (value === ''){
-			document.getElementById('logInOutput').innerText = 'Empty field.';
+			document.getElementById('logInOutput').innerText = 'Empty field';
 			return false;
 		}
 	}
@@ -747,11 +741,11 @@ async function signUp(){
 	for (var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('signUpOutput').innerText = 'Wrong entry: "' + value + '" contains spaces.';
+			document.getElementById('signUpOutput').innerText = 'Wrong entry: "' + value + '" contains spaces';
 			return false;
 		}
 		else if (value === ''){
-			document.getElementById('signUpOutput').innerText = 'Empty field.';
+			document.getElementById('signUpOutput').innerText = 'Empty field';
 			return false;
 		}
 	}
@@ -773,11 +767,11 @@ async function updateUsername(){
 
 	const value = input.value;
 	if (value.includes(" ")){
-		document.getElementById('updateUsernameOutput').innerText = 'Wrong entry: "' + value + '" contains spaces.';
+		document.getElementById('updateUsernameOutput').innerText = 'Wrong entry: "' + value + '" contains spaces';
 		return false;
 	}
 	else if (value === ''){
-		document.getElementById('updateUsernameOutput').innerText = 'Empty field.';
+		document.getElementById('updateUsernameOutput').innerText = 'Empty field';
 		return false;
 	}
 	await backendPost("/post/username/", value);
@@ -798,11 +792,11 @@ async function updatePassword(){
 
 	const value = input.value;
 	if (value.includes(" ")){
-		document.getElementById('updatePasswordOutput').textContent = 'Wrong entry: "' + value + '" contains spaces.';
+		document.getElementById('updatePasswordOutput').textContent = 'Wrong entry: "' + value + '" contains spaces';
 		return false;
 	}
 	else if (value === ''){
-		document.getElementById('updatePasswordOutput').textContent = 'Empty field.';
+		document.getElementById('updatePasswordOutput').textContent = 'Empty field';
 		return false;
 	}
 	await backendPost("/post/password/", value);
@@ -869,15 +863,15 @@ async function checkInputsAndPlayTournament(){
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('tournamentOutputText').innerText = 'Wrong entry: "' + value + '" contains spaces.';
+			document.getElementById('tournamentOutputText').innerText = 'Wrong entry: "' + value + '" contains spaces';
 			return false;
 		}
 		else if (classArr.includes(value)){
-			document.getElementById('tournamentOutputText').innerText = 'Wrong entry: "' + value + '" is duplicated.';
+			document.getElementById('tournamentOutputText').innerText = 'Wrong entry: "' + value + '" is duplicated';
 			return false;
 		}
 		if (value === ''){
-			document.getElementById('tournamentOutputText').innerText = 'Please fill in all the fields.';
+			document.getElementById('tournamentOutputText').innerText = 'Please fill in all the fields';
 			return false;
 		}
 		classArr.push(value);
@@ -908,15 +902,15 @@ async function checkInputAndPlay(){
 	for(var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('duoOutputText').innerText = 'Wrong entry: "' + value + '" contains spaces.';
+			document.getElementById('duoOutputText').innerText = 'Wrong entry: "' + value + '" contains spaces';
 			return false;
 		}
 		else if (classArr.includes(value)){
-			document.getElementById('duoOutputText').innerText = 'Wrong entry: "' + value + '" is duplicated.';
+			document.getElementById('duoOutputText').innerText = 'Wrong entry: "' + value + '" is duplicated';
 			return false;
 		}
 		if (value === ''){
-			document.getElementById('duoOutputText').innerText = 'Please fill in all the fields.';
+			document.getElementById('duoOutputText').innerText = 'Please fill in all the fields';
 			return false;
 		}
 		classArr.push(value);
@@ -974,9 +968,11 @@ function cleanPage(currentFragment){
 
 	if (currentFragment === "login"){
 		document.getElementById("logInForm").reset();
+		document.getElementById("logInOutput").innerText = null;
 	}
 	if (currentFragment === "signup"){
 		document.getElementById("signUpForm").reset();
+		document.getElementById("signUpOutput").innerText = null;
 	}
 	if (currentFragment === "home"){
 		document.getElementById("duoButtonOutputText").innerText = null;

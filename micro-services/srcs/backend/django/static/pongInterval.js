@@ -4,24 +4,36 @@
 			const canvas = document.getElementById("myCanvas");
 			const ctx = canvas.getContext("2d");
 			const navbar = document.querySelector('nav.navbar');
-			// let navbarHeight = navbar.offsetHeight;
+			let oldWidth;
+			let oldHeight;
+			let navbarHeight;
 			// canvas.height = window.innerHeight - navbarHeight;
 			// canvas.width = canvas.height * 3/2;
 
 			handleWindowSize();
 			function handleWindowSize(){
-				const navbarHeight = navbar.offsetHeight;
-				const currentWidth = window.innerWidth;
-				const currentHeight = window.innerHeight;
+				const newWidth = window.innerWidth;
+				const newHeight = window.innerHeight;
+				navbarHeight = navbar.offsetHeight;
 
-				if (currentWidth < currentHeight){
-					canvas.width = window.innerWidth - (window.innerWidth / 20);
+				if ((newWidth > oldWidth || newWidth < oldWidth) && newHeight === oldHeight){
+					canvas.width = newWidth - (newWidth / 10);
+					canvas.height = (canvas.width * 2/3) - navbarHeight;
+				}
+				else if (newWidth < newHeight){
+					canvas.width = newWidth - (newWidth / 10);
 					canvas.height = (canvas.width * 2/3) - navbarHeight;
 				}
 				else{
-					canvas.height = window.innerHeight - navbarHeight;
+					canvas.height = newHeight - (newHeight / 10) - navbarHeight;
 					canvas.width = canvas.height * 3/2;
 				}
+				if (canvas.height > 835 - navbarHeight)
+					canvas.height = 835 - navbarHeight;
+				oldWidth = newWidth;
+				oldHeight = newHeight;
+
+				console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
 			}
 
 			//----------- Ball coordinates -----------------------------------------------------------------
@@ -33,7 +45,7 @@
 
 			let dx = (canvas.width / 2) / 200;
 			let dy = -1 * ((canvas.height / 2) / 200);
-			const ballRadius = 10;
+			let ballRadius = canvas.width / 140;
 			let relativeIntersectionY = 0;
 			let normalizedIntersectionY = 0;
 			let bounceAngle = 0;
@@ -42,7 +54,7 @@
 			//---------- Paddle size/coordinates/state------------------------------------------------------
 
 			let paddleHeight = canvas.height / 4.5;
-			const paddleWidth = 10;
+			let paddleWidth = canvas.width / 140;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
 			let leftPaddleDownPressed = false;
@@ -140,6 +152,9 @@
 				y = canvas.height - 10;
 				dx = (canvas.width / 2) / 200;
 				dy = -1 * ((canvas.height / 2) / 200);
+				ballRadius = canvas.width / 140;
+				paddleHeight = canvas.height / 4.5;
+				paddleWidth = canvas.width / 140;
 				leftPaddle = (canvas.height - paddleHeight) / 2;
 				rightPaddle = (canvas.height - paddleHeight) / 2;
 				leftScore = 0;
@@ -605,22 +620,11 @@
 					const mousePos = getMousePos(canvas, e);
 			});
 
-			let initialWidth = window.innerWidth;
-			let initialHeight = window.innerHeight;
-
 			window.addEventListener( 'resize', onWindowResize, false );
 			function onWindowResize() {
 
-				let newWidth = window.innerWidth;
-				let newHeight = window.innerHeight;
-				navbarHeight = navbar.offsetHeight;
-				if (initialHeight > newHeight || initialHeight < newHeight || initialWidth > newWidth || initialWidth < newWidth){
-					handleWindowSize();
-					resetGame();
-				}
-				initialWidth = newWidth;
-				initialHeight = newHeight;
-				paddleHeight = canvas.height / 4.5;
+				handleWindowSize();
+				resetGame();
 			}
 
 			function simulateKeyPress(key) {
