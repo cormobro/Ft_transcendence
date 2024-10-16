@@ -18,9 +18,9 @@ function setBlock(tournamentMatches, tournamentId, tournamentWinner, matchesNumb
 async function getBlock(){
 
 	const tournamentId = document.getElementById("tournamentIdInput").value;
-	if (tournamentId < 0){
+	if (tournamentId < 0 || tournamentId.length === 0){
 		document.getElementById('blockchainOutput').innerHTML = `
-			<p>Negative value not allowed.</p>
+			<p>Negative or NaN value not allowed</p>
 		`;
 		return;
 	}
@@ -39,7 +39,7 @@ async function getBlock(){
 			}
 			else {
 				document.getElementById('blockchainOutput').innerHTML = `
-					<p>The value of the message could not be extracted.</p>
+					<p>The value of the message could not be extracted</p>
 				`;
 			}
 		}

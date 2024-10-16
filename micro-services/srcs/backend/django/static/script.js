@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 		getAvatar();
 		document.getElementById("logInButton").innerHTML = `
 			<div class="dropdown">
-				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40rem" height="40rem" id="avatarProfile"></a>
+				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false"><img class="rounded-circle" src="static/img/default_avatar.png" alt="profile" width="40rem" height="40rem" id="avatarProfile"></a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfileButton">
 					<li><a class="dropdown-item" href="#profile" onclick="displayProfilePage()">Profile</a></li>
 					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 1.5rem; color: red;"></i></a></li>
@@ -241,7 +241,7 @@ async function displayVictoriesAndDefeatsGraph(){
 
 	const chartOptions = {
 		canvas: canvas,
-		seriesName: "Number of victories and defeats",
+		seriesName: "Number of match victories and defeats",
 		padding: 20,
 		data: {
 			"Victories": victories,
@@ -358,7 +358,7 @@ async function displayPointsByMatchGraph(){
 	const pointsOverTime = buffer.message.matches;
 	if (pointsOverTime.length === 0){
 		document.getElementById("playerStatsOutput").innerHTML = `
-			<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of points per match</h3>
+			<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of points</h3>
 			<p class="text-light">No matches found</p>
 		`;
 		return;
@@ -368,14 +368,14 @@ async function displayPointsByMatchGraph(){
 			break;
 		else if (i === pointsOverTime.length - 1){
 			document.getElementById("playerStatsOutput").innerHTML = `
-				<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of points per match</h3>
+				<h3 class="text-light">Graphic statistics of ${currInputPlayer.value} : Number of points</h3>
 				<p class="text-light">No points won</p>
 			`;
 			return;
 		}
 	}
 	document.getElementById("playerStatsOutput").innerHTML = `
-		<h3 class="text-light">Graphic stats of ${currInputPlayer.value} : Number of points per match</h3>
+		<h3 class="text-light">Graphic stats of ${currInputPlayer.value} : Number of points</h3>
 		<div class="row d-flex align-item-center">
 			<canvas id="myPlayerChart"></canvas>
 		</div>
@@ -393,6 +393,7 @@ async function displayPointsByMatchGraph(){
 	var mapping = {};
 	for (let i = 0; i < pointsOverTime.length; i++) {
 		mapping["Match " + i] = pointsOverTime[i];
+		console.log(pointsOverTime[i]);
 	}
 
 	const plotChartOptions = {
@@ -489,6 +490,23 @@ async function displayUsername(currentUser){
 		document.getElementById("defeatsProfileOutput").innerText = buffer.error;
 	else
 		document.getElementById("defeatsProfileOutput").innerText = `${buffer.message.matchesLost} ${buffer.message.matchesLost < 2 ? " loss" : " losses"}`;
+}
+
+async function uploadAvatar(){
+
+	const file = document.getElementById("avatarInput");
+
+	const formData = new FormData();
+	formData.append('avatar_img', file);
+
+	console.log(formData);
+	await backendPost("/post/avatar/", formData);
+	console.log(buffer);
+	if (buffer.error)
+		document.getElementById("avatarOutput").innerText = buffer.error;
+	else{
+		getAvatar();
+	}
 }
 
 async function searchAndAddFriend(){
@@ -611,7 +629,7 @@ async function updateLogInButton(){
 		getAvatar();
 		document.getElementById("logInButton").innerHTML = `
 			<div class="dropdown">
-				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false"><img src="static/img/default_avatar.png" class="img-fluid rounded-5" alt="profile" width="40rem" height="40rem" id="avatarProfile"></a>
+				<a class="dropdown-toggle text-light" type="button" id="dropdownProfileButton" data-bs-toggle="dropdown" aria-expanded="false"><img class="rounded-circle" src="static/img/default_avatar.png" alt="profile" width="40rem" height="40rem" id="avatarProfile"></a>
 				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfileButton">
 					<li><a class="dropdown-item" href="#profile" onclick="displayProfilePage()">Profile</a></li>
 					<li><a class="btn btn-link dropdown-item" role="button" onclick="logOut()"><i class="bi bi-power" style="font-size: 1.5rem; color: red;"></i></a></li>
@@ -699,7 +717,7 @@ async function logIn(){
 	for (var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('logInOutput').innerText = 'Wrong entry: "' + value + '" contains spaces';
+			document.getElementById('logInOutput').innerText = 'Wrong entry: username or password contains spaces';
 			return false;
 		}
 		else if (value === ''){
@@ -741,7 +759,7 @@ async function signUp(){
 	for (var i = 0; i < inputs.length; i++){
 		const value = inputs[i].value;
 		if (value.includes(" ")){
-			document.getElementById('signUpOutput').innerText = 'Wrong entry: "' + value + '" contains spaces';
+			document.getElementById('signUpOutput').innerText = 'Wrong entry: username or password contains spaces';
 			return false;
 		}
 		else if (value === ''){
@@ -792,7 +810,7 @@ async function updatePassword(){
 
 	const value = input.value;
 	if (value.includes(" ")){
-		document.getElementById('updatePasswordOutput').textContent = 'Wrong entry: "' + value + '" contains spaces';
+		document.getElementById('updatePasswordOutput').textContent = 'Wrong entry: password contains spaces';
 		return false;
 	}
 	else if (value === ''){
@@ -985,6 +1003,8 @@ function cleanPage(currentFragment){
 	}
 	if (currentFragment === "profile"){
 		document.getElementById("avatarForm").reset();
+		document.getElementById("fileName").innerText = "No File chosen";
+		document.getElementById("avatarOutput").innerText = null;
 		document.getElementById("searchProfileInput").value = '';
 		document.getElementById("updateUsernameForm").reset();
 		document.getElementById("updatePasswordForm").reset();

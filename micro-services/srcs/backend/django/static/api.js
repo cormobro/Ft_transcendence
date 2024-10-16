@@ -333,12 +333,15 @@ async function getAvatar()
 			throw new Error(`Response status: ${response.status}`);
 		}
 		const data = await response.json();
-		if (data.avatar_url){
+		if (data.message === 'No file associated') {
+			document.getElementById('avatar').src = 'static/img/default_avatar.png';
+			document.getElementById('avatarProfile').src = 'static/img/default_avatar.png';
+		}
+		else{
+			console.log(data.avatar_url);
 			document.getElementById('avatar').src = data.avatar_url;
 			document.getElementById('avatarProfile').src = data.avatar_url;
 		}
-		else
-			console.error('Error: Avatar URL not found');
 	} catch (error) {
 		console.error(error.message);
 	}

@@ -105,47 +105,47 @@ def use_access_token(access_token, request):
 	return simple_response("Api error")
 
 def simple_response(message):
-    html_content = f"""
-    <html>
-    <head>
-        <title>Response</title>
-        <style>
-            body {{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                font-family: 'Audiowide', sans-serif !important;
-                background-color: black;
-                color: white;
-            }}
-            .message-container {{
-                text-align: center;
-            }}
-            button {{
-                margin-top: 20px;
-                padding: 10px 20px;
-                background-color: black;
-                color: white;
-                border: 2px solid white;
-                border-radius: 5px;
-                cursor: pointer;
-            }}
-            button:hover {{
-                background-color: white;
-                color: black;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="message-container">
-            <h2>{message}</h2>
-            <button onclick="window.close()">Close Window</button>
-        </div>
-    </body>
-    </html>
-    """
-    return HttpResponse(html_content)
+	html_content = f"""
+	<html>
+	<head>
+		<title>Response</title>
+		<style>
+			body {{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				font-family: 'Audiowide', sans-serif !important;
+				background-color: black;
+				color: white;
+			}}
+			.message-container {{
+				text-align: center;
+			}}
+			button {{
+				margin-top: 20px;
+				padding: 10px 20px;
+				background-color: black;
+				color: white;
+				border: 2px solid white;
+				border-radius: 5px;
+				cursor: pointer;
+			}}
+			button:hover {{
+				background-color: white;
+				color: black;
+			}}
+		</style>
+	</head>
+	<body>
+		<div class="message-container">
+			<h2>{message}</h2>
+			<button onclick="window.close()">Close Window</button>
+		</div>
+	</body>
+	</html>
+	"""
+	return HttpResponse(html_content)
 
 
 @csrf_protect
@@ -605,12 +605,16 @@ def get_points_by_match(request):
 			response = []
 			previous_value = 0
 			for i in range(len(matches)):
-				if i == 0:
-					response.append(matches[i].player1_points)
-					previous_value = matches[i].player1_points
+				if (player_username == matches[i].player1):
+					player_points = matches[i].player1_points
 				else:
-					response.append(previous_value + matches[i].player1_points)
-					previous_value = previous_value + matches[i].player1_points
+					player_points = matches[i].player2_points
+				if i == 0:
+					response.append(player_points)
+					previous_value = player_points
+				else:
+					response.append(previous_value + player_points)
+					previous_value = previous_value +player_points
 			player_data = {
 				'matches': response
 			}
@@ -962,10 +966,10 @@ def post_avatar(request):
 		player = Player.objects.get(username=request.session['username'])
 		form = AvatarForm(request.POST, request.FILES, instance=player)
 		#form = Player.objects.get(username=request.session['username']).avatar_img.AvatarForm(request.POST, request.FILES)
-		#form = AvatarForm(request.POST, request.FILES)
+		# form = AvatarForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save()
-			#return HttpResponse("Avatar has been uploaded")
+			# return HttpResponse("Avatar has been uploaded")
 			return JsonResponse({'message': 'Avatar has been uploaded successfully'}, status=200)
 		else:
 			# Handle form errors
@@ -977,23 +981,13 @@ def post_avatar(request):
 @csrf_protect
 def get_avatar(request):
 	if request.method == 'POST':
-		if not request.session['user_id']:
-			return JsonResponse({'error': 'User is not logged in'}, status=200)
-		avatar_url = Player.objects.get(username=request.session['username']).avatar_img.url
-		return JsonResponse({'avatar_url': avatar_url}, status=200)
-	return JsonResponse({'error': 'Unauthorized action'}, status=405)
-		#return render(request, 'profile.html', {'player': player})
-
-@csrf_protect
-def get_avatar2(request):
-
-	if request.method == 'POST':
-		if not request.session['user_id']:
-			return JsonResponse({'error': 'User is not logged in'}, status=200)
-		# getting all the objects of hotel.
-		avatars = Avatar.objects.all()
-		return HttpResponse(avatars)
-		#return render((request, 'display_hotel_images.html', {'hotel_images': avatars}))
+		try:
+			if not request.session['user_id']:
+				return JsonResponse({'error': 'User is not logged in'}, status=200)
+			avatar_url = Player.objects.get(username=request.session['username']).avatar_img.url
+			return JsonResponse({'avatar_url': avatar_url}, status=200)
+		except ValueError:
+			return JsonResponse({'message': 'No file associated'}, status=200)
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 @csrf_protect

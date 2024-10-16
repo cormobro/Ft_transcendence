@@ -26,8 +26,23 @@ document.getElementById("tournamentModeButton").addEventListener('click', async 
 		window.location.href = "#tournament";
 });
 
-document.getElementById('avatar_img').addEventListener('change', function() {
+document.getElementById('avatarInput').addEventListener('change', function() {
 
 	var fileName = this.files[0].name;
 	document.getElementById('fileName').textContent = fileName;
+});
+
+document.getElementById("avatarSubmitButton").addEventListener('click', function(){
+
+	console.log("Button has been clicked");
+	var form = document.getElementById("avatarForm");
+	var input = document.getElementById("avatar_img").value;
+
+	console.log("Input:"+input);
+	if (input.length === 0)
+		document.getElementById("avatarOutput").innerText = "File does not exist";
+	else{
+		form.submit();
+		getAvatar();
+	}
 });
