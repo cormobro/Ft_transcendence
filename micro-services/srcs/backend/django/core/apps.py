@@ -4,7 +4,7 @@ from django.db import connection
 
 class AppConfig(AppConfig):
 	default_auto_field = 'django.db.models.BigAutoField'
-	name = 'app'
+	name = 'core'
 	def ready(self):
 		from .models import Player
 		if 'app_player' in connection.introspection.table_names():
