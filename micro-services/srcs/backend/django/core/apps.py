@@ -7,7 +7,7 @@ class AppConfig(AppConfig):
 	name = 'core'
 	def ready(self):
 		from .models import Player
-		if 'app_player' in connection.introspection.table_names():
+		if 'core_player' in connection.introspection.table_names():
 			# Mettre à jour tous les utilisateurs pour qu'ils soient déconnectés
 			Player.objects.update(logged_in=False)
 		if 'django_session' in connection.introspection.table_names():

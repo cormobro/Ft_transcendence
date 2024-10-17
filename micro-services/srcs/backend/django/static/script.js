@@ -229,7 +229,7 @@ async function displayVictoriesAndDefeatsGraph(){
 			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
-			<div class="text-light" id="myPlayerChartLegend"></div>
+			<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -299,7 +299,7 @@ async function displayVictoriesByModeGraph(){
 			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
-			<div class="text-light" id="myPlayerChartLegend"></div>
+			<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -380,7 +380,7 @@ async function displayPointsByMatchGraph(){
 			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
-			<div class="text-light" id="myPlayerChartLegend"></div>
+			<div class="text-light" for="myPlayerChartLegend"></div>
 		</div>
 	`;
 
