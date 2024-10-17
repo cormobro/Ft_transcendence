@@ -1,12 +1,11 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 	<head>
 		{% load static %}
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 		<link rel="stylesheet" href="{% static 'style.css' %}">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -186,15 +185,15 @@
 										<div class="col-12 col-sm-6 mt-3">
 											<!-- <form class="d-flex flex-column justify-content-center align-items-center" action="/post/avatar/" method="post" enctype="multipart/form-data" id="avatarForm"> -->
 											<form class="d-flex flex-column justify-content-center align-items-center" id="avatarForm">
-												{% csrf_token %}
-												<label for="name">Select a file:</label>
-												<input type="file" id="avatarInput" name="avatar_img" style="display:none;">
-												<label for="avatarInput" class="btn btn-outline-light">Choose File</label>
-												<span id="fileName" class="text-light text-break mt-3">No file chosen</span>
+												<!-- {% csrf_token %} -->
+												<span>Select a file:</span>
+												<label for="avatar_img" class="btn btn-outline-light mt-2">Choose File</label>
+												<input type="file" name="avatar_img" id="avatar_img" style="display:none;">
+												<span id="fileName" class="text-light text-break mt-2">No file chosen</span>
 												<!-- <button class="btn btn-outline-light mt-3" type="submit" id="avatarSubmitButton">Upload</button> -->
-												<button class="btn btn-outline-light mt-3" type="button" onclick="uploadAvatar()">Upload</button>
+												<button class="btn btn-outline-light mt-2" type="button" onclick="uploadAvatar()">Upload</button>
 											</form>
-											<p class="text-light text-center mt-3" id="avatarOutput"></p>
+											<p class="text-light text-center mt-2" id="avatarOutput"></p>
 											<div class="d-flex justify-content-center align-items-center">
 												<img class="rounded-circle mt-3 mb-3" id="avatar" src="{% static 'img/default_avatar.png' %}" alt="User Avatar" width="200rem" height="200rem">
 											</div>
@@ -317,12 +316,12 @@
 									<form class="row gy-4" id="duoForm">
 										<div id="playerInputs">
 											<div class="col-12">
-												<label for="player1" class="form-label">Alias *</label>
-												<input type="text" class="form-control" name="player1" placeholder="Alias" maxlength="15">
+												<label for="player1Duo" class="form-label">Alias *</label>
+												<input type="text" class="form-control" name="player1" id="player1Duo" placeholder="Alias" maxlength="15">
 											</div>
 											<div class="col-12 mt-2">
-												<label for="player2" class="form-label">Alias *</label>
-												<input type="text" class="form-control" name="player2" placeholder="Alias" maxlength="15">
+												<label for="player2Duo" class="form-label">Alias *</label>
+												<input type="text" class="form-control" name="player2" id="player2Duo" placeholder="Alias" maxlength="15">
 											</div>
 										</div>
 										<div class="d-flex justify-content-center">
@@ -347,16 +346,16 @@
 										<div id="tournamentInputs">
 											<div id="playerInputs">
 												<div class="col-12">
-													<label for="player1" class="form-label">Alias *</label>
-													<input type="text" class="form-control" name="player1" placeholder="Alias" maxlength="15">
+													<label for="player1Tournament" class="form-label">Alias *</label>
+													<input type="text" class="form-control" name="player1" id="player1Tournament" placeholder="Alias" maxlength="15">
 												</div>
 												<div class="col-12 mt-2">
-													<label for="player2" class="form-label">Alias *</label>
-													<input type="text" class="form-control" name="player2" placeholder="Alias" maxlength="15">
+													<label for="player2Tournament" class="form-label">Alias *</label>
+													<input type="text" class="form-control" name="player2" id="player2Tournament" placeholder="Alias" maxlength="15">
 												</div>
 												<div class="col-12 mt-2">
-													<label for="player3" class="form-label">Alias *</label>
-													<input type="text" class="form-control" name="player3" placeholder="Alias" maxlength="15">
+													<label for="player3Tournament" class="form-label">Alias *</label>
+													<input type="text" class="form-control" name="player3" id="player3Tournament" placeholder="Alias" maxlength="15">
 												</div>
 											</div>
 										</div>

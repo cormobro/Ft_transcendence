@@ -285,24 +285,24 @@ async function backendPost(path, ...data)
 		}
 
 		buffer = await response.json();
-		console.log(buffer);
 	} catch (error) {
 		buffer = await response.json();
-		console.log(buffer);
 	}
 }
 
-async function avatarPost(fileInput)
+async function postAvatar(fileInput)
 {
 	const formData = new FormData();
+	let response;
 
-	formData.append('file', fileInput.files[0]);
+	formData.append('avatar_img', fileInput.files[0]);
 	try {
-		const response = await fetch("/post/changeavatar", {
+		const csrfToken = getCookie('csrftoken');
+		response = await fetch("/post/avatar/", {
 			method: "POST",
 			body: formData,
 			headers: {
-				'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+				'X-CSRFToken': csrfToken
 			}
 		});
 
@@ -310,10 +310,9 @@ async function avatarPost(fileInput)
 			throw new Error(`Response status: ${response.status}`);
 		}
 
-		const json = await response.json();
-		console.log(json);
+		buffer = await response.json();
 	} catch (error) {
-		console.error(error.message);
+		buffer = await response.json();
 	}
 }
 
@@ -338,7 +337,6 @@ async function getAvatar()
 			document.getElementById('avatarProfile').src = 'static/img/default_avatar.png';
 		}
 		else{
-			console.log(data.avatar_url);
 			document.getElementById('avatar').src = data.avatar_url;
 			document.getElementById('avatarProfile').src = data.avatar_url;
 		}

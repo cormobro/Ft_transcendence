@@ -229,7 +229,7 @@ async function displayVictoriesAndDefeatsGraph(){
 			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
-			<div class="text-light" for="myPlayerChartLegend"></div>
+			<div class="text-light" id="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -299,7 +299,7 @@ async function displayVictoriesByModeGraph(){
 			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
-			<div class="text-light" for="myPlayerChartLegend"></div>
+			<div class="text-light" id="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -380,7 +380,7 @@ async function displayPointsByMatchGraph(){
 			<canvas id="myPlayerChart"></canvas>
 		</div>
 		<div class="row d-flex align-item-center">
-			<div class="text-light" for="myPlayerChartLegend"></div>
+			<div class="text-light" id="myPlayerChartLegend"></div>
 		</div>
 	`;
 
@@ -447,11 +447,12 @@ async function displayMatchStats(){
 			<h3 class="text-light">Match history of ${currInputPlayer.value}</h3>
 		`;
 	for (let i = 0; i < matches.length; i++){
+		let date = new Date(matches[i].fields.date);
 		document.getElementById("playerStatsOutput").innerHTML += `
 			<h5 class="text-light">Match ${i}</h5>
 			<p class="text-light">${matches[i].fields.player1} (${matches[i].fields.player1_points}) - ${matches[i].fields.player2} (${matches[i].fields.player2_points})</p>
 			<p class="text-light">Mode : ${matches[i].fields.mode == 0 ? 'Solo' : matches[i].fields.mode == 1 ? 'Duo' : 'Tournament'}</p>
-			<p class="text-light">Date : ${matches[i].fields.date}</p>
+			<p class="text-light">Date : ${date.toLocaleString()}</p>
 			<p class="text-light">Match time :  ${Math.ceil(matches[i].fields.match_time)} secondes</p>
 		`;
 	}
@@ -494,14 +495,13 @@ async function displayUsername(currentUser){
 
 async function uploadAvatar(){
 
-	const file = document.getElementById("avatarInput");
+	const fileInput = document.getElementById("avatar_img");
 
-	const formData = new FormData();
-	formData.append('avatar_img', file);
-
-	console.log(formData);
-	await backendPost("/post/avatar/", formData);
-	console.log(buffer);
+	if (fileInput.files.length === 0) {
+		document.getElementById("avatarOutput").innerText = "Please select a file";
+		return;
+	}
+	await postAvatar(fileInput);
 	if (buffer.error)
 		document.getElementById("avatarOutput").innerText = buffer.error;
 	else{
@@ -840,7 +840,7 @@ function addPlayerToForm(){
 	newInputDiv.classList.add('mt-2');
 
 	const newLabel = document.createElement('label');
-	newLabel.setAttribute('for', 'player' + (playersNumber + 1));
+	newLabel.setAttribute('for', 'player' + (playersNumber + 1) + 'Tournament');
 	newLabel.classList.add('form-label');
 	newLabel.textContent = 'Alias *';
 
@@ -849,6 +849,7 @@ function addPlayerToForm(){
 	newInput.type = 'text';
 	newInput.classList.add('form-control');
 	newInput.name = 'player' + (playersNumber + 1);
+	newInput.id = 'player' + (playersNumber + 1) + 'Tournament';
 	newInput.placeholder = 'Alias';
 	newInput.maxLength = '15';
 	newInput.required = ' ';

@@ -23,6 +23,7 @@ services:
     env_file:
       - .env
     volumes:
+      - ./srcs/backend/django/media:/app/media
       - ./srcs/shared/build:/code/build
       - shared-volumes:/code/openssl
     networks:

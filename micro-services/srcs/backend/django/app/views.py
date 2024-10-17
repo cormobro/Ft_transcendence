@@ -734,7 +734,10 @@ def post_remove_friend(request):
 				player = Player.objects.get(username=username)
 				if player.friends.filter(username=targetUsername).exists():
 					player.friends.remove(player.friends.get(username=targetUsername))
-					return JsonResponse({'message': 'You\'ve successfully deleted this friend'}, status=200)
+				friend = Player.objects.get(username=targetUsername)
+				if (friend.friends.filter(username=username).exists()):
+					friend.friends.remove(friend.friends.get(username=username))
+				return JsonResponse({'message': 'You\'ve successfully deleted this friend'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)

@@ -16,10 +16,12 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY . .
 
 # Copier le script d'entrypoint
 COPY /tools/entrypoint.sh ../usr/local/bin/
+
+COPY media/images media/images
 
 # Donner les permissions d'exécution au script
 RUN chmod +x ../usr/local/bin/entrypoint.sh
