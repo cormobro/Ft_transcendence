@@ -10,6 +10,7 @@ fclean:
 	@docker volume rm $(shell docker volume ls -q)
 	@docker network rm micro-services_app-network
 	rm -rf srcs/shared/build/contracts/TournamentScores.json
+	rm -rf srcs/backend/django/media/images/*
 
 prune:
 	@docker system prune
