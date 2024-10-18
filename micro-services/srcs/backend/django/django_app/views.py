@@ -274,11 +274,6 @@ def tournament_end(request):
 
 	return JsonResponse({'error: Unauthorized action'}, status=405)
 
-# dans cette requete il y aura toute les infos sur les tournois
-	# on l'occurence les matchs/leurs données, dans l'ordre dans lequel
-	# ils ont été joués
-	# ajouter ce tournoi à la liste des tournois du joueur 1
-
 @csrf_protect
 def match_end(request):
 	if request.method == 'POST':
@@ -341,25 +336,6 @@ def get_best_players(request):
 			return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)
-
-#@csrf_protect
-#def get_global_stats(request):
-#    if request.method == 'POST':
-#        try:
-#            if not request.session.get('user_id'):
-#                return JsonResponse({'error': 'Unauthorized action'}, status=405)
-#            players = Player.objects.get(username=request.session.get['username']).matches.annotate
-#            players = Player.objects.annotate(
-#                matches_won_count=Count('matches', filter=Q(matches__winner=models.F('username')))
-#            ).order_by('-matches_won_count')[0:10]
-#            player_data = [{'username': player.username, 'matches_won': player.matches_won_count} for player in players]
-#            return JsonResponse({'message': player_data}, status=200)
-#        except IndexError as e:
-#            return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
-#        except json.JSONDecodeError:
-#            return JsonResponse({'error': 'Invalid JSON'}, status=400)
-#
-#    return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 @csrf_protect
 def get_global_stats(request):
@@ -662,20 +638,11 @@ def is_user_signed_in(request):
 					return JsonResponse({'message': 'True'}, status=200)
 				else:
 					return JsonResponse({'message': 'False'}, status=200)
-			#else:
-			 #   return JsonResponse({'error': 'This username is not assigned'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
 			return JsonResponse({'error': 'invalid JSON'}, status=400)
 	return JsonResponse({'error': 'Unauthorized method'}, status=405)
-#@csrf_protect
-#def get_avatar(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
-
-#@csrf_protect
-#def post_avatar(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
 
 @csrf_protect
 def get_requests(request):
@@ -693,8 +660,6 @@ def get_requests(request):
 					'requests': response
 				}
 				return JsonResponse({'message': player_data}, status=200)
-			#else:
-			 #   return JsonResponse({'error': 'Unauthorized action'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)
@@ -790,9 +755,6 @@ def get_friends_list(request):
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)
-#@csrf_protect
-#def post_42api(request):
-#    return JsonResponse({'error': 'Unauthorized method'}, status=405)
 
 @csrf_protect
 def post_username(request):

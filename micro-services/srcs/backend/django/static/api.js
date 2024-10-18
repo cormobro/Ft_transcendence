@@ -286,7 +286,7 @@ async function backendPost(path, ...data)
 
 		buffer = await response.json();
 	} catch (error) {
-		buffer = await response.json();
+		console.error(error.message);
 	}
 }
 
@@ -312,7 +312,7 @@ async function postAvatar(fileInput)
 
 		buffer = await response.json();
 	} catch (error) {
-		buffer = await response.json();
+		console.error(error.message);
 	}
 }
 

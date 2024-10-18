@@ -19,7 +19,6 @@ class Player(models.Model):
 	linked_42_acc = models.CharField(max_length=30, unique=True, blank=True, null=True)
 	friends = models.ManyToManyField('Player', symmetrical=False, blank=True, related_name='friended_by')
 	matches = models.ManyToManyField('Match', related_name='players', blank=True)
-	# tournament_matches = models.ManyToManyField('Match', related_name='players', blank=True)
 	friends_request = models.ManyToManyField('Player', symmetrical=False, blank=True, related_name='request_by')
 	avatar_img = models.ImageField(upload_to='images/', blank=True, null=True)
 
@@ -35,8 +34,6 @@ class Player(models.Model):
 class Tournament(models.Model):
 	winner = models.CharField(max_length=255, blank=False)
 	matchs = models.ManyToManyField('Match', related_name='tournament', blank=True)
-	# stocker les matchs de manières à pouvoir trouver ceux du joueur X
-	# donc probablement une fonction qui ira chercher l'id du joueur dans les matchs
 
 	def __str__(self):
 		return self.winner

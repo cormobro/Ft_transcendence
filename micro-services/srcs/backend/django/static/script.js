@@ -393,7 +393,6 @@ async function displayPointsByMatchGraph(){
 	var mapping = {};
 	for (let i = 0; i < pointsOverTime.length; i++) {
 		mapping["Match " + i] = pointsOverTime[i];
-		console.log(pointsOverTime[i]);
 	}
 
 	const plotChartOptions = {

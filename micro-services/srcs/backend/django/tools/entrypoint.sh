@@ -1,14 +1,17 @@
 #!/bin/sh
 
-# Attendre pour que le service Postgres soit prêt
+# Wait until the Postgres service is ready
 sleep 6
 
-# Appliquer les migrations
+# Apply migration
 python manage.py makemigrations
 python manage.py migrate
 
-# Créer le super utilisateur si nécessaire
+# Create super user if necessary
 python manage.py createsuperuser --noinput --username admin --email admin@example.com || true
 
-# Démarrer le serveur Django
+# Recover static files
+python manage.py collectstatic --noinput
+
+# Starting the Django server
 python manage.py runsslserver --certificate /code/openssl/cert.pem --key /code/openssl/key.pem 0.0.0.0:8000
