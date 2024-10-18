@@ -33,7 +33,7 @@
 				oldWidth = newWidth;
 				oldHeight = newHeight;
 
-				console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
+				// console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
 			}
 
 			//----------- Ball coordinates -----------------------------------------------------------------
