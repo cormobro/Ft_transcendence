@@ -17,7 +17,7 @@ import os
 
 @csrf_protect
 def home(request):
-	return render(request, 'app/index.html')
+	return render(request, 'index.html')
 
 @csrf_protect
 def manage_42_api_step1(request):
@@ -150,7 +150,7 @@ def simple_response(message):
 
 @csrf_protect
 def manage_request(request):
-	return render(request, 'app/index.html')
+	return render(request, 'index.html')
 
 
 @csrf_protect

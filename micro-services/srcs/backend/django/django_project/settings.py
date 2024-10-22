@@ -130,13 +130,13 @@ USE_TZ = True
 
 # Static files during development phase
 STATICFILES_DIRS = [
-	BASE_DIR / 'staticfiles',
+	BASE_DIR / 'static',
 ]
 
 # Url where the browser will find the static files
 STATIC_URL = '/static/'
 # Static files during production phase
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
@@ -148,4 +148,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Url where the browser will find the media files
 MEDIA_URL = '/media/'
 # Media files during production phase
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'

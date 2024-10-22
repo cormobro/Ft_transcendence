@@ -88,10 +88,12 @@ urlpatterns = [
 	path ('post/password/', post_password, name='home'),
 	path('get/setblock/', set_block, name='home'),
 	path('get/getblock/', get_block, name='home'),
-	path ('get/currentuser/', get_current_user, name='home'),
-	re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
-	re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT})
+	path ('get/currentuser/', get_current_user, name='home')
 ]
 
-if settings.DEBUG:
-		urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG is False:
+	urlpatterns += [
+		re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+		re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+	]
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
