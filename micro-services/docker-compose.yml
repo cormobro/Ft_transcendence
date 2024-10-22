@@ -6,8 +6,8 @@ services:
       context: srcs/backend/postgres
       dockerfile: Dockerfile
     container_name: postgres
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
     env_file:
       - .env
     networks:
@@ -37,8 +37,8 @@ services:
       context: srcs/backend/ganache
       dockerfile: Dockerfile
     container_name: ganache
-    ports:
-      - "7545:7545"
+    # ports:
+    #   - "7545:7545"
     networks:
       - app-network
 
