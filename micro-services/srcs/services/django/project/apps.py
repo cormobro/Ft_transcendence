@@ -3,13 +3,13 @@ from django.db import connection
 
 class AppConfig(AppConfig):
 	default_auto_field = 'django.db.models.BigAutoField'
-	name = 'django_app'
+	name = 'project'
 	def ready(self):
 		from .models import Player
-		if 'django_app_player' in connection.introspection.table_names():
-			# Mettre à jour tous les utilisateurs pour qu'ils soient déconnectés
+		if 'project_player' in connection.introspection.table_names():
+			# Update all users to be logged out
 			Player.objects.update(logged_in=False)
 		if 'django_session' in connection.introspection.table_names():
 			from django.contrib.sessions.models import Session
-			# Supprimer toutes les sessions pour vider request.session
+			# Delete all sessions to empty request.session
 			Session.objects.all().delete()

@@ -3,7 +3,7 @@ version: '3.9'
 services:
   database:
     build:
-      context: srcs/backend/postgres
+      context: srcs/services/postgres
       dockerfile: Dockerfile
     container_name: postgres
     # ports:
@@ -15,7 +15,7 @@ services:
 
   django:
     build:
-      context: srcs/backend/django
+      context: srcs/services/django
       dockerfile: Dockerfile
     container_name: django
     ports:
@@ -23,7 +23,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./srcs/backend/django/media:/app/media
+      - ./srcs/services/django/media:/app/media
       - ./srcs/shared/build:/code/build
       - shared-volumes:/code/openssl
     networks:
@@ -34,7 +34,7 @@ services:
 
   ganache:
     build:
-      context: srcs/backend/ganache
+      context: srcs/services/ganache
       dockerfile: Dockerfile
     container_name: ganache
     # ports:
@@ -44,7 +44,7 @@ services:
 
   truffle:
     build:
-      context: srcs/backend/truffle
+      context: srcs/services/truffle
       dockerfile: Dockerfile
     container_name: truffle
     volumes:
@@ -56,7 +56,7 @@ services:
 
   openssl:
     build:
-      context: srcs/backend/openssl
+      context: srcs/services/openssl
       dockerfile: Dockerfile
     container_name: openssl
     volumes:
