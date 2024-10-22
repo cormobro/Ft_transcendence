@@ -617,12 +617,11 @@ def get_match_stats(request):
 					matches = Player.objects.get(username=username).matches.all()
 					return JsonResponse({'message': serializers.serialize('json', matches)}, status=200)
 				else:
-					return JsonResponse({'error': 'Unassigned user account'}, status=200)
+					return JsonResponse({'error': 'User is not assigned'}, status=200)
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
 			return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
 
 @csrf_protect
 def is_user_signed_in(request):

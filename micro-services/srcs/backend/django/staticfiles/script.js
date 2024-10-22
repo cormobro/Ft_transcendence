@@ -996,6 +996,11 @@ function cleanPage(currentFragment){
 		document.getElementById("duoButtonOutputText").innerText = null;
 		document.getElementById("tournamentButtonOutputText").innerText = null;
 	}
+	if (currentFragment === "game"){
+		document.getElementById("player1StatsOutput").innerHTML = null;
+		document.getElementById("matchStatsOutput").innerHTML = null;
+		document.getElementById("player2StatsOutput").innerHTML = null;
+	}
 	if (currentFragment === "stats"){
 		document.getElementById("playerStatsOutput").innerHTML = null;
 		document.getElementById("searchPlayerInput").value = '';

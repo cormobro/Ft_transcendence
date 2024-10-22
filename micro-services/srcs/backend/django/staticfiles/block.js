@@ -59,24 +59,14 @@ function generateCubeHTML(){
 	document.getElementById('blockchainOutput').innerHTML = `
 		<div class="container">
 	`;
-	console.log(buffer.scores.length);
 	for (let i = 0; i < buffer.scores.length; i++){
 		document.getElementById('blockchainOutput').innerHTML += `
-				<div class="text-white border p-3">
-					<p>Match ${i}: ${buffer.scores[i].join(', ')}</p>
-				</div>
+			<h3 class="text-white text-center">Match ${i}</h3>
+			<p class="text-white text-center">${buffer.scores[i][0]} (${buffer.scores[i][3]}) - ${buffer.scores[i][1]} (${buffer.scores[i][4]})</p>
 		`;
 	}
 	document.getElementById('blockchainOutput').innerHTML += `
-			<div class="text-white border p-3">
-				<p>Winner: ${buffer.winner}</p>
-			</div>
-			<div class= "text-white border p-3">
-				<p>Blockchain Cube</p>
-			</div>
-			<div class= "text-white border p-3">
-				<p>End of Data</p>
-			</div>
+			<h3 class="text-white text-center">Tournament Winner : ${buffer.winner}</h3>
 		</div>
 	`;
 }
