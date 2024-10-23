@@ -17,6 +17,7 @@ class Player(models.Model):
 	matches_won = models.IntegerField(default=0)
 	logged_in = models.BooleanField(default=False)
 	linked_42_acc = models.CharField(max_length=30, unique=True, blank=True, null=True)
+	is_42_acc = models.BooleanField(default=False)
 	friends = models.ManyToManyField('Player', symmetrical=False, blank=True, related_name='friended_by')
 	matches = models.ManyToManyField('Match', related_name='players', blank=True)
 	friends_request = models.ManyToManyField('Player', symmetrical=False, blank=True, related_name='request_by')

@@ -79,7 +79,7 @@ def manage_42_api_step3(code, state, request):
 		# return HttpResponse(f"The token is {access_token}")
 		return use_access_token(access_token, request)
 	else:
-		return HttpResponse(request_info)
+		return simple_response("Internal server error")
 		#return HttpResponse(f"Error code : {response.status_code} and code was {code}")
 
 def use_access_token(access_token, request):
@@ -93,16 +93,35 @@ def use_access_token(access_token, request):
 	if response.status_code == 200:
 		user_data = response.json()
 		username_42 = user_data.get('login')
-		username = request.session.get('username')
-		player = Player.objects.get(username=username)
-		player.linked_42_acc = username_42
-		try:
+		#si compte existe et compte de 42 alors je log
+		#si compte n'existe pas je cree compte username = login 42
+		#
+		if Player.objects.filter(username=username_42, is_42_acc=True).exists():
+			player = Player.objects.get(username=username_42, is_42_acc=True)
+			request.session['user_id'] = player.id
+			request.session['username'] = player.username
+			player.logged_in = True
 			player.save()
-			return simple_response("Account linked successfully")
-		except IntegrityError:
-			return simple_response("This 42 account is already linked to another player")
+		else:
+			new_player = Player(username=username_42, is_42_acc=True)
+			new_player.logged_in = True
+			new_player.matches_won = 0
+			new_player.save()
+		return simple_response("You are now logged in via your 42 account")
 
-	return simple_response("Api error")
+	# if response.status_code == 200:
+	# 	user_data = response.json()
+	# 	username_42 = user_data.get('login')
+	# 	username = request.session.get('username')
+	# 	player = Player.objects.get(username=username)
+	# 	player.linked_42_acc = username_42
+	# 	try:
+	# 		player.save()
+	# 		return simple_response("Account linked successfully")
+	# 	except IntegrityError:
+	# 		return simple_response("This 42 account is already linked to another player")
+
+	return simple_response("Api error please contact 42")
 
 def simple_response(message):
 	html_content = f"""

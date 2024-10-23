@@ -685,19 +685,14 @@ async function updateLogInButton(){
 // 	}
 
 function logInWith42() {
-	// Create authentication URL
 	const authUrl = '/api_42/';
 
-	// Open pop-up window
 	const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
 
-	// Listen to pop-up messages
 	window.addEventListener('message', function(event) {
 		if (event.origin !== window.location.origin) {
-			return; // Ignore messages from other origins
+			return;
 		}
-
-		// Check if the message contains authentication information
 		if (event.data && event.data.message) {
 			document.getElementById('linkMessage').textContent = event.data.message;
 		}
