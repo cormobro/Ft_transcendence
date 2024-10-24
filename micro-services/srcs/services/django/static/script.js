@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async function() {
+window.addEventListener("load", async function() {
 
 	await backendPost("/get/currentuser/");
 	// Check the result and modify the button accordingly
