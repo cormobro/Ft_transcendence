@@ -8,7 +8,9 @@ window.addEventListener("load", async function() {
 		`;
 	}
 	else if (buffer.error) {
-		alert(buffer.error);
+		document.getElementById("logInButton").innerHTML = `
+			<p class="text-right text-light">${buffer.error}</p>
+		`;
 	}
 	else {
 		getAvatar();
@@ -461,10 +463,7 @@ async function displayMatchStats(){
 async function displayProfilePage(){
 
 	await backendPost("/get/currentuser/");
-	if (buffer.error){
-		alert(buffer.error);
-	}
-	else{
+	if (buffer.message){
 		const currentUser = buffer.message;
 		displayUsername(currentUser);
 		getAvatar();
@@ -623,7 +622,9 @@ async function updateLogInButton(){
 			<a class="btn btn-outline-light" href="#login">Log in</a>
 		`;
 	} else if (buffer.error) {
-		document.getElementById("logInButton").innerHTML = buffer.error;
+		document.getElementById("logInButton").innerHTML = `
+			<p class="text-right text-light">${buffer.error}</p>
+		`;
 	} else {
 		getAvatar();
 		document.getElementById("logInButton").innerHTML = `
@@ -726,19 +727,22 @@ async function logIn(){
 	else{
 		window.location.href = "#home";
 		frm.reset();
+		updateLogInButton();
 	}
-	updateLogInButton();
 }
 
 async function logOut(){
 
 	await backendPost("/logout/");
 	if (buffer.error){
-		alert(buffer.error);
+		document.getElementById("logInButton").innerHTML = `
+			<p class="text-right text-light">${buffer.error}</p>
+		`;
 	}
-	else
+	else{
 		window.location.href = "#home";
-	updateLogInButton();
+		updateLogInButton();
+	}
 }
 
 async function signUp(){
@@ -768,8 +772,8 @@ async function signUp(){
 	else{
 		window.location.href = "#home";
 		frm.reset();
+		updateLogInButton();
 	}
-	updateLogInButton();
 }
 
 async function updateUsername(){
@@ -949,14 +953,16 @@ window.addEventListener('hashchange', async function (e) {
 
 	for (let fragment of fragmentsArray){
 		if (currentFragment === fragment){
-				await backendPost("/get/currentuser/");
-				if (buffer.error === "User is not logged in") {
-					document.getElementById("logInButton").innerHTML = `
-						<a class="btn btn-outline-light" href="#login">Log in</a>
-					`;
-				}
-				else if (buffer.error)
-					alert(buffer.error);
+				// await backendPost("/get/currentuser/");
+				// if (buffer.error === "User is not logged in") {
+				// 	document.getElementById("logInButton").innerHTML = `
+				// 		<a class="btn btn-outline-light" href="#login">Log in</a>
+				// 	`;
+				// }
+				// else if (buffer.error){
+				// 	alert(buffer.error);
+				// 	return;
+				// }
 				cleanPage(currentFragment);
 				hideAllContentDivs();
 				page = 'content-' + currentFragment;
@@ -988,6 +994,7 @@ function cleanPage(currentFragment){
 		document.getElementById("signUpOutput").innerText = null;
 	}
 	if (currentFragment === "home"){
+		document.getElementById("modeButtonOutputText").innerText = null;
 		document.getElementById("duoButtonOutputText").innerText = null;
 		document.getElementById("tournamentButtonOutputText").innerText = null;
 	}

@@ -8,6 +8,33 @@ function hideAllContentDivs(){
 	}
 };
 
+document.getElementById("easyModeButton").addEventListener('click', async function() {
+
+	await backendPost("/get/currentuser/");
+	if (buffer.error)
+		document.getElementById("modeButtonOutputText").innerText = buffer.error;
+	else
+		window.location.href = "#game";
+});
+
+document.getElementById("mediumModeButton").addEventListener('click', async function() {
+
+	await backendPost("/get/currentuser/");
+	if (buffer.error)
+		document.getElementById("modeButtonOutputText").innerText = buffer.error;
+	else
+		window.location.href = "#game";
+});
+
+document.getElementById("hardModeButton").addEventListener('click', async function() {
+
+	await backendPost("/get/currentuser/");
+	if (buffer.error)
+		document.getElementById("modeButtonOutputText").innerText = buffer.error;
+	else
+		window.location.href = "#game";
+});
+
 document.getElementById("duoModeButton").addEventListener('click', async function() {
 
 	await backendPost("/get/currentuser/");
