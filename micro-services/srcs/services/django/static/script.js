@@ -617,6 +617,7 @@ async function updateLogInButton(){
 	await backendPost("/get/currentuser/");
 
 	// Check the result and modify the button accordingly
+	console.log(buffer.error);
 	if (buffer.error === "User is not logged in") {
 		document.getElementById("logInButton").innerHTML = `
 			<a class="btn btn-outline-light" href="#login">Log in</a>
@@ -691,13 +692,20 @@ function logInWith42() {
 	const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
 
 	window.addEventListener('message', function(event) {
+		console.log("Salut");
 		if (event.origin !== window.location.origin) {
+			console.log("Return");
 			return;
 		}
 		if (event.data && event.data.message) {
-			document.getElementById('linkMessage').textContent = event.data.message;
+			console.log("Event");
+			document.getElementById('logInOutput').innerText = event.data.message;
 		}
+		console.log("None");
 	});
+	console.log("Bonjour");
+	window.location.href = "#home";
+	updateLogInButton();
 }
 
 async function logIn(){

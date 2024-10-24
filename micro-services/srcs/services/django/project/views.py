@@ -25,6 +25,7 @@ def home(request):
 def manage_42_api_step1(request):
 
 	client_id = os.getenv('API_CLIENT_ID')
+	# redirect_uri = 'http://localhost:8000/api_code'
 	redirect_uri = 'https://localhost:8000/api_code'
 	state = os.getenv('API_PROTECTION_STRING')
 	scope = "public"
@@ -53,6 +54,7 @@ def manage_42_api_step2(request):
 def manage_42_api_step3(code, state, request):
 	client_id = os.getenv('API_CLIENT_ID')
 	client_secret = os.getenv('API_CLIENT_SECRET')
+	# redirect_uri = 'http://localhost:8000/api_code'
 	redirect_uri = 'https://localhost:8000/api_code'
 	grant_type = "authorization_code"
 
