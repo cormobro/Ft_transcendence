@@ -14,4 +14,5 @@ python manage.py createsuperuser --noinput --username admin --email admin@exampl
 python manage.py collectstatic --noinput
 
 # Starting the Django server
+# python manage.py runserver 0.0.0.0:8000
 python manage.py runsslserver --certificate /code/openssl/cert.pem --key /code/openssl/key.pem 0.0.0.0:8000

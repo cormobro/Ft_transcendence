@@ -30,7 +30,7 @@ services:
       - app-network
     depends_on:
       - database
-      - openssl
+      # - openssl
 
   ganache:
     build:

@@ -10,3 +10,4 @@ pillow==10.4.0
 web3
 django-sslserver
 django-cors-headers==3.5.0
+# django-csp

@@ -12,7 +12,7 @@
 			// canvas.height = window.innerHeight - navbarHeight;
 			// canvas.width = canvas.height * 3/2;
 
-			handleWindowSize();	
+			handleWindowSize();
 
 			//----------- Ball coordinates -----------------------------------------------------------------
 
@@ -129,7 +129,7 @@
 				x = canvas.width / 2;
 				y = canvas.height - 10;
 				dx = (canvas.width / 2) / 200;
-				dy = -1 * ((canvas.height / 2) / 200);	
+				dy = -1 * ((canvas.height / 2) / 200);
 				leftPaddle = (canvas.height - paddleHeight) / 2;
 				rightPaddle = (canvas.height - paddleHeight) / 2;
 				leftScore = 0;
@@ -586,7 +586,7 @@
 			}
 
 			function handleWindowSize(){
-				
+
 				const newWidth = window.innerWidth;
 				const newHeight = window.innerHeight;
 				navbarHeight = navbar.offsetHeight;
@@ -605,7 +605,7 @@
 				}
 				if (canvas.height > newHeight - navbarHeight)
 					canvas.height = newHeight - navbarHeight;
-				
+
 				paddleHeight = canvas.height / 4.5;
 				paddleWidth = canvas.width / 140;
 
@@ -613,7 +613,7 @@
 				oldWidth = newWidth;
 
 				//console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
-			}	
+			}
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
 

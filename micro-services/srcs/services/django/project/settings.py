@@ -52,7 +52,8 @@ MIDDLEWARE = [
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'corsheaders.middleware.CorsMiddleware'
+	'corsheaders.middleware.CorsMiddleware',
+	# 'csp.middleware.CSPMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -124,7 +125,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-
 # Static files during development phase
 STATICFILES_DIRS = [
 	BASE_DIR / 'static',
@@ -146,3 +146,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 # Media files during production phase
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Configuring CSP directives
+# CSP_SCRIPT_SRC = ("'self'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com")
+# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com")
+# CSP_IMG_SRC = ("'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com")
+# CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net")
+# CSP_FRAME_SRC = ("'self'")
