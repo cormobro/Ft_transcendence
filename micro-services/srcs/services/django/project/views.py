@@ -9,8 +9,10 @@ from datetime import datetime, timedelta
 from django.db import IntegrityError, connection, models
 from django.db.models import Count, Q, Sum, Case, When, F
 from web3 import Web3
+from django.core.files import File
 from .forms import AvatarForm
 
+import tempfile
 import requests
 import json
 import os
@@ -34,8 +36,6 @@ def manage_42_api_step1(request):
 			f"&scope={scope}"
 			f"&state={state}"
 			)
-
-	# return JsonResponse({'auth_url': auth_url})
 	return redirect(auth_url)
 
 
@@ -76,11 +76,9 @@ def manage_42_api_step3(code, state, request):
 	if response.status_code == 302 or response.status_code == 301 or response.status_code == 200:
 		token_data = response.json()
 		access_token = token_data.get('access_token')
-		# return HttpResponse(f"The token is {access_token}")
 		return use_access_token(access_token, request)
 	else:
 		return simple_response("Internal server error")
-		#return HttpResponse(f"Error code : {response.status_code} and code was {code}")
 
 def use_access_token(access_token, request):
 	api_url = "https://api.intra.42.fr/v2/me"
@@ -89,24 +87,54 @@ def use_access_token(access_token, request):
 	}
 
 	response = requests.get(api_url, headers=headers)
-
 	if response.status_code == 200:
 		user_data = response.json()
 		username_42 = user_data.get('login')
-		#si compte existe et compte de 42 alors je log
-		#si compte n'existe pas je cree compte username = login 42
-		#
-		if Player.objects.filter(username=username_42, is_42_acc=True).exists():
-			player = Player.objects.get(username=username_42, is_42_acc=True)
-			request.session['user_id'] = player.id
-			request.session['username'] = player.username
+		#cas 1: un compte existe deja avec ce compte 42
+		if Player.objects.filter(linked_42_acc=username_42, is_42_acc=True).exists():
+			player = Player.objects.get(linked_42_acc=username_42, is_42_acc=True)
 			player.logged_in = True
 			player.save()
+			request.session['user_id'] = player.id
+			request.session['username'] = player.username
+		#cas 2: un compte avec username==au login de 42 existe deja
+		elif Player.objects.filter(username=username_42, is_42_acc=False).exists():
+			players = Player.objects.all()
+			usernames = [player.username for player in players]
+			append = 1
+			new_name = username_42
+			while (new_name in usernames):
+				new_name = f"{username_42}{append}"
+				append += 1
+			new_player = Player(username=new_name, is_42_acc=True)
+			new_player.logged_in = True
+			new_player.matches_won = 0
+			new_player.linked_42_acc = username_42
+			avatar_url = user_data['image']['versions']['large']
+			img_temp = tempfile.NamedTemporaryFile(delete=True)
+			img_temp.write(requests.get(avatar_url).content)
+			img_temp.flush()
+			new_player.avatar_img.save(f"{username_42}_avatar.jpg", File(img_temp))
+			new_player.save()
+			request.session['user_id'] = new_player.id
+			request.session['username'] = new_player.username
+			return simple_response(f"Your 42 username was already used, we assigned you {new_name} you can change it in the profile section")
+		#cas 3: le reste
 		else:
 			new_player = Player(username=username_42, is_42_acc=True)
 			new_player.logged_in = True
 			new_player.matches_won = 0
+			new_player.linked_42_acc = username_42
+			avatar_url = user_data['image']['versions']['large']
+			img_temp = tempfile.NamedTemporaryFile(delete=True)
+			img_temp.write(requests.get(avatar_url).content)
+			img_temp.flush()
+			new_player.avatar_img.save(f"{username_42}_avatar.jpg", File(img_temp))
 			new_player.save()
+			request.session['user_id'] = new_player.id
+			request.session['username'] = new_player.username
+		#print(user_data)
+		#return simple_response(avatar_url)
 		return simple_response("You are now logged in via your 42 account")
 
 	# if response.status_code == 200:
@@ -209,6 +237,8 @@ def log_in(request):
 			password = data[1]
 			if not username or not password:
 				return JsonResponse({'error': 'Invalid JSON'}, status=400)
+			if Player.objects.filter(username=username, is_42_acc=True).exists():
+				return JsonResponse({'error': 'This account is linked with 42, log in with the right method'}, status=200)
 			elif Player.objects.filter(username=username).exists():
 				player = Player.objects.get(username=username)
 				if check_password(password, player.password):
