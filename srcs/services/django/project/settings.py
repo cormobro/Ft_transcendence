@@ -146,10 +146,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 # Media files during production phase
 MEDIA_ROOT = BASE_DIR / 'media'
-
-# Configuring CSP directives
-# CSP_SCRIPT_SRC = ("'self'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com")
-# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com")
-# CSP_IMG_SRC = ("'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com")
-# CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net")
-# CSP_FRAME_SRC = ("'self'")

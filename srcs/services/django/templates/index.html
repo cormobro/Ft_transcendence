@@ -188,14 +188,11 @@
 									</div>
 									<div class="row">
 										<div class="col-12 col-sm-6 mt-3">
-											<!-- <form class="d-flex flex-column justify-content-center align-items-center" action="/post/avatar/" method="post" enctype="multipart/form-data" id="avatarForm"> -->
 											<form class="d-flex flex-column justify-content-center align-items-center" id="avatarForm">
-												<!-- {% csrf_token %} -->
 												<span>Select a file:</span>
 												<label for="avatar_img" class="btn btn-outline-light mt-2">Choose File</label>
 												<input type="file" name="avatar_img" id="avatar_img" style="display:none;">
 												<span id="fileName" class="text-light text-break mt-2">No file chosen</span>
-												<!-- <button class="btn btn-outline-light mt-3" type="submit" id="avatarSubmitButton">Upload</button> -->
 												<button class="btn btn-outline-light mt-2" type="button" onclick="uploadAvatar()">Upload</button>
 											</form>
 											<p class="text-light text-center mt-2" id="avatarOutput"></p>
@@ -435,6 +432,5 @@
 		<script src="{% static 'script.js' %}"></script>
 		<script src="{% static 'block.js' %}"></script>
 		<script src="{% static 'pongInterval.js' %}"></script>
-		<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
 	</body>
 </html>

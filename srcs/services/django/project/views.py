@@ -25,7 +25,6 @@ def home(request):
 def manage_42_api_step1(request):
 
 	client_id = os.getenv('API_CLIENT_ID')
-	# redirect_uri = 'http://localhost:8000/api_code'
 	redirect_uri = 'https://localhost:8000/api_code'
 	state = os.getenv('API_PROTECTION_STRING')
 	scope = "public"
@@ -54,7 +53,6 @@ def manage_42_api_step2(request):
 def manage_42_api_step3(code, state, request):
 	client_id = os.getenv('API_CLIENT_ID')
 	client_secret = os.getenv('API_CLIENT_SECRET')
-	# redirect_uri = 'http://localhost:8000/api_code'
 	redirect_uri = 'https://localhost:8000/api_code'
 	grant_type = "authorization_code"
 
@@ -92,14 +90,12 @@ def use_access_token(access_token, request):
 	if response.status_code == 200:
 		user_data = response.json()
 		username_42 = user_data.get('login')
-		#cas 1: un compte existe deja avec ce compte 42
 		if Player.objects.filter(linked_42_acc=username_42, is_42_acc=True).exists():
 			player = Player.objects.get(linked_42_acc=username_42, is_42_acc=True)
 			player.logged_in = True
 			player.save()
 			request.session['user_id'] = player.id
 			request.session['username'] = player.username
-		#cas 2: un compte avec username==au login de 42 existe deja
 		elif Player.objects.filter(username=username_42, is_42_acc=False).exists():
 			players = Player.objects.all()
 			usernames = [player.username for player in players]
@@ -124,8 +120,6 @@ def use_access_token(access_token, request):
 			request.session['user_id'] = new_player.id
 			request.session['username'] = new_player.username
 			return redirect('/')
-			#return simple_response(f"Your 42 username was already used, we assigned you {new_name} you can change it in the profile section")
-		#cas 3: le reste
 		else:
 			new_player = Player(username=username_42, is_42_acc=True)
 			new_player.logged_in = True
@@ -142,67 +136,8 @@ def use_access_token(access_token, request):
 			new_player.save()
 			request.session['user_id'] = new_player.id
 			request.session['username'] = new_player.username
-		#print(user_data)
-		#return simple_response(avatar_url)
 		return redirect('/')
-
-	# if response.status_code == 200:
-	# 	user_data = response.json()
-	# 	username_42 = user_data.get('login')
-	# 	username = request.session.get('username')
-	# 	player = Player.objects.get(username=username)
-	# 	player.linked_42_acc = username_42
-	# 	try:
-	# 		player.save()
-	# 		return simple_response("Account linked successfully")
-	# 	except IntegrityError:
-	# 		return simple_response("This 42 account is already linked to another player")
 	return redirect('/')
-	#return simple_response("Api error please contact 42")
-
-def simple_response(message):
-	html_content = f"""
-	<html>
-	<head>
-		<title>Response</title>
-		<style>
-			body {{
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				height: 100vh;
-				font-family: 'Audiowide', sans-serif !important;
-				background-color: black;
-				color: white;
-			}}
-			.message-container {{
-				text-align: center;
-			}}
-			button {{
-				margin-top: 20px;
-				padding: 10px 20px;
-				background-color: black;
-				color: white;
-				border: 2px solid white;
-				border-radius: 5px;
-				cursor: pointer;
-			}}
-			button:hover {{
-				background-color: white;
-				color: black;
-			}}
-		</style>
-	</head>
-	<body>
-		<div class="message-container">
-			<h2>{message}</h2>
-			<button onclick="window.close()">Close Window</button>
-		</div>
-	</body>
-	</html>
-	"""
-	return HttpResponse(html_content)
-
 
 @csrf_protect
 def manage_request(request):
@@ -350,9 +285,6 @@ def match_end(request):
 				player2_points = data[5]
 				date = data[6]
 				duration = data[7]
-
-				# date = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%fZ').date()
-				# duration = timedelta(seconds=float(duration_numeric))
 				match = Match(
 						player1=player1,
 						player2=player2,
@@ -983,21 +915,16 @@ def get_block(request):
 def post_avatar(request):
 	if request.method == "POST":
 		if not request.session.get('user_id'):
-			#return HttpResponse("You're not logged in")
 			return JsonResponse({'error': 'User is not logged in'}, status=200)
 		player = Player.objects.get(username=request.session['username'])
 		form = AvatarForm(request.POST, request.FILES, instance=player)
-		#form = Player.objects.get(username=request.session['username']).avatar_img.AvatarForm(request.POST, request.FILES)
-		# form = AvatarForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save()
-			# return HttpResponse("Avatar has been uploaded")
 			return JsonResponse({'message': 'Avatar has been uploaded successfully'}, status=200)
 		else:
 			# Handle form errors
 			errors = form.errors.as_json()  # Convert form errors to JSON format
 			return JsonResponse({'error': 'Invalid form data', 'details': errors}, status=200)
-	#return HttpResponse("Unauthorized action")
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)
 
 @csrf_protect

@@ -9,8 +9,6 @@
 			let oldWidth;
 			let oldHeight;
 			let navbarHeight;
-			// canvas.height = window.innerHeight - navbarHeight;
-			// canvas.width = canvas.height * 3/2;
 
 			handleWindowSize();
 
@@ -31,8 +29,6 @@
 
 			//---------- Paddle size/coordinates/state------------------------------------------------------
 
-			//let paddleHeight = canvas.height / 4.5;
-			//let paddleWidth = canvas.width / 140;
 			let leftPaddle = (canvas.height - paddleHeight) / 2;
 			let rightPaddle = (canvas.height - paddleHeight) / 2;
 			let leftPaddleDownPressed = false;
@@ -169,14 +165,11 @@
 			function drawStartSoloMenu()
 			{
 				drawStartSoloMenuBox(boxHover);
-				// if (boxHover === true)
-				// 	drawStartSoloMenuBoxHover();
 				drawStartSoloMenuText(boxHover);
 			}
 
 			function drawStartSoloMenuBox(boxHover)
 			{
-				// ctx.fillStyle = "#0095DD";
 				if (boxHover === false){
 					ctx.fillStyle = "rgb(255 255 255 / 0%)";
 					ctx.lineWidth = 3;
@@ -188,38 +181,23 @@
 				ctx.beginPath();
 				ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 5);
 				ctx.fill();
-				// ctx.shadowBlur = 0;
 			}
-
-			// function drawStartSoloMenuBoxHover()
-			// {
-			// 	// ctx.fillStyle = "#0095DD";
-			// 	ctx.fillStyle = 'white';
-			// 	ctx.beginPath();
-			// 	ctx.roundRect((canvas.width / 3), (canvas.height / 3), (canvas.width / 3), (canvas.height / 3), 50);
-			// 	// ctx.shadowColor = "#FFFFFF";
-			// 	// ctx.shadowBlur = 20;
-			// 	ctx.fill();
-			// }
 
 			function drawStartSoloMenuText(boxHover)
 			{
 				ctx.font = canvas.height/8 + "px Audiowide";
-				// ctx.fillStyle = "#ffffff";
 				if (boxHover === false)
 					ctx.fillStyle = 'red';
 				else
 					ctx.fillStyle = 'black';
 				ctx.textAlign="center";
 				ctx.textBaseline = "middle";
-				// ctx.fillText(`PLAY`, canvas.width / 2, (canvas.height / 2));
 				ctx.fillText(`PLAY`, canvas.width / 2, (canvas.height / 2));
 			}
 
 			function drawMenuScore()
 			{
 				ctx.font = canvas.height/10 + "px Audiowide";
-				// ctx.fillStyle = "#000000";
 				ctx.fillStyle = 'red';
 				ctx.textAlign="center";
 				ctx.textBaseline = "middle";
@@ -242,7 +220,6 @@
 
 			function drawAnnouncementMenu() {
 				ctx.font = canvas.height / 12 + "px Audiowide";
-				// ctx.fillStyle = "#000000";
 				ctx.fillStyle = 'red';
 				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
@@ -313,7 +290,6 @@
 			{
 				ctx.beginPath();
 				ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-				// ctx.fillStyle = "#0095DD";
 				ctx.fillStyle = 'red';
 				ctx.fill();
 				ctx.closePath();
@@ -325,7 +301,6 @@
 				let yPredict = y;
 				let dxPredict = dx;
 				let dyPredict = dy;
-				//time = new Date();
 				if (Date.now() - oldTime.getTime() >= 1000)
 				{
 					oldTime = new Date();
@@ -542,7 +517,6 @@
 			{
 				ctx.beginPath();
 				ctx.rect(0, leftPaddle, paddleWidth, paddleHeight);
-				// ctx.fillStyle = "#0095DD";
 				ctx.fillStyle = 'red';
 				ctx.fill();
 				ctx.closePath();
@@ -552,7 +526,6 @@
 			{
 				ctx.beginPath();
 				ctx.rect(canvas.width - paddleWidth, rightPaddle, paddleWidth, paddleHeight);
-				// ctx.fillStyle = "#0095DD";
 				ctx.fillStyle = 'red';
 				ctx.fill();
 				ctx.closePath();
@@ -560,12 +533,9 @@
 
 			function drawScore()
 			{
-				// ctx.font = "16px Audiowide";
 				ctx.font = canvas.height/20 + "px Audiowide";
-				// ctx.fillStyle = "#0095DD";
 				ctx.fillStyle = 'white';
 				ctx.textAlign = "left";
-				// ctx.textBaseline = "left";
 				ctx.textBaseline = "top";
 				if ((gameMode == 1) || (gameMode == 2 && player1 == players[0].name))
 					ctx.fillText(`${alias}: ${leftScore}`, canvas.width / 100, 5.5 * canvas.height / 80);
@@ -575,14 +545,6 @@
 					ctx.fillText(`${alias}: ${rightScore}`, canvas.width / 100, 5.5 * canvas.height / 300);
 				else
 					ctx.fillText(`${player2}: ${rightScore}`, canvas.width / 100, 5.5 * canvas.height / 300);
-				// if ((gameMode == 1) || (gameMode == 2 && player1 == players[0].name))
-				// 	ctx.fillText(`${alias}: ${leftScore}`, 8, 20);
-				// else
-				// 	ctx.fillText(`${player1}: ${leftScore}`, 8, 20);
-				// if (gameMode == 2 && player2 == players[0].name)
-				// 	ctx.fillText(`${alias}: ${rightScore}`, 8, 40);
-				// else
-				// 	ctx.fillText(`${player2}: ${rightScore}`, 8, 40);
 			}
 
 			function handleWindowSize(){
@@ -611,8 +573,6 @@
 
 				oldHeight = newHeight
 				oldWidth = newWidth;
-
-				//console.log(`Canvas width: ${canvas.width}, height: ${canvas.height}`);
 			}
 
 			//---------- EVENT LISTENERS -------------------------------------------------------------------
@@ -648,41 +608,9 @@
 					const rect = canvas.getBoundingClientRect();
 					// Calculate mouse position within the canvas, accounting for scroll offset
 					const x = evt.clientX - rect.left;
-				//+ window.scrollX;
 					const y = evt.clientY - rect.top;
-				//+ window.scrollY;
 					return { x: x, y: y };
 			}
-
-			/*function mouseMoveHandler(e)
-			{
-				const relativeX = e.clientX - canvas.offsetLeft;
-				const relativeY = e.clientY - canvas.offsetTop;
-
-				if (relativeX > canvas.width/3 && relativeX < 2*canvas.width/3 && relativeY > canvas.height/3 && relativeY < 2*canvas.height/3)
-				{
-					boxHover = true;
-				}
-				else
-				{
-					boxHover = false;
-				}
-			}
-
-			function mouseClickHandler(e)
-			{
-				const relativeX = e.clientX - canvas.offsetLeft;
-				const relativeY = e.clientY - canvas.offsetTop;
-
-				if (relativeX > canvas.width/3 && relativeX < 2*canvas.width/3 && relativeY > canvas.height/3 && relativeY < 2*canvas.height/3 && menuBool === true)
-				{
-					menuBool = false;
-					winner = 0;
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					clearInterval(interval);
-					interval = setInterval(draw, 8);
-				}
-			}*/
 
 			function mouseMoveHandler(e)
 			{
