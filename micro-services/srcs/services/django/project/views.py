@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.contrib import messages
 from .models import Player, Tournament, Match
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
 from datetime import datetime, timedelta
 from django.db import IntegrityError, connection, models
@@ -21,7 +21,7 @@ import os
 def home(request):
 	return render(request, 'index.html')
 
-@csrf_protect
+@csrf_exempt
 def manage_42_api_step1(request):
 
 	client_id = os.getenv('API_CLIENT_ID')
@@ -40,7 +40,7 @@ def manage_42_api_step1(request):
 	return redirect(auth_url)
 
 
-@csrf_protect
+@csrf_exempt
 def manage_42_api_step2(request):
 	code = request.GET.get('code')
 	state = request.GET.get('state')
@@ -113,14 +113,18 @@ def use_access_token(access_token, request):
 			new_player.matches_won = 0
 			new_player.linked_42_acc = username_42
 			avatar_url = user_data['image']['versions']['large']
-			img_temp = tempfile.NamedTemporaryFile(delete=True)
-			img_temp.write(requests.get(avatar_url).content)
-			img_temp.flush()
-			new_player.avatar_img.save(f"{username_42}_avatar.jpg", File(img_temp))
+			if avatar_url:
+				img_temp = tempfile.NamedTemporaryFile(delete=True)
+				response = requests.get(avatar_url)
+				if response.status_code == 200:
+					img_temp.write(requests.get(avatar_url).content)
+					img_temp.flush()
+					new_player.avatar_img.save(f"{username_42}_avatar.jpg", File(img_temp))
 			new_player.save()
 			request.session['user_id'] = new_player.id
 			request.session['username'] = new_player.username
-			return simple_response(f"Your 42 username was already used, we assigned you {new_name} you can change it in the profile section")
+			return redirect('/')
+			#return simple_response(f"Your 42 username was already used, we assigned you {new_name} you can change it in the profile section")
 		#cas 3: le reste
 		else:
 			new_player = Player(username=username_42, is_42_acc=True)
@@ -128,16 +132,19 @@ def use_access_token(access_token, request):
 			new_player.matches_won = 0
 			new_player.linked_42_acc = username_42
 			avatar_url = user_data['image']['versions']['large']
-			img_temp = tempfile.NamedTemporaryFile(delete=True)
-			img_temp.write(requests.get(avatar_url).content)
-			img_temp.flush()
-			new_player.avatar_img.save(f"{username_42}_avatar.jpg", File(img_temp))
+			if avatar_url:
+				img_temp = tempfile.NamedTemporaryFile(delete=True)
+				response = requests.get(avatar_url)
+				if response.status_code == 200:
+					img_temp.write(requests.get(avatar_url).content)
+					img_temp.flush()
+					new_player.avatar_img.save(f"{username_42}_avatar.jpg", File(img_temp))
 			new_player.save()
 			request.session['user_id'] = new_player.id
 			request.session['username'] = new_player.username
 		#print(user_data)
 		#return simple_response(avatar_url)
-		return render(request, 'index.html')
+		return redirect('/')
 
 	# if response.status_code == 200:
 	# 	user_data = response.json()
@@ -150,8 +157,8 @@ def use_access_token(access_token, request):
 	# 		return simple_response("Account linked successfully")
 	# 	except IntegrityError:
 	# 		return simple_response("This 42 account is already linked to another player")
-
-	return simple_response("Api error please contact 42")
+	return redirect('/')
+	#return simple_response("Api error please contact 42")
 
 def simple_response(message):
 	html_content = f"""
