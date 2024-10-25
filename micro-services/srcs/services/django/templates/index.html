@@ -130,8 +130,13 @@
 											</div>
 											<div class="d-flex flex-column align-items-center">
 												<button type="button" class="btn btn-outline-light w-100" onclick="logIn()">Log in</button>
-												<button type="button" class="btn btn-light mt-3 w-100" onclick="logInWith42()">Log in with <img src="{% static 'img/42_Logo.png' %}" alt="42" width="30" height="30"></button>
+												<!-- <button type="button" class="btn btn-light mt-3 w-100" onclick="logInWith42()">Log in with <img src="{% static 'img/42_Logo.png' %}" alt="42" width="30" height="30"></button> -->
 											</div>
+										</form>
+										<form method="POST" action="/api_42/">
+											{% csrf_token %}
+											<!-- <button type="submit" class="btn btn-outline-light w-100">Log in with <img src="{% static 'img/42_Logo.png' %}" alt="42" width="30" height="30"></button> -->
+											<input type="submit" value="Submit">
 										</form>
 										<p class="text-light text-center mt-4" id="logInOutput"></p>
 										<!-- <p class="text-light text-center mt-4" id="linkMessage"></p> -->

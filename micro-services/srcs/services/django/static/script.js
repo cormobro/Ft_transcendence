@@ -686,26 +686,32 @@ async function updateLogInButton(){
 // 		}
 // 	}
 
-function logInWith42() {
-	const authUrl = '/api_42/';
+// async function openWindow(){
+	
+// 	const authUrl = '/api_42/';
+// 	const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
+// 	return popup;
+// }
 
-	const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
+async function logInWith42() {
 
-	window.addEventListener('message', function(event) {
-		console.log("Salut");
-		if (event.origin !== window.location.origin) {
-			console.log("Return");
-			return;
-		}
-		if (event.data && event.data.message) {
-			console.log("Event");
-			document.getElementById('logInOutput').innerText = event.data.message;
-		}
-		console.log("None");
-	});
-	console.log("Bonjour");
-	window.location.href = "#home";
+	// const popup = await openWindow();
+	await backendPost("/api_42/");
+	// window.addEventListener('message', function(event) {
+	// 	console.log("Salut");
+	// 	if (event.origin !== window.location.origin) {
+	// 		console.log("Return");
+	// 		return;
+	// 	}
+	// 	if (event.data && event.data.message) {
+	// 		console.log("Event");
+	// 		document.getElementById('logInOutput').innerText = event.data.message;
+	// 	}
+	// 	console.log("None");
+	// });
+	// console.log("Bonjour");
 	updateLogInButton();
+	window.location.href = "#home";
 }
 
 async function logIn(){

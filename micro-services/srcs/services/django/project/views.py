@@ -137,7 +137,7 @@ def use_access_token(access_token, request):
 			request.session['username'] = new_player.username
 		#print(user_data)
 		#return simple_response(avatar_url)
-		return simple_response("You are now logged in via your 42 account")
+		return render(request, 'index.html')
 
 	# if response.status_code == 200:
 	# 	user_data = response.json()
