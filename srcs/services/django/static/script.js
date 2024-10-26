@@ -29,6 +29,12 @@ window.addEventListener("load", async function() {
 
 function displayNextMatch() {
 
+	if (gameMode === 1)
+		player1 = alias;
+	if (player1 === players[0].name)
+		player1 = alias;
+	if (player2 === players[0].name)
+		player2 = alias;
 	document.getElementById('informationOutput').innerText = `${player1} - ${player2}`;
 }
 
@@ -53,6 +59,12 @@ async function displayLeaderboard() {
 
 function displayCurrentMatchStats(){
 
+	if (gameMode === 1)
+		player1 = alias;
+	if (player1 === players[0].name)
+		player1 = alias;
+	if (player2 === players[0].name)
+		player2 = alias;
 	document.getElementById("matchStatsOutput").innerHTML = `
 		<h3 class="text-light">Statistics of the match : ${player1} - ${player2}</h3>
 		<p class="text-light">Points won by ${player1} : ${leftScore}</p>
@@ -454,7 +466,7 @@ async function displayMatchStats(){
 			<p class="text-light">${matches[i].fields.player1} (${matches[i].fields.player1_points}) - ${matches[i].fields.player2} (${matches[i].fields.player2_points})</p>
 			<p class="text-light">Mode : ${matches[i].fields.mode == 0 ? 'Solo' : matches[i].fields.mode == 1 ? 'Duo' : 'Tournament'}</p>
 			<p class="text-light">Date : ${date.toLocaleString()}</p>
-			<p class="text-light">Match time :  ${Math.ceil(matches[i].fields.match_time)} secondes</p>
+			<p class="text-light">Match time :  ${Math.ceil(matches[i].fields.match_time)} seconds</p>
 		`;
 	}
 	}
