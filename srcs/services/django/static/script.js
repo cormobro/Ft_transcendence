@@ -982,3 +982,19 @@ function cleanPage(currentFragment){
 		document.getElementById("tournamentOutputText").innerText = null;
 	}
 }
+
+async function checkFragment(){
+	
+	if (window.location.hash === "#login"){
+		await backendPost("/get/currentuser/");
+		if (buffer.message){
+			cleanPage(window.location.hash);
+			hideAllContentDivs();
+			page = 'content-home';
+			document.getElementsByClassName(page)[0].style.display='block';
+			window.location.href = "#home";
+		}
+	}
+}
+
+setInterval(checkFragment, 10);

@@ -5,6 +5,7 @@ services:
     build:
       context: srcs/services/postgres
       dockerfile: Dockerfile
+    image: postgres
     container_name: postgres
     env_file:
       - .env
@@ -15,6 +16,7 @@ services:
     build:
       context: srcs/services/django
       dockerfile: Dockerfile
+    image: django
     container_name: django
     ports:
       - "8000:8000"
@@ -35,6 +37,7 @@ services:
     build:
       context: srcs/services/ganache
       dockerfile: Dockerfile
+    image: ganache
     container_name: ganache
     networks:
       - app-network
@@ -43,6 +46,7 @@ services:
     build:
       context: srcs/services/truffle
       dockerfile: Dockerfile
+    image: truffle
     container_name: truffle
     volumes:
       - ./srcs/shared/build:/dapp/build
@@ -55,6 +59,7 @@ services:
     build:
       context: srcs/services/openssl
       dockerfile: Dockerfile
+    image: openssl
     container_name: openssl
     volumes:
       - shared-volumes:/ssl/openssl
