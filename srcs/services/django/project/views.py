@@ -24,7 +24,7 @@ def manage_request(request):
 	csrf_token = get_token(request)
 	response = render(request, 'index.html')
 	response.set_cookie('csrftoken', csrf_token)
-	
+
 	return response
 	#return HttpResponse("hello world")
 	#return render(request, 'index.html')
@@ -824,10 +824,10 @@ def set_block(request):
 			data = json.loads(request.body)
 			# Parse header datas
 			node_url = data[0]
-			tournament_id = data[1]
-			tournament_winner = data[2]
-			matches_number = data[3]
-			matches_data = data[4]
+			# tournament_id = data[1]
+			tournament_winner = data[1]
+			matches_number = data[2]
+			matches_data = data[3]
 			#Initialize arrays
 			players1 = []
 			players2 = []
@@ -862,6 +862,7 @@ def set_block(request):
 			# Connect with the contract
 			contract = web3.eth.contract(address=latest_address, abi=contract_abi)
 			# Call a payable function of the smart contract
+			tournament_id = contract.functions.getTournamentId().call()
 			txn = contract.functions.setTournamentMatches(
 				tournament_id,
 				players1,

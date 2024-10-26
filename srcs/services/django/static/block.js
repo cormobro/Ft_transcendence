@@ -1,4 +1,4 @@
-function setBlock(tournamentMatches, tournamentId, tournamentWinner, matchesNumber){
+function setBlock(tournamentMatches, tournamentWinner, matchesNumber){
 
 	let data = [];
 
@@ -12,7 +12,7 @@ function setBlock(tournamentMatches, tournamentId, tournamentWinner, matchesNumb
 		data_info.push(match[5]); //player2_points
 		data.push(data_info);
 	}
-	backendPost("/get/setblock/", nodeUrl, tournamentId, tournamentWinner, matchesNumber, data);
+	backendPost("/get/setblock/", nodeUrl, tournamentWinner, matchesNumber, data);
 }
 
 async function getBlock(){

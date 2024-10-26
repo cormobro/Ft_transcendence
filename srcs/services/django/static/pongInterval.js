@@ -394,7 +394,7 @@
 								{
 									tournamentWinner = player2;
 									backendPost("/post/tournament/", tournamentWinner, _matches);
-									setBlock(_matches, tournamentId, tournamentWinner, postIndex);
+									setBlock(_matches, tournamentWinner, postIndex);
 									tournamentId++;
 								}
 								index = 0;
@@ -459,7 +459,7 @@
 								{
 									tournamentWinner = player1;
 									backendPost("/post/tournament/", tournamentWinner, _matches);
-									setBlock(_matches, tournamentId, tournamentWinner, postIndex);
+									setBlock(_matches, tournamentWinner, postIndex);
 									tournamentId++;
 								}
 								index = 0;
