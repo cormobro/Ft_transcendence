@@ -90,6 +90,11 @@ def use_access_token(access_token, request):
 	if response.status_code == 200:
 		user_data = response.json()
 		username_42 = user_data.get('login')
+		current_user = request.session.get('username')
+		if current_user:
+			old_user = Player.objects.get(username=current_user)
+			old_user.logged_in = False
+			old_user.save()
 		if Player.objects.filter(linked_42_acc=username_42, is_42_acc=True).exists():
 			player = Player.objects.get(linked_42_acc=username_42, is_42_acc=True)
 			player.logged_in = True
@@ -154,6 +159,11 @@ def create_account(request):
 			if not username or not password:
 				return JsonResponse({'error': 'Invalid JSON'}, status=400)
 			else:
+				current_user = request.session.get('username')
+				if current_user:
+					old_user = Player.objects.get(username=current_user)
+					old_user.logged_in = False
+					old_user.save()
 				new_player = Player(username=username)
 				new_player.set_password(password)
 				new_player.logged_in = True
@@ -186,6 +196,11 @@ def log_in(request):
 			elif Player.objects.filter(username=username).exists():
 				player = Player.objects.get(username=username)
 				if check_password(password, player.password):
+					current_user = request.session.get('username')
+					if current_user:
+						old_user = Player.objects.get(username=current_user)
+						old_user.logged_in = False
+						old_user.save()
 					request.session['user_id'] = player.id
 					request.session['username'] = player.username
 					player.logged_in = True
@@ -950,3 +965,7 @@ def get_current_user(request):
 		except IndexError as e:
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 	return JsonResponse({'error': 'Unauthorized action'}, status=405)
+
+@csrf_protect
+def get_favicon(request):
+	return JsonResponse({'message': 'Success'}, status=200)

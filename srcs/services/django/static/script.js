@@ -617,7 +617,6 @@ async function updateLogInButton(){
 	await backendPost("/get/currentuser/");
 
 	// Check the result and modify the button accordingly
-	console.log(buffer.error);
 	if (buffer.error === "User is not logged in") {
 		document.getElementById("logInButton").innerHTML = `
 			<a class="btn btn-outline-light" href="#login">Log in</a>
@@ -893,23 +892,8 @@ window.addEventListener('hashchange', async function (e) {
 
 	for (let fragment of fragmentsArray){
 		if (currentFragment === fragment){
-			// if (currentFragment === "login" || currentFragment === "signup"){
-			// 	console.log(currentFragment);
-			// 	await backendPost("/get/currentuser/");
-			// 	if (buffer.error && buffer.error !== "User is not logged in"){
-			// 		alert(buffer.error);
-			// 		return;
-			// 	}
-			// 	else if (buffer.message){
-			// 		cleanPage(currentFragment);
-			// 		hideAllContentDivs();
-			// 		page = 'content-home';
-			// 		document.getElementsByClassName(page)[0].style.display='block';
-			// 		window.location.href = "#home";
-			// 		return;
-			// 	}
-			// 	console.log(buffer.error);
-			// }
+			if (currentFragment !== "login" && currentFragment !== "signup")
+				await updateLogInButton();
 			cleanPage(currentFragment);
 			hideAllContentDivs();
 			page = 'content-' + currentFragment;
@@ -935,10 +919,12 @@ function cleanPage(currentFragment){
 	if (currentFragment === "login"){
 		document.getElementById("logInForm").reset();
 		document.getElementById("logInOutput").innerText = null;
+		document.getElementById("logInButton").innerHTML = null;
 	}
 	if (currentFragment === "signup"){
 		document.getElementById("signUpForm").reset();
 		document.getElementById("signUpOutput").innerText = null;
+		document.getElementById("logInButton").innerHTML = null;
 	}
 	if (currentFragment === "home"){
 		document.getElementById("modeButtonOutputText").innerText = null;
@@ -982,19 +968,3 @@ function cleanPage(currentFragment){
 		document.getElementById("tournamentOutputText").innerText = null;
 	}
 }
-
-async function checkFragment(){
-	
-	if (window.location.hash === "#login"){
-		await backendPost("/get/currentuser/");
-		if (buffer.message){
-			cleanPage(window.location.hash);
-			hideAllContentDivs();
-			page = 'content-home';
-			document.getElementsByClassName(page)[0].style.display='block';
-			window.location.href = "#home";
-		}
-	}
-}
-
-setInterval(checkFragment, 10);

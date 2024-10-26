@@ -26,7 +26,7 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-dx^*==u246l$@zeknbq(b1y4$ujoxj@9fw^8fj@$hdrals+$o6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,7 +53,6 @@ MIDDLEWARE = [
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'corsheaders.middleware.CorsMiddleware',
-	# 'csp.middleware.CSPMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

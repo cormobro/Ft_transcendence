@@ -57,7 +57,8 @@ urlpatterns = [
 	path ('post/password/', views.post_password, name='home'),
 	path('get/setblock/', views.set_block, name='home'),
 	path('get/getblock/', views.get_block, name='home'),
-	path ('get/currentuser/', views.get_current_user, name='home')
+	path ('get/currentuser/', views.get_current_user, name='home'),
+	path ('favicon.ico', views.get_favicon, name='favicon')
 ]
 
 if settings.DEBUG is False:
