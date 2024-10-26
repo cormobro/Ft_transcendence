@@ -617,7 +617,6 @@ async function updateLogInButton(){
 	await backendPost("/get/currentuser/");
 
 	// Check the result and modify the button accordingly
-	console.log(buffer.error);
 	if (buffer.error === "User is not logged in") {
 		document.getElementById("logInButton").innerHTML = `
 			<a class="btn btn-outline-light" href="#login">Log in</a>
@@ -638,80 +637,6 @@ async function updateLogInButton(){
 			</div>
 		`;
 	}
-}
-
-// async function logInWith42() {
-// 	try {
-// 		// Effectuer le premier appel à l'API
-// 		let responseStep1 = await fetch('/api_42/', {
-// 			method: 'GET',
-// 		});
-// 				if (!responseStep1.ok) {
-// 			throw new Error('Erreur lors de l\'appel à api_42');
-// 		}
-// 	}
-// 	catch (error)
-// 	{
-// 		console.error(error.message)
-// 	}
-// }
-
-// async function logInWith42() {
-// 	try {
-// 		// Effectuer le premier appel à l'API
-// 		let responseStep1 = await fetch('/api_42/', {
-// 			method: 'GET',
-// 		});
-// 				if (!responseStep1.ok) {
-// 			throw new Error('Erreur lors de l\'appel à api_42');
-// 		}
-// 				// Récupérer l'URL renvoyée par la fonction step_1
-// 		let dataStep1 = await responseStep1.json();
-// 		let auth_url = dataStep1.auth_url;  // Assume que l'URL est dans ce champ
-// 				// Effectuer le deuxième appel à l'API avec l'URL reçue
-// 		let responseStep2 = await fetch(auth_url, {
-// 			method: 'GET',
-// 		});
-// 			if (!responseStep2.ok) {
-// 				throw new Error('Erreur lors de l\'appel à api_code');
-// 		}
-
-// 		// Récupérer le message final
-// 		let dataStep2 = await responseStep2.json();
-// 			// Afficher le message dans l'élément TML
-// 		document.getElementById('linkMessage').textContent = dataStep2.message;
-// 		} catch (error) {
-// 			console.error('Une erreur est survenue :', error);
-// 			document.getElementById('linkMessage').textContent = 'Une erreur est survenue lors du lien du compte.';
-// 		}
-// 	}
-
-// async function openWindow(){
-	
-// 	const authUrl = '/api_42/';
-// 	const popup = window.open(authUrl, 'authPopup', 'width=500,height=500');
-// 	return popup;
-// }
-
-async function logInWith42() {
-
-	// const popup = await openWindow();
-	await backendPost("/api_42/");
-	// window.addEventListener('message', function(event) {
-	// 	console.log("Salut");
-	// 	if (event.origin !== window.location.origin) {
-	// 		console.log("Return");
-	// 		return;
-	// 	}
-	// 	if (event.data && event.data.message) {
-	// 		console.log("Event");
-	// 		document.getElementById('logInOutput').innerText = event.data.message;
-	// 	}
-	// 	console.log("None");
-	// });
-	// console.log("Bonjour");
-	updateLogInButton();
-	window.location.href = "#home";
 }
 
 async function logIn(){
@@ -967,21 +892,8 @@ window.addEventListener('hashchange', async function (e) {
 
 	for (let fragment of fragmentsArray){
 		if (currentFragment === fragment){
-			if (currentFragment === "login"){
-				await backendPost("/get/currentuser/");
-				if (buffer.error && buffer.error !== "User is not logged in"){
-					alert(buffer.error);
-					return;
-				}
-				else if (buffer.message){
-					cleanPage(currentFragment);
-					hideAllContentDivs();
-					page = 'content-home';
-					document.getElementsByClassName(page)[0].style.display='block';
-					window.location.href = "#home";
-					return;
-				}
-			}
+			if (currentFragment !== "login" && currentFragment !== "signup")
+				await updateLogInButton();
 			cleanPage(currentFragment);
 			hideAllContentDivs();
 			page = 'content-' + currentFragment;
@@ -1007,10 +919,12 @@ function cleanPage(currentFragment){
 	if (currentFragment === "login"){
 		document.getElementById("logInForm").reset();
 		document.getElementById("logInOutput").innerText = null;
+		document.getElementById("logInButton").innerHTML = null;
 	}
 	if (currentFragment === "signup"){
 		document.getElementById("signUpForm").reset();
 		document.getElementById("signUpOutput").innerText = null;
+		document.getElementById("logInButton").innerHTML = null;
 	}
 	if (currentFragment === "home"){
 		document.getElementById("modeButtonOutputText").innerText = null;

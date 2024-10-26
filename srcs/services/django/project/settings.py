@@ -26,7 +26,7 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-dx^*==u246l$@zeknbq(b1y4$ujoxj@9fw^8fj@$hdrals+$o6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,7 +53,6 @@ MIDDLEWARE = [
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'corsheaders.middleware.CorsMiddleware',
-	# 'csp.middleware.CSPMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -146,10 +145,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 # Media files during production phase
 MEDIA_ROOT = BASE_DIR / 'media'
-
-# Configuring CSP directives
-# CSP_SCRIPT_SRC = ("'self'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com")
-# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com")
-# CSP_IMG_SRC = ("'self'", "data:", "https://cdn.jsdelivr.net", "https://fonts.gstatic.com")
-# CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net")
-# CSP_FRAME_SRC = ("'self'")
