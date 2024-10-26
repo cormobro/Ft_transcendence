@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.middleware.csrf import get_token
 from django.core import serializers
 from django.contrib import messages
 from .models import Player, Tournament, Match
@@ -17,9 +18,18 @@ import requests
 import json
 import os
 
+
 @csrf_protect
-def home(request):
-	return render(request, 'index.html')
+def manage_request(request):
+	csrf_token = get_token(request)
+	response = render(request, 'index.html')
+	response.set_cookie('csrftoken', csrf_token)
+	
+	return response
+	#return HttpResponse("hello world")
+	#return render(request, 'index.html')
+
+
 
 @csrf_exempt
 def manage_42_api_step1(request):
@@ -143,10 +153,6 @@ def use_access_token(access_token, request):
 			request.session['username'] = new_player.username
 		return redirect('/')
 	return redirect('/')
-
-@csrf_protect
-def manage_request(request):
-	return render(request, 'index.html')
 
 
 @csrf_protect
