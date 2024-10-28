@@ -633,6 +633,7 @@ def get_match_stats(request):
 			return JsonResponse({'error': f'Missing index: {str(e)}'}, status=400)
 		except json.JSONDecodeError:
 			return JsonResponse({'error': 'Invalid JSON'}, status=400)
+	return JsonResponse({'error': 'Unauthorized method'}, status=405)
 
 @csrf_protect
 def is_user_signed_in(request):
@@ -920,8 +921,6 @@ def get_block(request):
 			# Call two non payable functions from smart contract
 			scores = contract.functions.getTournamentMatches(tournament_id).call()
 			winner = contract.functions.getTournamentWinner(tournament_id).call()
-			# if (len(scores) < 0 or len(winner) < 0):
-			# 	return JsonResponse({'error': 'id not found'}, status=404)
 			print("Tournament matches: ", scores)
 			print("Tournament winner: ", winner)
 			return JsonResponse({'scores': scores, 'winner': winner}, status=200)
